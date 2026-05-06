@@ -1,8 +1,8 @@
 {
   "metadata": {
     "home": {
-      "title": "PDFCraft - Professional PDF Tools",
-      "description": "Free, Private & Browser-Based. Merge, edit, and edit PDF files online without uploading to servers."
+      "title": "PDFCraft AIwBiznesie — Professional PDF Tools",
+      "description": "Free, Private & Browser-Based. Merge, edit, and edit PDF files online without uploading to servers. Hosted by AIwBiznesie."
     },
     "tools": {
       "title": "All PDF Tools",
@@ -35,7 +35,7 @@
     }
   },
   "common": {
-    "brand": "PDFCraft",
+    "brand": "PDFCraft AIwBiznesie",
     "tagline": "Professional PDF Tools - Free & Private",
     "navigation": {
       "home": "Home",
@@ -83,8 +83,8 @@
       "loading": "Loading..."
     },
     "footer": {
-      "footer": "© 2025 PDFCraft. All rights reserved.",
-      "copyright": "© {year} PDFCraft. All rights reserved.",
+      "footer": "© 2026 AIwBiznesie. Based on PDFCraft (AGPL-3.0). Source: github.com/DariuszCiesielski/tools-PDFCraftTool",
+      "copyright": "© {year} AIwBiznesie. Based on PDFCraft (AGPL-3.0). Source: github.com/DariuszCiesielski/tools-PDFCraftTool",
       "privacyBadge": "100% Private - Files never leave your device",
       "madeWith": "Made with <Heart /> and <Nextjs />"
     },
