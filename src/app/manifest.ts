@@ -14,7 +14,7 @@ export const dynamic = 'force-static';
 export default function manifest(): MetadataRoute.Manifest {
   return {
     name: siteConfig.name,
-    short_name: 'PDFCraft',
+    short_name: 'PDFCraft AIwB',
     description: siteConfig.description,
     start_url: '/',
     display: 'standalone',
@@ -22,6 +22,7 @@ export default function manifest(): MetadataRoute.Manifest {
     theme_color: '#3b82f6',
     orientation: 'portrait-primary',
     categories: ['productivity', 'utilities'],
+    lang: 'pl',
     icons: [
       {
         src: '/favicon.svg',
@@ -51,24 +52,24 @@ export default function manifest(): MetadataRoute.Manifest {
     ],
     shortcuts: [
       {
-        name: 'Merge PDF',
-        short_name: 'Merge',
-        description: 'Combine multiple PDF files',
-        url: '/en/tools/merge-pdf',
+        name: 'Scal PDF',
+        short_name: 'Scal',
+        description: 'Połącz wiele plików PDF w jeden',
+        url: '/pl/tools/merge-pdf',
         icons: [{ src: '/icons/merge.png', sizes: '96x96' }],
       },
       {
-        name: 'Split PDF',
-        short_name: 'Split',
-        description: 'Split PDF into multiple files',
-        url: '/en/tools/split-pdf',
+        name: 'Podziel PDF',
+        short_name: 'Podziel',
+        description: 'Rozdziel PDF na kilka plików',
+        url: '/pl/tools/split-pdf',
         icons: [{ src: '/icons/split.png', sizes: '96x96' }],
       },
       {
-        name: 'Compress PDF',
-        short_name: 'Compress',
-        description: 'Reduce PDF file size',
-        url: '/en/tools/compress-pdf',
+        name: 'Kompresja PDF',
+        short_name: 'Kompresuj',
+        description: 'Zmniejsz rozmiar pliku PDF',
+        url: '/pl/tools/compress-pdf',
         icons: [{ src: '/icons/compress.png', sizes: '96x96' }],
       },
     ],

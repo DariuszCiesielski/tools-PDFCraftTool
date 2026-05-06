@@ -1,7 +1,7 @@
 /**
  * Supported locales
  */
-export type Locale = 'en' | 'ja' | 'ko' | 'es' | 'fr' | 'de' | 'zh' | 'zh-TW' | 'pt' | 'ar' | 'it'| 'vi';
+export type Locale = 'pl' | 'en' | 'ja' | 'ko' | 'es' | 'fr' | 'de' | 'zh' | 'zh-TW' | 'pt' | 'ar' | 'it' | 'id' | 'vi';
 
 /**
  * Locale configuration

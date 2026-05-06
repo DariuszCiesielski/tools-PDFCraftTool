@@ -3,10 +3,10 @@
  * Defines supported locales and routing configuration
  */
 
-export const locales = ['en', 'ja', 'ko', 'es', 'fr', 'de', 'zh', 'zh-TW', 'pt', 'ar', 'it', 'id', 'vi'] as const;
+export const locales = ['pl', 'en', 'ja', 'ko', 'es', 'fr', 'de', 'zh', 'zh-TW', 'pt', 'ar', 'it', 'id', 'vi'] as const;
 export type Locale = (typeof locales)[number];
 
-export const defaultLocale: Locale = 'en';
+export const defaultLocale: Locale = 'pl';
 
 export const localeConfig: Record<Locale, {
   name: string;
@@ -14,6 +14,7 @@ export const localeConfig: Record<Locale, {
   direction: 'ltr' | 'rtl';
   dateFormat: string;
 }> = {
+  pl: { name: 'Polish', nativeName: 'Polski', direction: 'ltr', dateFormat: 'DD.MM.YYYY' },
   en: { name: 'English', nativeName: 'English', direction: 'ltr', dateFormat: 'MM/DD/YYYY' },
   ja: { name: 'Japanese', nativeName: '日本語', direction: 'ltr', dateFormat: 'YYYY/MM/DD' },
   ko: { name: 'Korean', nativeName: '한국어', direction: 'ltr', dateFormat: 'YYYY.MM.DD' },
@@ -60,7 +61,7 @@ export function getLocaleFromPath(path: string): Locale | null {
  */
 export function getLocalizedPath(path: string, locale: Locale): string {
   // Remove any existing locale prefix (must be followed by / or end of string)
-  const cleanPath = path.replace(/^\/(en|ja|ko|es|fr|de|zh-TW|zh|pt|ar|it|id|vi)(\/|$)/, '/');
+  const cleanPath = path.replace(/^\/(pl|en|ja|ko|es|fr|de|zh-TW|zh|pt|ar|it|id|vi)(\/|$)/, '/');
   // Normalize the path - ensure it starts with / and handle empty paths
   const normalizedPath = cleanPath === '/' ? '/' : cleanPath.replace(/^\/+/, '/');
   // Add the new locale prefix

@@ -2,8 +2,8 @@ import type { Metadata } from 'next';
 import '@/app/globals.css';
 
 export const metadata: Metadata = {
-  title: 'PDFCraft AIwBiznesie — Professional PDF Tools',
-  description: 'Free online PDF tools for merging, splitting, compressing, and converting PDF files. All processing happens in your browser for maximum privacy. Hosted by AIwBiznesie.',
+  title: 'PDFCraft AIwBiznesie — profesjonalne narzędzia PDF',
+  description: 'Darmowe narzędzia PDF online: scalanie, dzielenie, kompresja i konwersja. Całe przetwarzanie odbywa się w twojej przeglądarce dla maksymalnej prywatności. Hostowane przez AIwBiznesie.',
   icons: {
     icon: '/favicon.svg',
     shortcut: '/favicon.svg',
@@ -19,7 +19,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html lang="pl" suppressHydrationWarning>
       <head>
         <meta name="color-scheme" content="light dark" />
         <style dangerouslySetInnerHTML={{ __html: 'html{scrollbar-gutter:stable}' }} />

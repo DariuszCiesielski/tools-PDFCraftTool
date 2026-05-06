@@ -60,8 +60,8 @@ export interface ConditionalNodeData {
  * NOTE: This is a placeholder for future implementation
  */
 export function evaluateCondition(
-    condition: Condition,
-    files: File[]
+    _condition: Condition,
+    _files: File[]
 ): boolean {
     // TODO: Implement condition evaluation logic
     // This is a placeholder that always returns false
@@ -74,9 +74,9 @@ export function evaluateCondition(
  * NOTE: This is a placeholder for future implementation
  */
 export function evaluateBranch(
-    branch: ConditionalBranch,
-    files: File[],
-    logic: 'any' | 'all'
+    _branch: ConditionalBranch,
+    _files: File[],
+    _logic: 'any' | 'all'
 ): boolean {
     // TODO: Implement branch evaluation logic
     // This is a placeholder that always returns false

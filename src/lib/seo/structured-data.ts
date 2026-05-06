@@ -231,6 +231,7 @@ export function generateWebPageSchema(
   locale: Locale
 ): WebPageSchema {
   const languageMap: Record<Locale, string> = {
+    pl: 'pl-PL',
     en: 'en-US',
     ja: 'ja-JP',
     ko: 'ko-KR',

@@ -1,0 +1,55 @@
+{
+  "hero": {
+    "title": "Profesjonalne Narzędzia PDF",
+    "highlight": "Profesjonalne Narzędzia",
+    "subtitle": "Darmowe, prywatne i wydajne przetwarzanie PDF w Twojej przeglądarce",
+    "cta": "Zacznij"
+  },
+  "features": {
+    "privacy": {
+      "title": "100% Prywatność",
+      "description": "Całe przetwarzanie odbywa się w Twojej przeglądarce. Twoje pliki nigdy nie opuszczają Twojego urządzenia."
+    },
+    "free": {
+      "title": "Całkowicie Darmowe",
+      "description": "Bez rejestracji, bez limitów, bez ukrytych kosztów."
+    },
+    "powerful": {
+      "title": "Potężne Narzędzia",
+      "description": "Ponad 67 profesjonalnych narzędzi PDF do spełnienia wszystkich Twoich potrzeb."
+    }
+  },
+  "popularTools": {
+    "badge": "Najpopularniejsze",
+    "title": "Popularne Narzędzia PDF",
+    "description": "Najczęściej używane narzędzia, które pomogą Ci szybciej wykonać swoją pracę."
+  },
+  "categoriesSection": {
+    "title": "Odkryj Wszystkie Kategorie Narzędzi",
+    "description": "Ponad {count} profesjonalnych narzędzi PDF pogrupowanych w kategorie",
+    "toolsCount": "{count} narzędzi"
+  },
+  "categoriesDescription": {
+    "editAnnotate": "Edytuj, dodawaj notatki i modyfikuj zawartość PDF",
+    "convertToPdf": "Konwertuj różne formaty do PDF",
+    "convertFromPdf": "Konwertuj PDF do innych formatów",
+    "organizeManage": "Organizuj, scalaj, dziel i zarządzaj stronami PDF",
+    "optimizeRepair": "Kompresuj, optymalizuj i naprawiaj pliki PDF",
+    "securePdf": "Szyfruj, deszyfruj i zabezpieczaj pliki PDF"
+  },
+  "stats": {
+    "pdfTools": "Narzędzia PDF",
+    "freeToUse": "Darmowe w użyciu",
+    "languages": "Języki",
+    "filesUploaded": "Przesłane pliki"
+  },
+  "categories": {
+    "popular": "Popularne Narzędzia",
+    "editAnnotate": "Edycja i Notatki",
+    "convertToPdf": "Konwersja do PDF",
+    "convertFromPdf": "Konwersja z PDF",
+    "organizeManage": "Organizacja i Zarządzanie",
+    "optimizeRepair": "Optymalizacja i Naprawa",
+    "securePdf": "Zabezpieczenie PDF"
+  }
+}

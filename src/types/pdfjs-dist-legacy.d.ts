@@ -9,8 +9,10 @@ declare module 'pdfjs-dist-legacy' {
 
 declare module 'pdfjs-dist-legacy/lib/display/svg' {
     export class SVGGraphics {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         constructor(commonObjs: any, objs: any);
         embedFonts: boolean;
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         getSVG(operatorList: any, viewport: any): Promise<SVGElement>;
     }
 }

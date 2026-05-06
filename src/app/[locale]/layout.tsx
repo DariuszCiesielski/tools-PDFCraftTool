@@ -2,7 +2,7 @@ import type { Metadata, Viewport } from 'next';
 import { NextIntlClientProvider } from 'next-intl';
 import { getMessages, setRequestLocale, getTranslations } from 'next-intl/server';
 import { notFound } from 'next/navigation';
-import { localeConfig, type Locale, locales } from '@/lib/i18n/config';
+import { localeConfig, type Locale, locales, defaultLocale } from '@/lib/i18n/config';
 import { generateHomeMetadata } from '@/lib/seo';
 import { fontVariables } from '@/lib/fonts';
 import { SkipLink } from '@/components/common/SkipLink';
@@ -33,7 +33,7 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { locale } = await params;
   // Validate locale
-  const validLocale = locales.includes(locale as Locale) ? (locale as Locale) : 'en';
+  const validLocale = locales.includes(locale as Locale) ? (locale as Locale) : defaultLocale;
 
   // Get localized SEO translations
   const t = await getTranslations({ locale: validLocale, namespace: 'metadata' });
@@ -71,7 +71,7 @@ export default async function LocaleLayout({
   return (
     <NextIntlClientProvider messages={messages}>
       <div lang={locale} dir={direction} className={`${fontVariables} min-h-screen bg-background text-foreground antialiased font-sans`}>
-        <SkipLink targetId="main-content">Skip to main content</SkipLink>
+        <SkipLink targetId="main-content">Pomiń nawigację, przejdź do treści</SkipLink>
         {children}
       </div>
     </NextIntlClientProvider>

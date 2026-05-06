@@ -252,6 +252,7 @@ export function generateContactMetadata(locale: Locale, translations?: { title: 
  */
 export function getOpenGraphLocale(locale: Locale): string {
   const ogLocaleMap: Record<Locale, string> = {
+    pl: 'pl_PL',
     en: 'en_US',
     ja: 'ja_JP',
     ko: 'ko_KR',

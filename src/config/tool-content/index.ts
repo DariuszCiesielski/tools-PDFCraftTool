@@ -30,12 +30,13 @@ import { toolContentId } from './id';
 import { toolContentVn } from './vi';
 import { ToolContent } from '@/types/tool';
 
-export type Locale = 'en' | 'ja' | 'ko' | 'es' | 'fr' | 'de' | 'zh' | 'zh-TW' | 'pt' | 'ar' | 'it' | 'id' | 'vi';
+export type Locale = 'pl' | 'en' | 'ja' | 'ko' | 'es' | 'fr' | 'de' | 'zh' | 'zh-TW' | 'pt' | 'ar' | 'it' | 'id' | 'vi';
 
 /**
  * Get tool content for a specific locale
  * Falls back to English if translation not found
  * zh-TW falls back to zh (Simplified Chinese) content
+ * pl falls back to en content (no per-tool Polish content yet — sesja 2 polonized only UI strings)
  * ar falls back to en content for now
  */
 export function getToolContent(locale: Locale, toolId: string): ToolContent | undefined {
@@ -54,9 +55,9 @@ export function getToolContent(locale: Locale, toolId: string): ToolContent | un
     vi: toolContentVn,
   };
 
-  // Map zh-TW to zh (use Simplified Chinese content for Traditional Chinese)
-  const effectiveLocale: Exclude<Locale, 'zh-TW'> =
-    locale === 'zh-TW' ? 'zh' : locale;
+  // Map zh-TW → zh, pl → en (no per-tool Polish content — sesja 2 polonized only common UI strings)
+  const effectiveLocale: Exclude<Locale, 'zh-TW' | 'pl'> =
+    locale === 'zh-TW' ? 'zh' : locale === 'pl' ? 'en' : locale;
 
   const localeContent = contentMap[effectiveLocale];
   if (localeContent && localeContent[toolId]) {

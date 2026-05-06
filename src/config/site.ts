@@ -2,33 +2,33 @@
  * Site configuration
  */
 export const siteConfig = {
-  name: 'PDFCraft',
-  description: 'Professional PDF Tools - Free, Private & Browser-Based. Merge, split, compress, convert, and edit PDF files online without uploading to servers.',
-  url: 'https://pdfcraft.devtoolcafe.com',
+  name: 'PDFCraft AIwBiznesie',
+  description: 'Profesjonalne narzędzia PDF — darmowe, prywatne, działające w przeglądarce. Scalaj, dziel, kompresuj, konwertuj i edytuj pliki PDF online bez wysyłania ich na serwer.',
+  url: 'https://access-manager-tools-pdfcraft.vercel.app',
   ogImage: '/images/og-image.png',
   links: {
-    github: 'https://github.com/PDFCraftTool/pdfcraft',
-    twitter: 'https://twitter.com/pdfcraft',
+    github: 'https://github.com/DariuszCiesielski/tools-PDFCraftTool',
+    twitter: 'https://twitter.com/aiwbiznesie',
   },
-  creator: 'PDFCraft Team',
+  creator: 'AIwBiznesie (Dariusz Ciesielski)',
   keywords: [
-    'PDF tools',
-    'PDF editor',
-    'merge PDF',
-    'split PDF',
-    'compress PDF',
-    'convert PDF',
-    'free PDF tools',
-    'online PDF editor',
-    'browser-based PDF',
-    'private PDF processing',
+    'narzędzia PDF',
+    'edytor PDF',
+    'scal PDF',
+    'podziel PDF',
+    'kompresja PDF',
+    'konwersja PDF',
+    'darmowe narzędzia PDF',
+    'edytor PDF online',
+    'PDF w przeglądarce',
+    'prywatne przetwarzanie PDF',
   ],
   // SEO-related settings
   seo: {
-    titleTemplate: '%s | PDFCraft',
-    defaultTitle: 'PDFCraft - Professional PDF Tools',
-    twitterHandle: '@pdfcraft',
-    locale: 'en_US',
+    titleTemplate: '%s | PDFCraft AIwBiznesie',
+    defaultTitle: 'PDFCraft AIwBiznesie — profesjonalne narzędzia PDF',
+    twitterHandle: '@aiwbiznesie',
+    locale: 'pl_PL',
   },
 };
 

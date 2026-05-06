@@ -94,8 +94,9 @@ const nextConfig = {
 
   // ESLint configuration
   eslint: {
-    // Workshop AIwBiznesie: workaround na lint errors w main upstream (4× any + 5× unused vars,
-    // dirty state pushy 2026-04-23). TODO: fix przy sesji 2 polonizacji (sync z upstream).
+    // Workshop AIwBiznesie: 260 lint errors odziedziczone z upstream PDFCraft (4★, niedbały kod).
+    // Strategia: selektywny tracking upstream + osobna sesja "lint baseline" (~4-6h jednorazowo).
+    // Tracking w BACKLOG PM: "Workshop PDFCraftTool: lint baseline" (P2, public repo = brand).
     ignoreDuringBuilds: true,
   },
 

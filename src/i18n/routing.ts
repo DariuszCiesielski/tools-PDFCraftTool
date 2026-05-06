@@ -8,6 +8,7 @@ export const routing = defineRouting({
   // Used when no locale matches
   defaultLocale,
 
-  // Always use locale prefix in URL
+  // Always use locale prefix in URL (compatibility with output: 'export')
+  // 'as-needed' wymaga runtime middleware do redirectów, niekompatybilne ze static export
   localePrefix: 'always',
 });
