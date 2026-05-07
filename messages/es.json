@@ -2274,6 +2274,151 @@
         "name": "Eliminar páginas en blanco",
         "description": "Eliminar páginas en blanco del PDF",
         "longDescription": "Detecta y elimina automáticamente las páginas en blanco de un documento PDF."
+      },
+      "alternate-merge": {
+        "name": "Combinación alterna",
+        "description": "Intercala páginas de 2 PDFs",
+        "longDescription": "Intercala páginas de dos documentos PDF (1A, 1B, 2A, 2B…). Ideal para escaneos por una cara."
+      },
+      "combine-single-page": {
+        "name": "Combinar en una página",
+        "description": "Une todas las páginas en una sola hoja",
+        "longDescription": "Combina todas las páginas de un PDF en una sola hoja vertical para facilitar la lectura continua."
+      },
+      "divide": {
+        "name": "Dividir páginas",
+        "description": "Divide cada página mediante líneas",
+        "longDescription": "Divide cada página de un PDF en varias páginas más pequeñas de forma vertical u horizontal."
+      },
+      "grid-combine": {
+        "name": "Combinar en cuadrícula",
+        "description": "Une las páginas en una cuadrícula",
+        "longDescription": "Organiza varias páginas de un PDF en una sola cuadrícula (por ejemplo, 2×2 o 3×3) en una misma hoja."
+      },
+      "page-dimensions": {
+        "name": "Dimensiones de página",
+        "description": "Cambia el tamaño de las páginas de un PDF",
+        "longDescription": "Modifica el ancho y alto de las páginas de un PDF: A4, Carta, Legal o valores personalizados."
+      },
+      "pdf-booklet": {
+        "name": "Folleto PDF",
+        "description": "Diseño de folleto para imprimir",
+        "longDescription": "Genera un diseño de folleto a partir de un PDF para impresión: las páginas se despliegan al doblar el papel."
+      },
+      "posterize": {
+        "name": "Posterizar",
+        "description": "Divide la página en mosaicos",
+        "longDescription": "Divide cada página de un PDF en mosaicos para imprimir un póster de gran tamaño."
+      },
+      "reverse": {
+        "name": "Invertir páginas",
+        "description": "Invierte el orden de las páginas",
+        "longDescription": "Invierte el orden de las páginas en un documento PDF (del último al primero)."
+      },
+      "rotate-custom": {
+        "name": "Rotación personalizada",
+        "description": "Rota las páginas en cualquier ángulo",
+        "longDescription": "Rota las páginas de un PDF en cualquier ángulo, sin limitarse a 90° o 180°."
+      },
+      "background-color": {
+        "name": "Color de fondo",
+        "description": "Añade un color de fondo",
+        "longDescription": "Agrega un color de fondo sólido a cada página de un PDF."
+      },
+      "bookmark": {
+        "name": "Marcadores",
+        "description": "Edita los marcadores de un PDF",
+        "longDescription": "Editor visual de marcadores con vista previa del PDF: añade, elimina o anida secciones."
+      },
+      "decrypt": {
+        "name": "Descifrar PDF",
+        "description": "Elimina la contraseña de un PDF",
+        "longDescription": "Quita la protección por contraseña de un documento PDF (es necesario conocer la clave actual)."
+      },
+      "deskew": {
+        "name": "Corregir inclinación",
+        "description": "Endereza automáticamente escaneos inclinados",
+        "longDescription": "Endereza automáticamente las páginas escaneadas con inclinación (genera un archivo ZIP para lotes)."
+      },
+      "edit-pdf": {
+        "name": "Editar PDF",
+        "description": "Editor de PDF integrado",
+        "longDescription": "Edita el contenido de un PDF de forma visual: texto, imágenes y formas."
+      },
+      "find-and-redact": {
+        "name": "Buscar y censurar",
+        "description": "Busca y oculta texto",
+        "longDescription": "Busca texto en un PDF y oculta los fragmentos seleccionados para proteger datos sensibles."
+      },
+      "fix-page-size": {
+        "name": "Corregir tamaño",
+        "description": "Normalizar tamaños de página",
+        "longDescription": "Detecta diferentes tamaños de página y los normaliza a uno estándar."
+      },
+      "font-to-outline": {
+        "name": "Fuente a contorno",
+        "description": "Convertir texto a trazados",
+        "longDescription": "Convierte el texto del PDF a trazados vectoriales para protegerse contra la falta de fuentes."
+      },
+      "invert-colors": {
+        "name": "Invertir colores",
+        "description": "Negativo de color del PDF",
+        "longDescription": "Invierte los colores en un documento PDF (por ejemplo, modo oscuro para lectura)."
+      },
+      "ocg-manager": {
+        "name": "Gestor de capas",
+        "description": "Editor de capas OCG",
+        "longDescription": "Activa, edita y gestiona los Grupos de Contenido Opcional (capas) en un PDF."
+      },
+      "pdf-to-greyscale": {
+        "name": "PDF a escala de grises",
+        "description": "Convertir a escala de grises",
+        "longDescription": "Convierte un PDF a color a escala de grises (tamaño menor para impresión)."
+      },
+      "rasterize": {
+        "name": "Rasterizar",
+        "description": "Vectorial a mapa de bits",
+        "longDescription": "Convierte las páginas del PDF de vectorial a rasterizado (imágenes planas)."
+      },
+      "remove-metadata": {
+        "name": "Eliminar metadatos",
+        "description": "Limpiar metadatos del PDF",
+        "longDescription": "Elimina todos los metadatos (autor, fecha, título) de un documento PDF."
+      },
+      "repair": {
+        "name": "Reparar PDF",
+        "description": "Corregir PDF dañado",
+        "longDescription": "Intenta reparar archivos PDF corruptos o mal formados."
+      },
+      "stamps": {
+        "name": "Sellos",
+        "description": "Añadir sellos al PDF",
+        "longDescription": "Inserta sellos visuales (CONFIDENCIAL, APROBADO, BORRADOR, etc.) en las páginas del PDF."
+      },
+      "table-of-contents": {
+        "name": "Tabla de contenidos",
+        "description": "Generar TOC automáticamente",
+        "longDescription": "Genera automáticamente una tabla de contenidos a partir de los encabezados o marcadores del PDF."
+      },
+      "text-color": {
+        "name": "Color de texto",
+        "description": "Cambiar color del texto en PDF",
+        "longDescription": "Cambia el color de todo (o parte seleccionada) el texto en un documento PDF."
+      },
+      "linearize": {
+        "name": "Linealizar (web)",
+        "description": "Optimizar para visualización online",
+        "longDescription": "Linealiza el PDF para una carga rápida en el navegador (Vista Web Rápida)."
+      },
+      "remove-restrictions": {
+        "name": "Eliminar restricciones",
+        "description": "Quitar bloqueos de impresión/copia",
+        "longDescription": "Elimina las restricciones (imprimir, copiar, editar) de un documento PDF."
+      },
+      "sanitize": {
+        "name": "Sanitizar PDF",
+        "description": "Limpiar datos ocultos",
+        "longDescription": "Elimina datos ocultos del PDF: JavaScript, scripts, archivos incrustados y formularios."
       }
     }
   }

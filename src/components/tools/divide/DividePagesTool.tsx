@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useCallback, useRef } from 'react';
+import React, { useState, useCallback, useRef, useEffect } from 'react';
 import { useTranslations } from 'next-intl';
 import { FileUploader } from '../FileUploader';
 import { ProcessingProgress, ProcessingStatus } from '../ProcessingProgress';
@@ -14,6 +14,12 @@ import type { ProcessOutput } from '@/types/pdf';
 export interface DividePagesToolProps {
   /** Custom class name */
   className?: string;
+  /** Optional initial file (skips upload step when prefilled from Studio) */
+  initialFile?: File;
+  /** Hide the FileUploader UI when prefilled */
+  hideUploader?: boolean;
+  /** Callback fired with the resulting blob and original file when processing succeeds */
+  onComplete?: (blob: Blob, originalFile: File) => void;
 }
 
 /**
@@ -22,12 +28,12 @@ export interface DividePagesToolProps {
  * 
  * Provides the UI for dividing PDF pages into multiple sections.
  */
-export function DividePagesTool({ className = '' }: DividePagesToolProps) {
+export function DividePagesTool({ className = '', initialFile, hideUploader, onComplete }: DividePagesToolProps) {
   const t = useTranslations('common');
   const tTools = useTranslations('tools');
   
   // State
-  const [file, setFile] = useState<File | null>(null);
+  const [file, setFile] = useState<File | null>(initialFile ?? null);
   const [totalPages, setTotalPages] = useState<number>(0);
   const [status, setStatus] = useState<ProcessingStatus>('idle');
   const [progress, setProgress] = useState(0);
@@ -40,6 +46,12 @@ export function DividePagesTool({ className = '' }: DividePagesToolProps) {
   
   // Ref for cancellation
   const cancelledRef = useRef(false);
+  useEffect(() => {
+    if (initialFile) {
+      setFile(initialFile);
+    }
+  }, [initialFile]);
+
 
   /**
    * Load PDF to get page count
@@ -128,8 +140,10 @@ export function DividePagesTool({ className = '' }: DividePagesToolProps) {
       }
 
       if (output.success && output.result) {
-        setResult(output.result as Blob);
+        const blob = output.result as Blob;
+        setResult(blob);
         setStatus('complete');
+        if (onComplete && file) onComplete(blob, file);
       } else {
         setError(output.error?.message || 'Failed to divide PDF pages.');
         setStatus('error');
@@ -140,7 +154,7 @@ export function DividePagesTool({ className = '' }: DividePagesToolProps) {
         setStatus('error');
       }
     }
-  }, [file, divisionType]);
+  }, [file, divisionType, onComplete]);
 
   /**
    * Handle cancel operation
@@ -185,8 +199,8 @@ export function DividePagesTool({ className = '' }: DividePagesToolProps) {
   return (
     <div className={`space-y-6 ${className}`.trim()}>
       {/* File Upload Area */}
-      {!file && (
-        <FileUploader
+      {!file && !hideUploader && (
+          <FileUploader
           accept={['application/pdf', '.pdf']}
           multiple={false}
           maxFiles={1}
@@ -196,7 +210,7 @@ export function DividePagesTool({ className = '' }: DividePagesToolProps) {
           label={tTools('dividePages.uploadLabel') || 'Upload PDF File'}
           description={tTools('dividePages.uploadDescription') || 'Drag and drop a PDF file here, or click to browse.'}
         />
-      )}
+        )}
 
       {/* Error Message */}
       {error && (

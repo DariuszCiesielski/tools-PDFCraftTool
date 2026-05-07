@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import { useTranslations } from 'next-intl';
 import { FileUploader } from '../FileUploader';
 import { ProcessingProgress } from '../ProcessingProgress';
@@ -13,6 +13,10 @@ import { Grid2X2, Image } from 'lucide-react';
 export interface RasterizePDFToolProps {
     /** Custom class name */
     className?: string;
+  /** Optional initial file (skips upload step when prefilled from Studio) */
+  initialFile?: File;
+  /** Hide the FileUploader UI when prefilled */
+  hideUploader?: boolean;
 }
 
 /**
@@ -20,12 +24,12 @@ export interface RasterizePDFToolProps {
  * 
  * Converts PDF pages to high-quality images.
  */
-export function RasterizePDFTool({ className = '' }: RasterizePDFToolProps) {
+export function RasterizePDFTool({ className = '', initialFile, hideUploader }: RasterizePDFToolProps) {
     const t = useTranslations('common');
     const tTools = useTranslations('tools');
 
     // State
-    const [file, setFile] = useState<File | null>(null);
+    const [file, setFile] = useState<File | null>(initialFile ?? null);
     const [resultBlob, setResultBlob] = useState<Blob | null>(null);
     const [resultFilename, setResultFilename] = useState<string>('');
     const [isProcessing, setIsProcessing] = useState(false);
@@ -38,6 +42,12 @@ export function RasterizePDFTool({ className = '' }: RasterizePDFToolProps) {
     const [quality, setQuality] = useState(85);
     const [pageRange, setPageRange] = useState<string>('');
     const [backgroundColor, setBackgroundColor] = useState('#ffffff');
+  useEffect(() => {
+    if (initialFile) {
+      setFile(initialFile);
+    }
+  }, [initialFile]);
+
 
     /**
      * Handle file selected from uploader
@@ -116,7 +126,8 @@ export function RasterizePDFTool({ className = '' }: RasterizePDFToolProps) {
     return (
         <div className={`space-y-6 ${className}`.trim()}>
             {/* File Upload Area */}
-            <FileUploader
+            {!file && !hideUploader && (
+              <FileUploader
                 accept={['application/pdf', '.pdf']}
                 multiple={false}
                 maxFiles={1}
@@ -126,6 +137,7 @@ export function RasterizePDFTool({ className = '' }: RasterizePDFToolProps) {
                 label={tTools('rasterizePdf.uploadLabel') || 'Upload PDF File'}
                 description={tTools('rasterizePdf.uploadDescription') || 'Drag and drop a PDF file to convert to images.'}
             />
+            )}
 
             {/* Error Message */}
             {error && (

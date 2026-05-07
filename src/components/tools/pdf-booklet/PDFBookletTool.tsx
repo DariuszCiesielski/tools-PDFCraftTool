@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import { useTranslations } from 'next-intl';
 import { FileUploader } from '../FileUploader';
 import { ProcessingProgress } from '../ProcessingProgress';
@@ -13,6 +13,12 @@ import { BookOpen } from 'lucide-react';
 export interface PDFBookletToolProps {
     /** Custom class name */
     className?: string;
+    /** Optional initial file (skips upload step when prefilled from Studio) */
+    initialFile?: File;
+    /** Hide the FileUploader UI when prefilled */
+    hideUploader?: boolean;
+    /** Callback fired with the resulting blob and original file when processing succeeds */
+    onComplete?: (blob: Blob, originalFile: File) => void;
 }
 
 /**
@@ -20,12 +26,18 @@ export interface PDFBookletToolProps {
  * 
  * Creates booklet layouts from PDF files for printing.
  */
-export function PDFBookletTool({ className = '' }: PDFBookletToolProps) {
+export function PDFBookletTool({ className = '', initialFile, hideUploader, onComplete }: PDFBookletToolProps) {
     const t = useTranslations('common');
     const tTools = useTranslations('tools');
 
     // State
-    const [file, setFile] = useState<File | null>(null);
+    const [file, setFile] = useState<File | null>(initialFile ?? null);
+
+    useEffect(() => {
+        if (initialFile) {
+            setFile(initialFile);
+        }
+    }, [initialFile]);
     const [resultBlob, setResultBlob] = useState<Blob | null>(null);
     const [isProcessing, setIsProcessing] = useState(false);
     const [progress, setProgress] = useState(0);
@@ -85,7 +97,9 @@ export function PDFBookletTool({ className = '' }: PDFBookletToolProps) {
             );
 
             if (output.success && output.result) {
-                setResultBlob(output.result as Blob);
+                const blob = output.result as Blob;
+                setResultBlob(blob);
+                if (onComplete && file) onComplete(blob, file);
             } else {
                 setError(output.error?.message || 'Failed to create booklet.');
             }
@@ -94,7 +108,7 @@ export function PDFBookletTool({ className = '' }: PDFBookletToolProps) {
         } finally {
             setIsProcessing(false);
         }
-    }, [file, gridMode, paperSize, orientation, rotation, padding]);
+    }, [file, gridMode, paperSize, orientation, rotation, padding, onComplete]);
 
     /**
      * Reset state
@@ -112,6 +126,7 @@ export function PDFBookletTool({ className = '' }: PDFBookletToolProps) {
     return (
         <div className={`space-y-6 ${className}`.trim()}>
             {/* File Upload Area */}
+            {!file && !hideUploader && (
             <FileUploader
                 accept={['application/pdf', '.pdf']}
                 multiple={false}
@@ -122,6 +137,7 @@ export function PDFBookletTool({ className = '' }: PDFBookletToolProps) {
                 label={tTools('pdfBooklet.uploadLabel') || 'Upload PDF File'}
                 description={tTools('pdfBooklet.uploadDescription') || 'Drag and drop a PDF file to create a booklet layout.'}
             />
+            )}
 
             {/* Error Message */}
             {error && (

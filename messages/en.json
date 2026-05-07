@@ -2465,6 +2465,151 @@
         "name": "Remove blank pages",
         "description": "Clean blank pages from PDF",
         "longDescription": "Automatically detect and remove blank pages from a PDF document."
+      },
+      "alternate-merge": {
+        "name": "Alternate merge",
+        "description": "Interleave pages from 2 PDFs",
+        "longDescription": "Interleaves pages from two PDF documents (1A, 1B, 2A, 2B…). Useful for one-sided scans."
+      },
+      "combine-single-page": {
+        "name": "Combine to single page",
+        "description": "All pages onto one sheet",
+        "longDescription": "Combine all PDF pages into a single tall page (for long scroll viewing)."
+      },
+      "divide": {
+        "name": "Divide pages",
+        "description": "Split each page by lines",
+        "longDescription": "Divide each PDF page into several smaller pages vertically or horizontally."
+      },
+      "grid-combine": {
+        "name": "Grid combine",
+        "description": "Combine pages into grid",
+        "longDescription": "Arrange multiple PDF pages into a single grid (e.g. 2×2, 3×3) on one sheet."
+      },
+      "page-dimensions": {
+        "name": "Page dimensions",
+        "description": "Resize PDF pages",
+        "longDescription": "Change width and height of PDF pages — A4, Letter, Legal or custom values."
+      },
+      "pdf-booklet": {
+        "name": "PDF booklet",
+        "description": "Booklet layout for printing",
+        "longDescription": "Create a booklet layout from PDF for printing — pages unfold when folded."
+      },
+      "posterize": {
+        "name": "Posterize",
+        "description": "Split page into tiles",
+        "longDescription": "Split each PDF page into tiles for printing as a large poster."
+      },
+      "reverse": {
+        "name": "Reverse pages",
+        "description": "Reverse page order",
+        "longDescription": "Reverses the order of pages in a PDF document (last → first)."
+      },
+      "rotate-custom": {
+        "name": "Custom rotate",
+        "description": "Rotate by any angle",
+        "longDescription": "Rotate PDF pages by any angle (not limited to 90/180°)."
+      },
+      "background-color": {
+        "name": "Background color",
+        "description": "Add background color",
+        "longDescription": "Add a solid background color to every PDF page."
+      },
+      "bookmark": {
+        "name": "Bookmarks",
+        "description": "Edit PDF bookmarks",
+        "longDescription": "Visual bookmark editor with PDF preview — add, remove, nest."
+      },
+      "decrypt": {
+        "name": "Decrypt PDF",
+        "description": "Remove password from PDF",
+        "longDescription": "Removes password from a protected PDF document (requires knowing the password)."
+      },
+      "deskew": {
+        "name": "Deskew",
+        "description": "Auto-straighten skewed scans",
+        "longDescription": "Automatically straightens skewed scanned pages (ZIP output for multi-file batch)."
+      },
+      "edit-pdf": {
+        "name": "Edit PDF",
+        "description": "Built-in PDF editor",
+        "longDescription": "Edit PDF content visually — text, images, shapes."
+      },
+      "find-and-redact": {
+        "name": "Find & redact",
+        "description": "Search and black out text",
+        "longDescription": "Search text in PDF and black out selected fragments (sensitive data redaction)."
+      },
+      "fix-page-size": {
+        "name": "Fix page size",
+        "description": "Normalize page sizes",
+        "longDescription": "Detects different page sizes and normalizes them to one standard."
+      },
+      "font-to-outline": {
+        "name": "Font to outline",
+        "description": "Convert text to paths",
+        "longDescription": "Converts PDF text to vector paths — protects against missing fonts."
+      },
+      "invert-colors": {
+        "name": "Invert colors",
+        "description": "Color negative of PDF",
+        "longDescription": "Invert colors in a PDF document (e.g. dark mode for reading)."
+      },
+      "ocg-manager": {
+        "name": "Layer manager",
+        "description": "OCG layer editor",
+        "longDescription": "Toggle, edit and manage Optional Content Groups (layers) in a PDF."
+      },
+      "pdf-to-greyscale": {
+        "name": "PDF to greyscale",
+        "description": "Convert to greyscale",
+        "longDescription": "Convert color PDF to greyscale (smaller size for printing)."
+      },
+      "rasterize": {
+        "name": "Rasterize",
+        "description": "Vector → bitmap",
+        "longDescription": "Convert PDF pages from vector to raster (flat images)."
+      },
+      "remove-metadata": {
+        "name": "Remove metadata",
+        "description": "Clear PDF metadata",
+        "longDescription": "Removes all metadata (author, date, title) from a PDF document."
+      },
+      "repair": {
+        "name": "Repair PDF",
+        "description": "Fix corrupted PDF",
+        "longDescription": "Attempts to repair corrupted or malformed PDF files."
+      },
+      "stamps": {
+        "name": "Stamps",
+        "description": "Add stamps to PDF",
+        "longDescription": "Insert visual stamps (CONFIDENTIAL, APPROVED, DRAFT etc.) on PDF pages."
+      },
+      "table-of-contents": {
+        "name": "Table of contents",
+        "description": "Auto-generate TOC",
+        "longDescription": "Automatically generates a table of contents from PDF headings or bookmarks."
+      },
+      "text-color": {
+        "name": "Text color",
+        "description": "Change text color in PDF",
+        "longDescription": "Changes color of all (or selected) text in a PDF document."
+      },
+      "linearize": {
+        "name": "Linearize (web)",
+        "description": "Optimize for online viewing",
+        "longDescription": "Linearizes PDF for fast loading in the browser (Fast Web View)."
+      },
+      "remove-restrictions": {
+        "name": "Remove restrictions",
+        "description": "Clear print/copy locks",
+        "longDescription": "Removes restrictions (print, copy, edit) from a PDF document."
+      },
+      "sanitize": {
+        "name": "Sanitize PDF",
+        "description": "Clean hidden data",
+        "longDescription": "Removes hidden data from PDF — JavaScript, scripts, embedded files, forms."
       }
     },
     "a11y": {

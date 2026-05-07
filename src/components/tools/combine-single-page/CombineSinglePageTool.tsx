@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useCallback, useRef } from 'react';
+import React, { useState, useCallback, useRef, useEffect } from 'react';
 import { useTranslations } from 'next-intl';
 import { FileUploader } from '../FileUploader';
 import { ProcessingProgress, ProcessingStatus } from '../ProcessingProgress';
@@ -14,6 +14,12 @@ import type { ProcessOutput } from '@/types/pdf';
 export interface CombineSinglePageToolProps {
   /** Custom class name */
   className?: string;
+  /** Optional initial file (skips upload step when prefilled from Studio) */
+  initialFile?: File;
+  /** Hide the FileUploader UI when prefilled */
+  hideUploader?: boolean;
+  /** Callback fired with the resulting blob and original file when processing succeeds */
+  onComplete?: (blob: Blob, originalFile: File) => void;
 }
 
 /**
@@ -22,12 +28,12 @@ export interface CombineSinglePageToolProps {
  * 
  * Provides the UI for combining PDF pages into a single continuous page.
  */
-export function CombineSinglePageTool({ className = '' }: CombineSinglePageToolProps) {
+export function CombineSinglePageTool({ className = '', initialFile, hideUploader, onComplete }: CombineSinglePageToolProps) {
   const t = useTranslations('common');
   const tTools = useTranslations('tools');
   
   // State
-  const [file, setFile] = useState<File | null>(null);
+  const [file, setFile] = useState<File | null>(initialFile ?? null);
   const [totalPages, setTotalPages] = useState<number>(0);
   const [status, setStatus] = useState<ProcessingStatus>('idle');
   const [progress, setProgress] = useState(0);
@@ -45,6 +51,12 @@ export function CombineSinglePageTool({ className = '' }: CombineSinglePageToolP
   
   // Ref for cancellation
   const cancelledRef = useRef(false);
+  useEffect(() => {
+    if (initialFile) {
+      setFile(initialFile);
+    }
+  }, [initialFile]);
+
 
 
   /**
@@ -139,8 +151,10 @@ export function CombineSinglePageTool({ className = '' }: CombineSinglePageToolP
       }
 
       if (output.success && output.result) {
-        setResult(output.result as Blob);
+        const blob = output.result as Blob;
+        setResult(blob);
         setStatus('complete');
+        if (onComplete && file) onComplete(blob, file);
       } else {
         setError(output.error?.message || 'Failed to combine PDF pages.');
         setStatus('error');
@@ -151,7 +165,7 @@ export function CombineSinglePageTool({ className = '' }: CombineSinglePageToolP
         setStatus('error');
       }
     }
-  }, [file, orientation, spacing, backgroundColor, addSeparator, separatorThickness, separatorColor]);
+  }, [file, orientation, spacing, backgroundColor, addSeparator, separatorThickness, separatorColor, onComplete]);
 
   /**
    * Handle cancel operation
@@ -177,8 +191,8 @@ export function CombineSinglePageTool({ className = '' }: CombineSinglePageToolP
   return (
     <div className={`space-y-6 ${className}`.trim()}>
       {/* File Upload Area */}
-      {!file && (
-        <FileUploader
+      {!file && !hideUploader && (
+          <FileUploader
           accept={['application/pdf', '.pdf']}
           multiple={false}
           maxFiles={1}
@@ -188,7 +202,7 @@ export function CombineSinglePageTool({ className = '' }: CombineSinglePageToolP
           label={tTools('combineSinglePage.uploadLabel') || 'Upload PDF File'}
           description={tTools('combineSinglePage.uploadDescription') || 'Drag and drop a PDF file here, or click to browse.'}
         />
-      )}
+        )}
 
       {/* Error Message */}
       {error && (

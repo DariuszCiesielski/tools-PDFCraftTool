@@ -141,6 +141,37 @@ const RemoveBlankPagesTool = dynamic(
   { ssr: false, loading: () => <ToolLoader /> },
 );
 
+// Wave-3 Group A: 29 tools
+const BackgroundColorTool = dynamic(() => import('@/components/tools/background-color/BackgroundColorTool').then((m) => m.BackgroundColorTool), { ssr: false, loading: () => <ToolLoader /> });
+const BookmarkTool = dynamic(() => import('@/components/tools/bookmark/BookmarkTool').then((m) => m.BookmarkTool), { ssr: false, loading: () => <ToolLoader /> });
+const CombineSinglePageTool = dynamic(() => import('@/components/tools/combine-single-page/CombineSinglePageTool').then((m) => m.CombineSinglePageTool), { ssr: false, loading: () => <ToolLoader /> });
+const DecryptPDFTool = dynamic(() => import('@/components/tools/decrypt/DecryptPDFTool').then((m) => m.DecryptPDFTool), { ssr: false, loading: () => <ToolLoader /> });
+const DividePagesTool = dynamic(() => import('@/components/tools/divide/DividePagesTool').then((m) => m.DividePagesTool), { ssr: false, loading: () => <ToolLoader /> });
+const FixPageSizeTool = dynamic(() => import('@/components/tools/fix-page-size/FixPageSizeTool').then((m) => m.FixPageSizeTool), { ssr: false, loading: () => <ToolLoader /> });
+const InvertColorsTool = dynamic(() => import('@/components/tools/invert-colors/InvertColorsTool').then((m) => m.InvertColorsTool), { ssr: false, loading: () => <ToolLoader /> });
+const PageDimensionsTool = dynamic(() => import('@/components/tools/page-dimensions/PageDimensionsTool').then((m) => m.PageDimensionsTool), { ssr: false, loading: () => <ToolLoader /> });
+const PosterizePDFTool = dynamic(() => import('@/components/tools/posterize/PosterizePDFTool').then((m) => m.PosterizePDFTool), { ssr: false, loading: () => <ToolLoader /> });
+const RemoveMetadataTool = dynamic(() => import('@/components/tools/remove-metadata/RemoveMetadataTool').then((m) => m.RemoveMetadataTool), { ssr: false, loading: () => <ToolLoader /> });
+const RemoveRestrictionsTool = dynamic(() => import('@/components/tools/remove-restrictions/RemoveRestrictionsTool').then((m) => m.RemoveRestrictionsTool), { ssr: false, loading: () => <ToolLoader /> });
+const ReversePagesTool = dynamic(() => import('@/components/tools/reverse/ReversePagesTool').then((m) => m.ReversePagesTool), { ssr: false, loading: () => <ToolLoader /> });
+const RotateCustomTool = dynamic(() => import('@/components/tools/rotate-custom/RotateCustomTool').then((m) => m.RotateCustomTool), { ssr: false, loading: () => <ToolLoader /> });
+const SanitizePDFTool = dynamic(() => import('@/components/tools/sanitize/SanitizePDFTool').then((m) => m.SanitizePDFTool), { ssr: false, loading: () => <ToolLoader /> });
+const TableOfContentsTool = dynamic(() => import('@/components/tools/table-of-contents/TableOfContentsTool').then((m) => m.TableOfContentsTool), { ssr: false, loading: () => <ToolLoader /> });
+const TextColorTool = dynamic(() => import('@/components/tools/text-color/TextColorTool').then((m) => m.TextColorTool), { ssr: false, loading: () => <ToolLoader /> });
+const FindAndRedactTool = dynamic(() => import('@/components/tools/find-and-redact/FindAndRedactTool').then((m) => m.FindAndRedactTool), { ssr: false, loading: () => <ToolLoader /> });
+const PDFToGreyscaleTool = dynamic(() => import('@/components/tools/pdf-to-greyscale/PDFToGreyscaleTool').then((m) => m.PDFToGreyscaleTool), { ssr: false, loading: () => <ToolLoader /> });
+const PDFBookletTool = dynamic(() => import('@/components/tools/pdf-booklet/PDFBookletTool').then((m) => m.PDFBookletTool), { ssr: false, loading: () => <ToolLoader /> });
+const RasterizePDFTool = dynamic(() => import('@/components/tools/rasterize/RasterizePDFTool').then((m) => m.RasterizePDFTool), { ssr: false, loading: () => <ToolLoader /> });
+const OCGManagerTool = dynamic(() => import('@/components/tools/ocg-manager/OCGManagerTool').then((m) => m.OCGManagerTool), { ssr: false, loading: () => <ToolLoader /> });
+const AlternateMergeTool = dynamic(() => import('@/components/tools/alternate-merge/AlternateMergeTool').then((m) => m.AlternateMergeTool), { ssr: false, loading: () => <ToolLoader /> });
+const GridCombineTool = dynamic(() => import('@/components/tools/grid-combine/GridCombineTool').then((m) => m.GridCombineTool), { ssr: false, loading: () => <ToolLoader /> });
+const LinearizePDFTool = dynamic(() => import('@/components/tools/linearize/LinearizePDFTool').then((m) => m.LinearizePDFTool), { ssr: false, loading: () => <ToolLoader /> });
+const RepairPDFTool = dynamic(() => import('@/components/tools/repair/RepairPDFTool').then((m) => m.RepairPDFTool), { ssr: false, loading: () => <ToolLoader /> });
+const EditPDFTool = dynamic(() => import('@/components/tools/edit-pdf/EditPDFTool').then((m) => m.EditPDFTool), { ssr: false, loading: () => <ToolLoader /> });
+const StampsTool = dynamic(() => import('@/components/tools/stamps/StampsTool').then((m) => m.StampsTool), { ssr: false, loading: () => <ToolLoader /> });
+const DeskewPDFTool = dynamic(() => import('@/components/tools/deskew/DeskewPDFTool').then((m) => m.DeskewPDFTool), { ssr: false, loading: () => <ToolLoader /> });
+const FontToOutlineTool = dynamic(() => import('@/components/tools/font-to-outline/FontToOutlineTool').then((m) => m.FontToOutlineTool), { ssr: false, loading: () => <ToolLoader /> });
+
 type SupportedToolId = NonNullable<StudioToolId>;
 
 const SUPPORTED_TOOL_IDS: ReadonlySet<string> = new Set<SupportedToolId>([
@@ -172,6 +203,16 @@ const SUPPORTED_TOOL_IDS: ReadonlySet<string> = new Set<SupportedToolId>([
   'header-footer',
   'remove-annotations',
   'remove-blank-pages',
+  // Wave-3 Group A — std refactor with onComplete (16)
+  'background-color', 'bookmark', 'combine-single-page', 'decrypt', 'divide',
+  'fix-page-size', 'invert-colors', 'page-dimensions', 'posterize', 'remove-metadata',
+  'remove-restrictions', 'reverse', 'rotate-custom', 'sanitize', 'table-of-contents', 'text-color',
+  // Wave-3 special with onComplete (3)
+  'find-and-redact', 'pdf-to-greyscale', 'pdf-booklet',
+  // Wave-3 special without onComplete (2)
+  'rasterize', 'ocg-manager',
+  // Wave-3 self-uploader (8)
+  'alternate-merge', 'grid-combine', 'linearize', 'repair', 'edit-pdf', 'stamps', 'deskew', 'font-to-outline',
 ]);
 
 // Tools that produce a PDF as their primary output. Only these get the onComplete callback
@@ -197,6 +238,11 @@ const PDF_OUTPUT_TOOLS: ReadonlySet<string> = new Set<SupportedToolId>([
   'header-footer',
   'remove-annotations',
   'remove-blank-pages',
+  // Wave-3 Group A — PDF→PDF (16 std + 3 special = 19 with onComplete)
+  'background-color', 'bookmark', 'combine-single-page', 'decrypt', 'divide',
+  'fix-page-size', 'invert-colors', 'page-dimensions', 'posterize', 'remove-metadata',
+  'remove-restrictions', 'reverse', 'rotate-custom', 'sanitize', 'table-of-contents', 'text-color',
+  'find-and-redact', 'pdf-to-greyscale', 'pdf-booklet',
 ]);
 
 export function isToolSupportedInDrawer(toolId: StudioToolId): toolId is SupportedToolId {
@@ -241,6 +287,38 @@ const RESULT_FILENAME_PREFIX: Record<SupportedToolId, string> = {
   'header-footer': 'with-headers',
   'remove-annotations': 'cleaned',
   'remove-blank-pages': 'cleaned',
+  // Wave-3 Group A — PDF output (with onComplete)
+  'background-color': 'background',
+  bookmark: 'bookmarked',
+  'combine-single-page': 'combined',
+  decrypt: 'decrypted',
+  divide: 'divided',
+  'fix-page-size': 'fixed',
+  'invert-colors': 'inverted',
+  'page-dimensions': 'resized',
+  posterize: 'posterized',
+  'remove-metadata': 'cleaned',
+  'remove-restrictions': 'unrestricted',
+  reverse: 'reversed',
+  'rotate-custom': 'rotated',
+  sanitize: 'sanitized',
+  'table-of-contents': 'toc',
+  'text-color': 'colored',
+  'find-and-redact': 'redacted',
+  'pdf-to-greyscale': 'greyscale',
+  'pdf-booklet': 'booklet',
+  // Wave-3 — non-PDF or unsafe-cast output (no replaceFileData)
+  rasterize: '',
+  'ocg-manager': '',
+  // Wave-3 self-uploader (output varies, no replaceFileData)
+  'alternate-merge': '',
+  'grid-combine': '',
+  linearize: '',
+  repair: '',
+  'edit-pdf': '',
+  stamps: '',
+  deskew: '',
+  'font-to-outline': '',
 };
 
 function renamedFilename(toolId: SupportedToolId, original: string): string {
@@ -323,6 +401,67 @@ function renderTool({ toolId, initialFile, onComplete }: RenderToolProps) {
       return <RemoveAnnotationsTool initialFile={initialFile} hideUploader={!!initialFile} onComplete={onComplete} />;
     case 'remove-blank-pages':
       return <RemoveBlankPagesTool initialFile={initialFile} hideUploader={!!initialFile} onComplete={onComplete} />;
+    // Wave-3 Group A — PDF→PDF with onComplete (19 tools)
+    case 'background-color':
+      return <BackgroundColorTool initialFile={initialFile} hideUploader={!!initialFile} onComplete={onComplete} />;
+    case 'bookmark':
+      return <BookmarkTool initialFile={initialFile} hideUploader={!!initialFile} onComplete={onComplete} />;
+    case 'combine-single-page':
+      return <CombineSinglePageTool initialFile={initialFile} hideUploader={!!initialFile} onComplete={onComplete} />;
+    case 'decrypt':
+      return <DecryptPDFTool initialFile={initialFile} hideUploader={!!initialFile} onComplete={onComplete} />;
+    case 'divide':
+      return <DividePagesTool initialFile={initialFile} hideUploader={!!initialFile} onComplete={onComplete} />;
+    case 'fix-page-size':
+      return <FixPageSizeTool initialFile={initialFile} hideUploader={!!initialFile} onComplete={onComplete} />;
+    case 'invert-colors':
+      return <InvertColorsTool initialFile={initialFile} hideUploader={!!initialFile} onComplete={onComplete} />;
+    case 'page-dimensions':
+      return <PageDimensionsTool initialFile={initialFile} hideUploader={!!initialFile} onComplete={onComplete} />;
+    case 'posterize':
+      return <PosterizePDFTool initialFile={initialFile} hideUploader={!!initialFile} onComplete={onComplete} />;
+    case 'remove-metadata':
+      return <RemoveMetadataTool initialFile={initialFile} hideUploader={!!initialFile} onComplete={onComplete} />;
+    case 'remove-restrictions':
+      return <RemoveRestrictionsTool initialFile={initialFile} hideUploader={!!initialFile} onComplete={onComplete} />;
+    case 'reverse':
+      return <ReversePagesTool initialFile={initialFile} hideUploader={!!initialFile} onComplete={onComplete} />;
+    case 'rotate-custom':
+      return <RotateCustomTool initialFile={initialFile} hideUploader={!!initialFile} onComplete={onComplete} />;
+    case 'sanitize':
+      return <SanitizePDFTool initialFile={initialFile} hideUploader={!!initialFile} onComplete={onComplete} />;
+    case 'table-of-contents':
+      return <TableOfContentsTool initialFile={initialFile} hideUploader={!!initialFile} onComplete={onComplete} />;
+    case 'text-color':
+      return <TextColorTool initialFile={initialFile} hideUploader={!!initialFile} onComplete={onComplete} />;
+    case 'find-and-redact':
+      return <FindAndRedactTool initialFile={initialFile} hideUploader={!!initialFile} onComplete={onComplete} />;
+    case 'pdf-to-greyscale':
+      return <PDFToGreyscaleTool initialFile={initialFile} hideUploader={!!initialFile} onComplete={onComplete} />;
+    case 'pdf-booklet':
+      return <PDFBookletTool initialFile={initialFile} hideUploader={!!initialFile} onComplete={onComplete} />;
+    // Wave-3 special, no onComplete (2)
+    case 'rasterize':
+      return <RasterizePDFTool initialFile={initialFile} hideUploader={!!initialFile} />;
+    case 'ocg-manager':
+      return <OCGManagerTool initialFile={initialFile} hideUploader={!!initialFile} />;
+    // Wave-3 self-uploader, no props (8)
+    case 'alternate-merge':
+      return <AlternateMergeTool />;
+    case 'grid-combine':
+      return <GridCombineTool />;
+    case 'linearize':
+      return <LinearizePDFTool />;
+    case 'repair':
+      return <RepairPDFTool />;
+    case 'edit-pdf':
+      return <EditPDFTool />;
+    case 'stamps':
+      return <StampsTool />;
+    case 'deskew':
+      return <DeskewPDFTool />;
+    case 'font-to-outline':
+      return <FontToOutlineTool />;
   }
 }
 

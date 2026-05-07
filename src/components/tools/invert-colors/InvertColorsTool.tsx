@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useCallback, useRef } from 'react';
+import React, { useState, useCallback, useRef, useEffect } from 'react';
 import { useTranslations } from 'next-intl';
 import { FileUploader } from '../FileUploader';
 import { ProcessingProgress, ProcessingStatus } from '../ProcessingProgress';
@@ -10,18 +10,31 @@ import { Card } from '@/components/ui/Card';
 import { invertColors } from '@/lib/pdf/processors/invert-colors';
 import type { ProcessOutput } from '@/types/pdf';
 
-export interface InvertColorsToolProps { className?: string; }
+export interface InvertColorsToolProps { className?: string;
+  /** Optional initial file (skips upload step when prefilled from Studio) */
+  initialFile?: File;
+  /** Hide the FileUploader UI when prefilled */
+  hideUploader?: boolean;
+  /** Callback fired with the resulting blob and original file when processing succeeds */
+  onComplete?: (blob: Blob, originalFile: File) => void;
+}
 
-export function InvertColorsTool({ className = '' }: InvertColorsToolProps) {
+export function InvertColorsTool({ className = '', initialFile, hideUploader, onComplete }: InvertColorsToolProps) {
   const t = useTranslations('tools.invertColors');
   const tCommon = useTranslations('common.buttons');
   
-  const [file, setFile] = useState<File | null>(null);
+  const [file, setFile] = useState<File | null>(initialFile ?? null);
   const [status, setStatus] = useState<ProcessingStatus>('idle');
   const [progress, setProgress] = useState(0);
   const [result, setResult] = useState<Blob | null>(null);
   const [error, setError] = useState<string | null>(null);
   const cancelledRef = useRef(false);
+  useEffect(() => {
+    if (initialFile) {
+      setFile(initialFile);
+    }
+  }, [initialFile]);
+
 
   const handleProcess = useCallback(async () => {
     if (!file) return;
@@ -29,17 +42,17 @@ export function InvertColorsTool({ className = '' }: InvertColorsToolProps) {
     setStatus('processing'); setProgress(0); setError(null); setResult(null);
     try {
       const output: ProcessOutput = await invertColors(file, { pages: 'all' }, (prog) => { if (!cancelledRef.current) setProgress(prog); });
-      if (output.success && output.result) { setResult(output.result as Blob); setStatus('complete'); }
+      if (output.success && output.result) { const blob = output.result as Blob; setResult(blob); setStatus('complete'); if (onComplete && file) onComplete(blob, file); }
       else { setError(output.error?.message || 'Failed.'); setStatus('error'); }
     } catch (err) { setError(err instanceof Error ? err.message : 'Error'); setStatus('error'); }
-  }, [file]);
+  }, [file, onComplete]);
 
   const isProcessing = status === 'processing';
 
   return (
     <div className={`space-y-6 ${className}`.trim()}>
-      {!file && (
-        <FileUploader 
+      {!file && !hideUploader && (
+          <FileUploader 
           accept={['application/pdf', '.pdf']} 
           multiple={false} 
           maxFiles={1} 
@@ -49,7 +62,7 @@ export function InvertColorsTool({ className = '' }: InvertColorsToolProps) {
           label={t('uploadLabel')} 
           description={t('uploadDescription')} 
         />
-      )}
+        )}
       
       {error && (
         <div className="p-4 rounded bg-red-50 border border-red-200 text-red-700">

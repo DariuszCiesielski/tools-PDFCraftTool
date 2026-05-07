@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useCallback, useRef } from 'react';
+import React, { useState, useCallback, useRef, useEffect } from 'react';
 import { useTranslations } from 'next-intl';
 import { FileUploader } from '../FileUploader';
 import { ProcessingProgress, ProcessingStatus } from '../ProcessingProgress';
@@ -20,6 +20,12 @@ function generateId(): string {
 export interface PDFToGreyscaleToolProps {
   /** Custom class name */
   className?: string;
+  /** Optional initial file (skips upload step when prefilled from Studio) */
+  initialFile?: File;
+  /** Hide the FileUploader UI when prefilled */
+  hideUploader?: boolean;
+  /** Callback fired with the resulting blob and original file when processing succeeds */
+  onComplete?: (blob: Blob, originalFile: File) => void;
 }
 
 /**
@@ -28,7 +34,7 @@ export interface PDFToGreyscaleToolProps {
  * 
  * Converts PDF pages to greyscale.
  */
-export function PDFToGreyscaleTool({ className = '' }: PDFToGreyscaleToolProps) {
+export function PDFToGreyscaleTool({ className = '', initialFile, hideUploader, onComplete }: PDFToGreyscaleToolProps) {
   const t = useTranslations('common');
   const tTools = useTranslations('tools');
   
@@ -47,6 +53,12 @@ export function PDFToGreyscaleTool({ className = '' }: PDFToGreyscaleToolProps) 
   
   // Ref for cancellation
   const cancelledRef = useRef(false);
+  useEffect(() => {
+    if (initialFile) {
+      setFile({ file: initialFile, id: crypto.randomUUID(), status: 'pending' });
+    }
+  }, [initialFile]);
+
 
   /**
    * Handle file selected from uploader
@@ -150,7 +162,9 @@ export function PDFToGreyscaleTool({ className = '' }: PDFToGreyscaleToolProps) 
       }
 
       if (output.success && output.result) {
-        setResult(output.result as Blob);
+        { const blob = output.result as Blob;
+        setResult(blob);
+        if (onComplete && file?.file) onComplete(blob, file.file); }
         setStatus('complete');
       } else {
         setError(output.error?.message || 'Failed to convert PDF to greyscale.');
@@ -188,7 +202,8 @@ export function PDFToGreyscaleTool({ className = '' }: PDFToGreyscaleToolProps) 
   return (
     <div className={`space-y-6 ${className}`.trim()}>
       {/* File Upload Area */}
-      <FileUploader
+      {!file && !hideUploader && (
+        <FileUploader
         accept={['application/pdf', '.pdf']}
         multiple={false}
         maxFiles={1}
@@ -198,6 +213,7 @@ export function PDFToGreyscaleTool({ className = '' }: PDFToGreyscaleToolProps) 
         label={tTools('pdfToGreyscale.uploadLabel') || 'Upload PDF'}
         description={tTools('pdfToGreyscale.uploadDescription') || 'Drag and drop a PDF file here, or click to browse.'}
       />
+      )}
 
       {/* Error Message */}
       {error && (

@@ -16,13 +16,38 @@ interface StudioMenuBarProps {
 }
 
 const TOOL_GROUPS: Array<{
-  group: 'pages' | 'enhance' | 'compress' | 'security';
+  group: 'pages' | 'enhance' | 'compress' | 'security' | 'convert';
   tools: NonNullable<StudioToolId>[];
 }> = [
-  { group: 'pages', tools: ['split', 'merge', 'rotate', 'page-numbers'] },
-  { group: 'enhance', tools: ['watermark'] },
-  { group: 'compress', tools: ['compress'] },
-  { group: 'security', tools: ['encrypt'] },
+  // Pages — operacje na stronach PDF
+  { group: 'pages', tools: [
+    'split', 'merge', 'rotate', 'extract-images',
+    // Wave-2
+    'delete', 'organize', 'extract', 'crop', 'add-blank-page', 'n-up',
+    // Wave-3
+    'alternate-merge', 'combine-single-page', 'divide', 'grid-combine',
+    'page-dimensions', 'pdf-booklet', 'posterize', 'reverse', 'rotate-custom',
+  ] },
+  // Enhance — wzbogacanie zawartości
+  { group: 'enhance', tools: [
+    'page-numbers', 'watermark', 'edit-metadata', 'sign', 'ocr',
+    // Wave-2
+    'flatten', 'header-footer', 'remove-annotations', 'remove-blank-pages',
+    // Wave-3
+    'background-color', 'bookmark', 'decrypt', 'deskew', 'edit-pdf',
+    'find-and-redact', 'fix-page-size', 'font-to-outline', 'invert-colors',
+    'ocg-manager', 'pdf-to-greyscale', 'rasterize', 'remove-metadata', 'repair',
+    'stamps', 'table-of-contents', 'text-color',
+  ] },
+  // Compress
+  { group: 'compress', tools: ['compress', 'linearize'] },
+  // Security
+  { group: 'security', tools: ['encrypt', 'remove-restrictions', 'sanitize'] },
+  // Convert — konwersje formatów
+  { group: 'convert', tools: [
+    'pdf-to-docx', 'pdf-to-excel', 'pdf-to-pptx',
+    'word-to-pdf', 'excel-to-pdf', 'image-to-pdf',
+  ] },
 ];
 
 export function StudioMenuBar({ locale, onFilesAdded }: StudioMenuBarProps) {

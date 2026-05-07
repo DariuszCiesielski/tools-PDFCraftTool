@@ -30,6 +30,12 @@ const loadPdfjsLib = async () => {
 
 export interface BookmarkToolProps {
   className?: string;
+  /** Optional initial file (skips upload step when prefilled from Studio) */
+  initialFile?: File;
+  /** Hide the FileUploader UI when prefilled */
+  hideUploader?: boolean;
+  /** Callback fired with the resulting blob and original file when processing succeeds */
+  onComplete?: (blob: Blob, originalFile: File) => void;
 }
 
 interface BookmarkNode {
@@ -46,12 +52,12 @@ interface BookmarkNode {
  * BookmarkTool Component - Visual Bookmark Editor
  * Provides a visual interface for editing PDF bookmarks with PDF preview
  */
-export function BookmarkTool({ className = '' }: BookmarkToolProps) {
+export function BookmarkTool({ className = '', initialFile, hideUploader, onComplete }: BookmarkToolProps) {
   const t = useTranslations('common');
   const tTools = useTranslations('tools');
 
   // File state
-  const [file, setFile] = useState<File | null>(null);
+  const [file, setFile] = useState<File | null>(initialFile ?? null);
   const [pdfDoc, setPdfDoc] = useState<any>(null);
   const [totalPages, setTotalPages] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
@@ -72,6 +78,12 @@ export function BookmarkTool({ className = '' }: BookmarkToolProps) {
 
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const cancelledRef = useRef(false);
+  useEffect(() => {
+    if (initialFile) {
+      setFile(initialFile);
+    }
+  }, [initialFile]);
+
 
   // Load PDF and extract existing bookmarks
   const loadPdf = useCallback(async (pdfFile: File) => {
@@ -332,8 +344,10 @@ export function BookmarkTool({ className = '' }: BookmarkToolProps) {
       );
 
       if (output.success && output.result) {
-        setResult(output.result as Blob);
+        const blob = output.result as Blob;
+        setResult(blob);
         setStatus('complete');
+        if (onComplete && file) onComplete(blob, file);
       } else {
         setError(output.error?.message || 'Failed to process bookmarks.');
         setStatus('error');
@@ -342,7 +356,7 @@ export function BookmarkTool({ className = '' }: BookmarkToolProps) {
       setError(err instanceof Error ? err.message : 'An unexpected error occurred.');
       setStatus('error');
     }
-  }, [file, bookmarks]);
+  }, [file, bookmarks, onComplete]);
 
   const isProcessing = status === 'processing';
 
@@ -437,8 +451,8 @@ export function BookmarkTool({ className = '' }: BookmarkToolProps) {
 
   return (
     <div className={`space-y-6 ${className}`.trim()}>
-      {!file && (
-        <FileUploader
+      {!file && !hideUploader && (
+          <FileUploader
           accept={['application/pdf', '.pdf']}
           multiple={false}
           maxFiles={1}
@@ -448,7 +462,7 @@ export function BookmarkTool({ className = '' }: BookmarkToolProps) {
           label={tTools('bookmark.uploadLabel') || 'Upload PDF File'}
           description={tTools('bookmark.uploadDescription') || 'Drag and drop a PDF file to edit bookmarks.'}
         />
-      )}
+        )}
 
       {error && (
         <div className="p-4 rounded-[var(--radius-md)] bg-red-50 border border-red-200 text-red-700" role="alert">

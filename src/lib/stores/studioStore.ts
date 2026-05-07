@@ -29,6 +29,40 @@ export type StudioToolId =
   | 'header-footer'
   | 'remove-annotations'
   | 'remove-blank-pages'
+  // Wave-3 Group A: PDF→PDF / page operations / utilities (29 tools)
+  // — std refactor with onComplete (16):
+  | 'background-color'
+  | 'bookmark'
+  | 'combine-single-page'
+  | 'decrypt'
+  | 'divide'
+  | 'fix-page-size'
+  | 'invert-colors'
+  | 'page-dimensions'
+  | 'posterize'
+  | 'remove-metadata'
+  | 'remove-restrictions'
+  | 'reverse'
+  | 'rotate-custom'
+  | 'sanitize'
+  | 'table-of-contents'
+  | 'text-color'
+  // — special refactor with onComplete (3):
+  | 'find-and-redact'
+  | 'pdf-to-greyscale'
+  | 'pdf-booklet'
+  // — special refactor without onComplete (2, ZIP/ambig output):
+  | 'rasterize'
+  | 'ocg-manager'
+  // — self-uploader, no ToolComponent refactor (8):
+  | 'alternate-merge'
+  | 'grid-combine'
+  | 'linearize'
+  | 'repair'
+  | 'edit-pdf'
+  | 'stamps'
+  | 'deskew'
+  | 'font-to-outline'
   | null;
 
 export interface StudioFile {

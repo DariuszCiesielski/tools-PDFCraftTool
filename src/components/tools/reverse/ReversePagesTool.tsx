@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useCallback, useRef } from 'react';
+import React, { useState, useCallback, useRef, useEffect } from 'react';
 import { useTranslations } from 'next-intl';
 import { FileUploader } from '../FileUploader';
 import { ProcessingProgress, ProcessingStatus } from '../ProcessingProgress';
@@ -14,6 +14,12 @@ import type { ProcessOutput } from '@/types/pdf';
 export interface ReversePagesToolProps {
   /** Custom class name */
   className?: string;
+  /** Optional initial file (skips upload step when prefilled from Studio) */
+  initialFile?: File;
+  /** Hide the FileUploader UI when prefilled */
+  hideUploader?: boolean;
+  /** Callback fired with the resulting blob and original file when processing succeeds */
+  onComplete?: (blob: Blob, originalFile: File) => void;
 }
 
 /**
@@ -22,12 +28,12 @@ export interface ReversePagesToolProps {
  * 
  * Provides the UI for reversing page order in a PDF.
  */
-export function ReversePagesTool({ className = '' }: ReversePagesToolProps) {
+export function ReversePagesTool({ className = '', initialFile, hideUploader, onComplete }: ReversePagesToolProps) {
   const t = useTranslations('common');
   const tTools = useTranslations('tools');
   
   // State
-  const [file, setFile] = useState<File | null>(null);
+  const [file, setFile] = useState<File | null>(initialFile ?? null);
   const [totalPages, setTotalPages] = useState<number>(0);
   const [status, setStatus] = useState<ProcessingStatus>('idle');
   const [progress, setProgress] = useState(0);
@@ -37,6 +43,12 @@ export function ReversePagesTool({ className = '' }: ReversePagesToolProps) {
   
   // Ref for cancellation
   const cancelledRef = useRef(false);
+  useEffect(() => {
+    if (initialFile) {
+      setFile(initialFile);
+    }
+  }, [initialFile]);
+
 
   /**
    * Load PDF to get page count
@@ -125,8 +137,10 @@ export function ReversePagesTool({ className = '' }: ReversePagesToolProps) {
       }
 
       if (output.success && output.result) {
-        setResult(output.result as Blob);
+        const blob = output.result as Blob;
+        setResult(blob);
         setStatus('complete');
+        if (onComplete && file) onComplete(blob, file);
       } else {
         setError(output.error?.message || 'Failed to reverse pages.');
         setStatus('error');
@@ -137,7 +151,7 @@ export function ReversePagesTool({ className = '' }: ReversePagesToolProps) {
         setStatus('error');
       }
     }
-  }, [file, totalPages]);
+  }, [file, totalPages, onComplete]);
 
   /**
    * Handle cancel operation
@@ -163,8 +177,8 @@ export function ReversePagesTool({ className = '' }: ReversePagesToolProps) {
   return (
     <div className={`space-y-6 ${className}`.trim()}>
       {/* File Upload Area */}
-      {!file && (
-        <FileUploader
+      {!file && !hideUploader && (
+          <FileUploader
           accept={['application/pdf', '.pdf']}
           multiple={false}
           maxFiles={1}
@@ -174,7 +188,7 @@ export function ReversePagesTool({ className = '' }: ReversePagesToolProps) {
           label={tTools('reversePages.uploadLabel') || 'Upload PDF File'}
           description={tTools('reversePages.uploadDescription') || 'Drag and drop a PDF file here, or click to browse.'}
         />
-      )}
+        )}
 
       {/* Error Message */}
       {error && (

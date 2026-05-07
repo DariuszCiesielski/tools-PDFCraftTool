@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useCallback, useRef } from 'react';
+import React, { useState, useCallback, useRef, useEffect } from 'react';
 import { useTranslations } from 'next-intl';
 import { FileUploader } from '../FileUploader';
 import { ProcessingProgress, ProcessingStatus } from '../ProcessingProgress';
@@ -13,6 +13,12 @@ import type { ProcessOutput } from '@/types/pdf';
 export interface PageDimensionsToolProps {
   /** Custom class name */
   className?: string;
+  /** Optional initial file (skips upload step when prefilled from Studio) */
+  initialFile?: File;
+  /** Hide the FileUploader UI when prefilled */
+  hideUploader?: boolean;
+  /** Callback fired with the resulting blob and original file when processing succeeds */
+  onComplete?: (blob: Blob, originalFile: File) => void;
 }
 
 type DisplayUnit = 'pt' | 'in' | 'mm';
@@ -24,12 +30,12 @@ type DisplayUnit = 'pt' | 'in' | 'mm';
  * Provides the UI for analyzing PDF page dimensions.
  * Displays detailed information about each page's size, orientation, and standard size match.
  */
-export function PageDimensionsTool({ className = '' }: PageDimensionsToolProps) {
+export function PageDimensionsTool({ className = '', initialFile, hideUploader, onComplete }: PageDimensionsToolProps) {
   const t = useTranslations('common');
   const tTools = useTranslations('tools');
   
   // State
-  const [file, setFile] = useState<File | null>(null);
+  const [file, setFile] = useState<File | null>(initialFile ?? null);
   const [status, setStatus] = useState<ProcessingStatus>('idle');
   const [progress, setProgress] = useState(0);
   const [progressMessage, setProgressMessage] = useState('');
@@ -42,6 +48,12 @@ export function PageDimensionsTool({ className = '' }: PageDimensionsToolProps) 
   
   // Ref for cancellation
   const cancelledRef = useRef(false);
+  useEffect(() => {
+    if (initialFile) {
+      setFile(initialFile);
+    }
+  }, [initialFile]);
+
 
   /**
    * Handle file selected from uploader
@@ -108,8 +120,10 @@ export function PageDimensionsTool({ className = '' }: PageDimensionsToolProps) 
       }
 
       if (output.success && output.result) {
-        setResult(output.result as Blob);
+        const blob = output.result as Blob;
+        setResult(blob);
         setStatus('complete');
+        if (onComplete && file) onComplete(blob, file);
         
         // Set dimensions result
         if (output.metadata?.result) {
@@ -125,7 +139,7 @@ export function PageDimensionsTool({ className = '' }: PageDimensionsToolProps) 
         setStatus('error');
       }
     }
-  }, [file, displayUnit]);
+  }, [file, displayUnit, onComplete]);
 
   /**
    * Handle cancel operation
@@ -167,7 +181,8 @@ export function PageDimensionsTool({ className = '' }: PageDimensionsToolProps) 
   return (
     <div className={`space-y-6 ${className}`.trim()}>
       {/* File Upload Area */}
-      <FileUploader
+      {!file && !hideUploader && (
+        <FileUploader
         accept={['application/pdf', '.pdf']}
         multiple={false}
         maxFiles={1}
@@ -177,6 +192,7 @@ export function PageDimensionsTool({ className = '' }: PageDimensionsToolProps) 
         label={tTools('pageDimensions.uploadLabel') || 'Upload PDF File'}
         description={tTools('pageDimensions.uploadDescription') || 'Drag and drop a PDF file here, or click to browse.'}
       />
+  )}
 
       {/* Error Message */}
       {error && (

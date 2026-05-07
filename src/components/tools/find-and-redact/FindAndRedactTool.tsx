@@ -17,6 +17,12 @@ import { loadPdfjs } from '@/lib/pdf/loader';
 
 export interface FindAndRedactToolProps {
     className?: string;
+  /** Optional initial file (skips upload step when prefilled from Studio) */
+  initialFile?: File;
+  /** Hide the FileUploader UI when prefilled */
+  hideUploader?: boolean;
+  /** Callback fired with the resulting blob and original file when processing succeeds */
+  onComplete?: (blob: Blob, originalFile: File) => void;
 }
 
 /**
@@ -26,12 +32,12 @@ export interface FindAndRedactToolProps {
  * and redact matching content. Useful for removing sensitive information
  * like account numbers, names, etc. from multi-page documents.
  */
-export function FindAndRedactTool({ className = '' }: FindAndRedactToolProps) {
+export function FindAndRedactTool({ className = '', initialFile, hideUploader, onComplete }: FindAndRedactToolProps) {
     const t = useTranslations('common');
     const tTools = useTranslations('tools.findAndRedact');
 
     // File state
-    const [file, setFile] = useState<File | null>(null);
+    const [file, setFile] = useState<File | null>(initialFile ?? null);
     const [status, setStatus] = useState<ProcessingStatus>('idle');
     const [progress, setProgress] = useState(0);
     const [progressMessage, setProgressMessage] = useState('');
@@ -64,6 +70,12 @@ export function FindAndRedactTool({ className = '' }: FindAndRedactToolProps) {
     const pdfDocRef = useRef<any>(null);
 
     const cancelledRef = useRef(false);
+  useEffect(() => {
+    if (initialFile) {
+      setFile(initialFile);
+    }
+  }, [initialFile]);
+
 
     // Parse search terms from input
     const parsedTerms = useMemo(() => parseSearchTerms(searchTermsInput), [searchTermsInput]);
@@ -365,7 +377,7 @@ export function FindAndRedactTool({ className = '' }: FindAndRedactToolProps) {
     return (
         <div className={`space-y-6 ${className}`.trim()}>
             {/* File Upload */}
-            {!file && (
+            {!file && !hideUploader && (
                 <FileUploader
                     accept={['application/pdf', '.pdf']}
                     multiple={false}

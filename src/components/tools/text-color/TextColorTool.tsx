@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useCallback, useRef } from 'react';
+import React, { useState, useCallback, useRef, useEffect } from 'react';
 import { useTranslations } from 'next-intl';
 import { FileUploader } from '../FileUploader';
 import { ProcessingProgress, ProcessingStatus } from '../ProcessingProgress';
@@ -10,13 +10,20 @@ import { Card } from '@/components/ui/Card';
 import { changeTextColor } from '@/lib/pdf/processors/text-color';
 import type { ProcessOutput } from '@/types/pdf';
 
-export interface TextColorToolProps { className?: string; }
+export interface TextColorToolProps { className?: string;
+  /** Optional initial file (skips upload step when prefilled from Studio) */
+  initialFile?: File;
+  /** Hide the FileUploader UI when prefilled */
+  hideUploader?: boolean;
+  /** Callback fired with the resulting blob and original file when processing succeeds */
+  onComplete?: (blob: Blob, originalFile: File) => void;
+}
 
-export function TextColorTool({ className = '' }: TextColorToolProps) {
+export function TextColorTool({ className = '', initialFile, hideUploader, onComplete }: TextColorToolProps) {
   const t = useTranslations('tools.textColor');
   const tCommon = useTranslations('common.buttons');
   
-  const [file, setFile] = useState<File | null>(null);
+  const [file, setFile] = useState<File | null>(initialFile ?? null);
   const [status, setStatus] = useState<ProcessingStatus>('idle');
   const [progress, setProgress] = useState(0);
   const [result, setResult] = useState<Blob | null>(null);
@@ -25,6 +32,12 @@ export function TextColorTool({ className = '' }: TextColorToolProps) {
   const [mode, setMode] = useState<'dark' | 'light'>('dark');
   const [threshold, setThreshold] = useState(128);
   const cancelledRef = useRef(false);
+  useEffect(() => {
+    if (initialFile) {
+      setFile(initialFile);
+    }
+  }, [initialFile]);
+
 
   const hexToRgb = (hex: string) => {
     const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
@@ -42,17 +55,17 @@ export function TextColorTool({ className = '' }: TextColorToolProps) {
         mode,
         threshold,
       }, (prog) => { if (!cancelledRef.current) setProgress(prog); });
-      if (output.success && output.result) { setResult(output.result as Blob); setStatus('complete'); }
+      if (output.success && output.result) { const blob = output.result as Blob; setResult(blob); setStatus('complete'); if (onComplete && file) onComplete(blob, file); }
       else { setError(output.error?.message || 'Failed.'); setStatus('error'); }
     } catch (err) { setError(err instanceof Error ? err.message : 'Error'); setStatus('error'); }
-  }, [file, color, mode, threshold]);
+  }, [file, color, mode, threshold, onComplete]);
 
   const isProcessing = status === 'processing';
 
   return (
     <div className={`space-y-6 ${className}`.trim()}>
-      {!file && (
-        <FileUploader 
+      {!file && !hideUploader && (
+          <FileUploader 
           accept={['application/pdf', '.pdf']} 
           multiple={false} 
           maxFiles={1} 
@@ -62,7 +75,7 @@ export function TextColorTool({ className = '' }: TextColorToolProps) {
           label={t('uploadLabel')} 
           description={t('uploadDescription')} 
         />
-      )}
+        )}
       
       {error && (
         <div className="p-4 rounded bg-red-50 border border-red-200 text-red-700">

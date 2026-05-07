@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useCallback, useRef } from 'react';
+import React, { useState, useCallback, useRef, useEffect } from 'react';
 import { useTranslations } from 'next-intl';
 import { FileUploader } from '../FileUploader';
 import { ProcessingProgress, ProcessingStatus } from '../ProcessingProgress';
@@ -14,6 +14,12 @@ import type { ProcessOutput } from '@/types/pdf';
 export interface RotateCustomToolProps {
     /** Custom class name */
     className?: string;
+  /** Optional initial file (skips upload step when prefilled from Studio) */
+  initialFile?: File;
+  /** Hide the FileUploader UI when prefilled */
+  hideUploader?: boolean;
+  /** Callback fired with the resulting blob and original file when processing succeeds */
+  onComplete?: (blob: Blob, originalFile: File) => void;
 }
 
 interface PagePreview {
@@ -27,12 +33,12 @@ interface PagePreview {
  * 
  * Provides the UI for rotating PDF pages by arbitrary degrees.
  */
-export function RotateCustomTool({ className = '' }: RotateCustomToolProps) {
+export function RotateCustomTool({ className = '', initialFile, hideUploader, onComplete }: RotateCustomToolProps) {
     const t = useTranslations('common');
     const tTools = useTranslations('tools');
 
     // State
-    const [file, setFile] = useState<File | null>(null);
+    const [file, setFile] = useState<File | null>(initialFile ?? null);
     const [totalPages, setTotalPages] = useState<number>(0);
     const [status, setStatus] = useState<ProcessingStatus>('idle');
     const [progress, setProgress] = useState(0);
@@ -47,6 +53,12 @@ export function RotateCustomTool({ className = '' }: RotateCustomToolProps) {
 
     // Ref for cancellation
     const cancelledRef = useRef(false);
+  useEffect(() => {
+    if (initialFile) {
+      setFile(initialFile);
+    }
+  }, [initialFile]);
+
 
     /**
      * Load PDF and generate page previews
@@ -234,8 +246,10 @@ export function RotateCustomTool({ className = '' }: RotateCustomToolProps) {
             }
 
             if (output.success && output.result) {
-                setResult(output.result as Blob);
+                const blob = output.result as Blob;
+                setResult(blob);
                 setStatus('complete');
+                if (onComplete && file) onComplete(blob, file);
             } else {
                 setError(output.error?.message || t('errors.processingFailed') || 'Failed to rotate PDF.');
                 setStatus('error');
@@ -246,7 +260,7 @@ export function RotateCustomTool({ className = '' }: RotateCustomToolProps) {
                 setStatus('error');
             }
         }
-    }, [file, pagePreviews, t]);
+    }, [file, pagePreviews, t, onComplete]);
 
     /**
      * Handle cancel operation
@@ -274,8 +288,8 @@ export function RotateCustomTool({ className = '' }: RotateCustomToolProps) {
     return (
         <div className={`space-y-6 ${className}`.trim()}>
             {/* File Upload Area */}
-            {!file && (
-                <FileUploader
+            {!file && !hideUploader && (
+                  <FileUploader
                     accept={['application/pdf', '.pdf']}
                     multiple={false}
                     maxFiles={1}
@@ -285,7 +299,7 @@ export function RotateCustomTool({ className = '' }: RotateCustomToolProps) {
                     label={tTools('rotateCustom.uploadLabel') || t('buttons.upload')}
                     description={tTools('rotateCustom.uploadDescription')}
                 />
-            )}
+                )}
 
             {/* Error Message */}
             {error && (

@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useCallback, useRef } from 'react';
+import React, { useState, useCallback, useRef, useEffect } from 'react';
 import { useTranslations } from 'next-intl';
 import { FileUploader } from '../FileUploader';
 import { ProcessingProgress, ProcessingStatus } from '../ProcessingProgress';
@@ -14,6 +14,12 @@ import type { ProcessOutput } from '@/types/pdf';
 export interface DecryptPDFToolProps {
   /** Custom class name */
   className?: string;
+  /** Optional initial file (skips upload step when prefilled from Studio) */
+  initialFile?: File;
+  /** Hide the FileUploader UI when prefilled */
+  hideUploader?: boolean;
+  /** Callback fired with the resulting blob and original file when processing succeeds */
+  onComplete?: (blob: Blob, originalFile: File) => void;
 }
 
 /**
@@ -23,12 +29,12 @@ export interface DecryptPDFToolProps {
  * Provides the UI for decrypting password-protected PDF files.
  * All decryption is performed client-side - passwords are never transmitted.
  */
-export function DecryptPDFTool({ className = '' }: DecryptPDFToolProps) {
+export function DecryptPDFTool({ className = '', initialFile, hideUploader, onComplete }: DecryptPDFToolProps) {
   const t = useTranslations('common');
   const tTools = useTranslations('tools');
   
   // State
-  const [file, setFile] = useState<File | null>(null);
+  const [file, setFile] = useState<File | null>(initialFile ?? null);
   const [status, setStatus] = useState<ProcessingStatus>('idle');
   const [progress, setProgress] = useState(0);
   const [progressMessage, setProgressMessage] = useState('');
@@ -45,6 +51,12 @@ export function DecryptPDFTool({ className = '' }: DecryptPDFToolProps) {
   
   // Ref for cancellation
   const cancelledRef = useRef(false);
+  useEffect(() => {
+    if (initialFile) {
+      setFile(initialFile);
+    }
+  }, [initialFile]);
+
 
   const handleFilesSelected = useCallback((files: File[]) => {
     if (files.length > 0) {
@@ -101,8 +113,10 @@ export function DecryptPDFTool({ className = '' }: DecryptPDFToolProps) {
       }
 
       if (output.success && output.result) {
-        setResult(output.result as Blob);
+        const blob = output.result as Blob;
+        setResult(blob);
         setStatus('complete');
+        if (onComplete && file) onComplete(blob, file);
       } else {
         // Check for invalid password error
         const errorMsg = output.error?.message || '';
@@ -134,7 +148,7 @@ export function DecryptPDFTool({ className = '' }: DecryptPDFToolProps) {
         setStatus('error');
       }
     }
-  }, [file, password, tTools]);
+  }, [file, password, tTools, onComplete]);
 
   const handleCancel = useCallback(() => {
     cancelledRef.current = true;
@@ -154,7 +168,8 @@ export function DecryptPDFTool({ className = '' }: DecryptPDFToolProps) {
   return (
     <div className={`space-y-6 ${className}`.trim()}>
       {/* File Upload Area */}
-      <FileUploader
+      {!file && !hideUploader && (
+        <FileUploader
         accept={['application/pdf', '.pdf']}
         multiple={false}
         maxFiles={1}
@@ -164,6 +179,7 @@ export function DecryptPDFTool({ className = '' }: DecryptPDFToolProps) {
         label={tTools('decryptPdf.uploadLabel') || 'Upload Encrypted PDF'}
         description={tTools('decryptPdf.uploadDescription') || 'Drag and drop an encrypted PDF file here, or click to browse.'}
       />
+  )}
 
       {/* Error Message */}
       {error && (

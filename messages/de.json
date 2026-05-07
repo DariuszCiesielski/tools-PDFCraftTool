@@ -2274,6 +2274,151 @@
         "name": "Leere Seiten entfernen",
         "description": "Leere Seiten aus dem PDF bereinigen",
         "longDescription": "Erkennen und entfernen Sie automatisch leere Seiten aus einem PDF-Dokument."
+      },
+      "alternate-merge": {
+        "name": "Alternierender Zusammenführ",
+        "description": "Seiten zweier PDFs verflechten",
+        "longDescription": "Verflechtet Seiten aus zwei PDF-Dokumenten (1A, 1B, 2A, 2B…). Nützlich für einseitige Scans."
+      },
+      "combine-single-page": {
+        "name": "Auf eine Seite zusammenfassen",
+        "description": "Alle Seiten auf einem Blatt",
+        "longDescription": "Fügt alle PDF-Seiten zu einer einzigen langen Seite zusammen (für das Scrollen)."
+      },
+      "divide": {
+        "name": "Seiten teilen",
+        "description": "Seiten durch Linien aufteilen",
+        "longDescription": "Teilt jede PDF-Seite vertikal oder horizontal in mehrere kleinere Seiten auf."
+      },
+      "grid-combine": {
+        "name": "Raster-Zusammenführung",
+        "description": "Seiten im Raster zusammenfassen",
+        "longDescription": "Ordnet mehrere PDF-Seiten in einem Raster (z. B. 2×2, 3×3) auf einem Blatt an."
+      },
+      "page-dimensions": {
+        "name": "Seitengröße",
+        "description": "PDF-Seiten skalieren",
+        "longDescription": "Ändern Sie Breite und Höhe von PDF-Seiten – A4, Letter, Legal oder benutzerdefinierte Werte."
+      },
+      "pdf-booklet": {
+        "name": "PDF-Broschüre",
+        "description": "Broschürenlayout zum Drucken",
+        "longDescription": "Erstellt ein Broschürenlayout aus PDFs zum Drucken – die Seiten entfalten sich beim Falten."
+      },
+      "posterize": {
+        "name": "Poster erstellen",
+        "description": "Seite in Kacheln aufteilen",
+        "longDescription": "Teilt jede PDF-Seite in Kacheln auf, um sie als großes Poster zu drucken."
+      },
+      "reverse": {
+        "name": "Seitenreihenfolge umkehren",
+        "description": "Seitenreihenfolge umkehren",
+        "longDescription": "Kehrt die Reihenfolge der Seiten in einem PDF-Dokument um (letzte → erste)."
+      },
+      "rotate-custom": {
+        "name": "Benutzerdefinierte Drehung",
+        "description": "Nach beliebigem Winkel drehen",
+        "longDescription": "Dreht PDF-Seiten um jeden beliebigen Winkel (nicht auf 90/180° beschränkt)."
+      },
+      "background-color": {
+        "name": "Hintergrundfarbe",
+        "description": "Hintergrundfarbe hinzufügen",
+        "longDescription": "Fügt jeder PDF-Seite eine einfarbige Hintergrundfarbe hinzu."
+      },
+      "bookmark": {
+        "name": "Lesezeichen",
+        "description": "PDF-Lesezeichen bearbeiten",
+        "longDescription": "Visueller Lesezeichen-Editor mit PDF-Vorschau – hinzufügen, entfernen, verschachteln."
+      },
+      "decrypt": {
+        "name": "PDF entschlüsseln",
+        "description": "Passwort aus PDF entfernen",
+        "longDescription": "Entfernt das Passwort aus einem geschützten PDF-Dokument (das Passwort ist erforderlich)."
+      },
+      "deskew": {
+        "name": "Geradeausrichten",
+        "description": "Schiefe Scans automatisch korrigieren",
+        "longDescription": "Richtet schief gescannte Seiten automatisch gerade aus (ZIP-Ausgabe für Batch-Verarbeitung)."
+      },
+      "edit-pdf": {
+        "name": "PDF bearbeiten",
+        "description": "Integrierter PDF-Editor",
+        "longDescription": "Bearbeiten Sie PDF-Inhalte visuell – Text, Bilder, Formen."
+      },
+      "find-and-redact": {
+        "name": "Suchen & Schwärzen",
+        "description": "Text suchen und schwärzen",
+        "longDescription": "Sucht Text in PDFs und schwärzt ausgewählte Fragmente (Schwärzen sensibler Daten)."
+      },
+      "fix-page-size": {
+        "name": "Seitengröße anpassen",
+        "description": "Seitengrößen normieren",
+        "longDescription": "Erkennt verschiedene Seitengrößen und normiert diese auf ein Standardformat."
+      },
+      "font-to-outline": {
+        "name": "Schrift in Pfade umwandeln",
+        "description": "Text in Pfade konvertieren",
+        "longDescription": "Konvertiert PDF-Text in Vektorpfade – schützt vor fehlenden Schriftarten."
+      },
+      "invert-colors": {
+        "name": "Farben invertieren",
+        "description": "Farbnegativ des PDFs erstellen",
+        "longDescription": "Invertiert Farben in einem PDF-Dokument (z. B. für den Dunkelmodus beim Lesen)."
+      },
+      "ocg-manager": {
+        "name": "Layer-Manager",
+        "description": "OCG-Layer-Editor",
+        "longDescription": "Schalten, bearbeiten und verwalten Sie Optionale Inhaltsguppen (Layer) in einem PDF."
+      },
+      "pdf-to-greyscale": {
+        "name": "PDF zu Graustufen",
+        "description": "In Graustufen konvertieren",
+        "longDescription": "Konvertiert farbige PDFs in Graustufen (kleinere Dateigröße für den Druck)."
+      },
+      "rasterize": {
+        "name": "Rasterisieren",
+        "description": "Vektor → Bitmap",
+        "longDescription": "Konvertiert PDF-Seiten von Vektorgrafiken in Rastergrafiken (flache Bilder)."
+      },
+      "remove-metadata": {
+        "name": "Metadaten entfernen",
+        "description": "PDF-Metadaten löschen",
+        "longDescription": "Entfernt alle Metadaten (Autor, Datum, Titel) aus einem PDF-Dokument."
+      },
+      "repair": {
+        "name": "PDF reparieren",
+        "description": "Beschädigtes PDF beheben",
+        "longDescription": "Versucht, beschädigte oder fehlerhafte PDF-Dateien zu reparieren."
+      },
+      "stamps": {
+        "name": "Stempel",
+        "description": "Stempel zu PDF hinzufügen",
+        "longDescription": "Fügt visuelle Stempel (VERTRAULICH, GENEHMIGT, ENTWURF usw.) auf PDF-Seiten ein."
+      },
+      "table-of-contents": {
+        "name": "Inhaltsverzeichnis",
+        "description": "Inhaltsverzeichnis automatisch erstellen",
+        "longDescription": "Erstellt automatisch ein Inhaltsverzeichnis aus PDF-Überschriften oder Lesezeichen."
+      },
+      "text-color": {
+        "name": "Textfarbe",
+        "description": "Textfarbe im PDF ändern",
+        "longDescription": "Ändert die Farbe von allen (oder ausgewählten) Texten in einem PDF-Dokument."
+      },
+      "linearize": {
+        "name": "Linearisieren (Web)",
+        "description": "Für Online-Ansicht optimieren",
+        "longDescription": "Linearisiert PDFs für schnelles Laden im Browser (Fast Web View)."
+      },
+      "remove-restrictions": {
+        "name": "Einschränkungen entfernen",
+        "description": "Druck-/Kopiersperren aufheben",
+        "longDescription": "Entfernt Einschränkungen (Druck, Kopie, Bearbeitung) aus einem PDF-Dokument."
+      },
+      "sanitize": {
+        "name": "PDF bereinigen",
+        "description": "Versteckte Daten entfernen",
+        "longDescription": "Entfernt versteckte Daten aus PDFs – JavaScript, Skripte, eingebettete Dateien, Formulare."
       }
     }
   }

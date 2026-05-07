@@ -2492,6 +2492,151 @@
         "name": "空白ページの削除",
         "description": "PDFから空白ページをクリーンアップ",
         "longDescription": "PDFドキュメントから空白ページを自動的に検出し、削除します。"
+      },
+      "alternate-merge": {
+        "name": "交互マージ",
+        "description": "2つのPDFのページを交互に結合",
+        "longDescription": "2つのPDFドキュメントのページを交互に結合します（1A, 1B, 2A, 2B…）。片面スキャンに便利です。"
+      },
+      "combine-single-page": {
+        "name": "1ページに結合",
+        "description": "全ページを1枚の用紙に",
+        "longDescription": "PDFの全ページを1枚の縦長のページに結合します（スクロール表示向け）。"
+      },
+      "divide": {
+        "name": "ページ分割",
+        "description": "ページを線で分割",
+        "longDescription": "PDFの各ページを縦または横に分割し、複数の小さなページにします。"
+      },
+      "grid-combine": {
+        "name": "グリッド結合",
+        "description": "ページをグリッド状に配置",
+        "longDescription": "複数のPDFページを1枚の用紙上にグリッド状（例：2×2, 3×3）に配置します。"
+      },
+      "page-dimensions": {
+        "name": "ページサイズ変更",
+        "description": "PDFページのリサイズ",
+        "longDescription": "PDFページの幅と高さを変更します。A4、レター、リーガルまたはカスタム値に対応。"
+      },
+      "pdf-booklet": {
+        "name": "PDF小冊子",
+        "description": "印刷用小冊子レイアウト",
+        "longDescription": "印刷用の小冊子レイアウトをPDFから作成します。折りたたむとページが開く形式。"
+      },
+      "posterize": {
+        "name": "ポスター分割",
+        "description": "ページをタイル状に分割",
+        "longDescription": "PDFの各ページをタイル状に分割し、大きなポスターとして印刷できるようにします。"
+      },
+      "reverse": {
+        "name": "ページ順序反転",
+        "description": "ページ順序を逆にする",
+        "longDescription": "PDFドキュメント内のページ順序を逆転させます（最後→最初）。"
+      },
+      "rotate-custom": {
+        "name": "角度指定回転",
+        "description": "任意の角度で回転",
+        "longDescription": "PDFページを任意の角度で回転します（90°や180°に限定されません）。"
+      },
+      "background-color": {
+        "name": "背景色設定",
+        "description": "背景色を追加",
+        "longDescription": "PDFの全ページに単色の背景色を追加します。"
+      },
+      "bookmark": {
+        "name": "ブックマーク",
+        "description": "PDFブックマークの編集",
+        "longDescription": "PDFプレビュー付きのビジュアルブックマークエディター。追加、削除、階層化が可能です。"
+      },
+      "decrypt": {
+        "name": "PDFの復号化",
+        "description": "PDFからパスワードを削除",
+        "longDescription": "保護されたPDFドキュメントからパスワードを削除します（パスワードが必要です）。"
+      },
+      "deskew": {
+        "name": "傾き補正",
+        "description": "傾いたスキャンを自動補正",
+        "longDescription": "傾いたスキャンページを自動的に補正します（複数ファイルのバッチ処理にはZIP出力）。"
+      },
+      "edit-pdf": {
+        "name": "PDF編集",
+        "description": "内蔵PDFエディター",
+        "longDescription": "テキスト、画像、図形など、PDFの内容を視覚的に編集します。"
+      },
+      "find-and-redact": {
+        "name": "検索と伏字",
+        "description": "テキストを検索して黒塗り",
+        "longDescription": "PDF内のテキストを検索し、選択した部分を黒塗りして機密データを伏字にします。"
+      },
+      "fix-page-size": {
+        "name": "ページサイズ修正",
+        "description": "ページサイズを統一",
+        "longDescription": "異なるページサイズを検出し、1つの標準サイズに統一します。"
+      },
+      "font-to-outline": {
+        "name": "フォントをアウトライン化",
+        "description": "テキストをパスに変換",
+        "longDescription": "PDFのテキストをベクターパスに変換し、フォント欠落による表示崩れを防ぎます。"
+      },
+      "invert-colors": {
+        "name": "色の反転",
+        "description": "PDFのネガポジ反転",
+        "longDescription": "PDFドキュメントの色を反転させます（読書用のダークモードなど）。"
+      },
+      "ocg-manager": {
+        "name": "レイヤー管理",
+        "description": "OCGレイヤー編集",
+        "longDescription": "PDF内のオプショナルコンテンツグループ（レイヤー）の表示切替、編集、管理を行います。"
+      },
+      "pdf-to-greyscale": {
+        "name": "PDFをグレースケール化",
+        "description": "グレースケールに変換",
+        "longDescription": "カラーPDFをグレースケールに変換し、印刷時のデータサイズを削減します。"
+      },
+      "rasterize": {
+        "name": "ラスター化",
+        "description": "ベクターからビットマップへ",
+        "longDescription": "PDFページをベクターからラスター（フラットな画像）に変換します。"
+      },
+      "remove-metadata": {
+        "name": "メタデータ削除",
+        "description": "PDFメタデータをクリア",
+        "longDescription": "PDFドキュメントからすべてのメタデータ（著者、日付、タイトルなど）を削除します。"
+      },
+      "repair": {
+        "name": "PDF修復",
+        "description": "破損したPDFを修復",
+        "longDescription": "破損または不正な形式のPDFファイルを修復しようと試みます。"
+      },
+      "stamps": {
+        "name": "スタンプ",
+        "description": "PDFにスタンプを追加",
+        "longDescription": "PDFページに視覚的なスタンプ（CONFIDENTIAL、APPROVED、DRAFTなど）を挿入します。"
+      },
+      "table-of-contents": {
+        "name": "目次",
+        "description": "目次を自動生成",
+        "longDescription": "PDFの見出しまたはブックマークから自動的に目次を生成します。"
+      },
+      "text-color": {
+        "name": "文字色",
+        "description": "PDFの文字色を変更",
+        "longDescription": "PDFドキュメント内のすべての（または選択した）文字の色を変更します。"
+      },
+      "linearize": {
+        "name": "リニアライズ（Web）",
+        "description": "オンライン表示用に最適化",
+        "longDescription": "ブラウザでの高速読み込みを可能にするようPDFをリニアライズします（Fast Web View）。"
+      },
+      "remove-restrictions": {
+        "name": "制限解除",
+        "description": "印刷・コピーロックを解除",
+        "longDescription": "PDFドキュメントからの制限（印刷、コピー、編集）を解除します。"
+      },
+      "sanitize": {
+        "name": "PDFのクリーンアップ",
+        "description": "隠しデータを削除",
+        "longDescription": "PDFからJavaScript、スクリプト、埋め込みファイル、フォームなどの隠しデータを削除します。"
       }
     }
   }

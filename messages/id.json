@@ -1614,6 +1614,151 @@
         "name": "Hapus halaman kosong",
         "description": "Bersihkan halaman kosong dari PDF",
         "longDescription": "Secara otomatis mendeteksi dan menghapus halaman kosong dari dokumen PDF."
+      },
+      "alternate-merge": {
+        "name": "Gabung selang-seling",
+        "description": "Selang-selingkan halaman dari 2 PDF",
+        "longDescription": "Mencampur halaman dari dua dokumen PDF (1A, 1B, 2A, 2B…). Berguna untuk pemindaian satu sisi."
+      },
+      "combine-single-page": {
+        "name": "Gabung ke satu halaman",
+        "description": "Semua halaman dalam satu lembar",
+        "longDescription": "Gabungkan semua halaman PDF menjadi satu halaman panjang (untuk tampilan gulir panjang)."
+      },
+      "divide": {
+        "name": "Bagi halaman",
+        "description": "Pisahkan setiap halaman dengan garis",
+        "longDescription": "Bagi setiap halaman PDF menjadi beberapa halaman yang lebih kecil secara vertikal atau horizontal."
+      },
+      "grid-combine": {
+        "name": "Gabung grid",
+        "description": "Gabungkan halaman ke dalam grid",
+        "longDescription": "Atur beberapa halaman PDF menjadi satu grid (misalnya 2×2, 3×3) dalam satu lembar."
+      },
+      "page-dimensions": {
+        "name": "Dimensi halaman",
+        "description": "Ubah ukuran halaman PDF",
+        "longDescription": "Ubah lebar dan tinggi halaman PDF — A4, Letter, Legal, atau nilai kustom."
+      },
+      "pdf-booklet": {
+        "name": "Buku PDF",
+        "description": "Tata letak buku untuk dicetak",
+        "longDescription": "Buat tata letak buku dari PDF untuk dicetak — halaman terbuka saat dilipat."
+      },
+      "posterize": {
+        "name": "Poster",
+        "description": "Pisahkan halaman menjadi ubin",
+        "longDescription": "Pisahkan setiap halaman PDF menjadi ubin untuk dicetak sebagai poster besar."
+      },
+      "reverse": {
+        "name": "Balik halaman",
+        "description": "Balik urutan halaman",
+        "longDescription": "Membalik urutan halaman dalam dokumen PDF (terakhir → pertama)."
+      },
+      "rotate-custom": {
+        "name": "Putar kustom",
+        "description": "Putar dengan sudut apa pun",
+        "longDescription": "Putar halaman PDF dengan sudut apa pun (tidak terbatas pada 90/180°)."
+      },
+      "background-color": {
+        "name": "Warna latar",
+        "description": "Tambahkan warna latar",
+        "longDescription": "Tambahkan warna latar belakang solid ke setiap halaman PDF."
+      },
+      "bookmark": {
+        "name": "Penanda",
+        "description": "Edit penanda PDF",
+        "longDescription": "Editor penanda visual dengan pratinjau PDF — tambah, hapus, dan susun."
+      },
+      "decrypt": {
+        "name": "Dekripsi PDF",
+        "description": "Hapus kata sandi dari PDF",
+        "longDescription": "Menghapus kata sandi dari dokumen PDF yang dilindungi (memerlukan kata sandi yang diketahui)."
+      },
+      "deskew": {
+        "name": "Luruskan",
+        "description": "Luruskan pemindaian miring secara otomatis",
+        "longDescription": "Meluruskan halaman yang dipindai secara miring secara otomatis (output ZIP untuk pemrosesan batch multi-file)."
+      },
+      "edit-pdf": {
+        "name": "Edit PDF",
+        "description": "Editor PDF bawaan",
+        "longDescription": "Edit konten PDF secara visual — teks, gambar, dan bentuk."
+      },
+      "find-and-redact": {
+        "name": "Temukan & sembunyikan",
+        "description": "Cari dan coret teks",
+        "longDescription": "Cari teks dalam PDF dan coret fragmen yang dipilih (penghapusan data sensitif)."
+      },
+      "fix-page-size": {
+        "name": "Perbaiki ukuran halaman",
+        "description": "Normalisasi ukuran halaman",
+        "longDescription": "Mendeteksi berbagai ukuran halaman dan menstandarkannya menjadi satu ukuran."
+      },
+      "font-to-outline": {
+        "name": "Font ke outline",
+        "description": "Konversi teks ke jalur",
+        "longDescription": "Mengonversi teks PDF ke jalur vektor — melindungi dari font yang hilang."
+      },
+      "invert-colors": {
+        "name": "Inversi warna",
+        "description": "Negatif warna PDF",
+        "longDescription": "Membalikkan warna dalam dokumen PDF (misalnya mode gelap untuk membaca)."
+      },
+      "ocg-manager": {
+        "name": "Pengelola layer",
+        "description": "Editor layer OCG",
+        "longDescription": "Aktifkan, edit, dan kelola Optional Content Groups (layer) dalam PDF."
+      },
+      "pdf-to-greyscale": {
+        "name": "PDF ke greyscale",
+        "description": "Konversi ke greyscale",
+        "longDescription": "Konversi PDF berwarna ke greyscale (ukuran lebih kecil untuk pencetakan)."
+      },
+      "rasterize": {
+        "name": "Rasterisasi",
+        "description": "Vektor ke bitmap",
+        "longDescription": "Konversi halaman PDF dari vektor ke raster (gambar datar)."
+      },
+      "remove-metadata": {
+        "name": "Hapus metadata",
+        "description": "Bersihkan metadata PDF",
+        "longDescription": "Menghapus semua metadata (penulis, tanggal, judul) dari dokumen PDF."
+      },
+      "repair": {
+        "name": "Perbaiki PDF",
+        "description": "Perbaiki PDF rusak",
+        "longDescription": "Mencoba memperbaiki file PDF yang rusak atau tidak valid."
+      },
+      "stamps": {
+        "name": "Stempel",
+        "description": "Tambah stempel ke PDF",
+        "longDescription": "Sisipkan stempel visual (RAHASIA, DISETUJUI, DRAFT, dll.) pada halaman PDF."
+      },
+      "table-of-contents": {
+        "name": "Daftar isi",
+        "description": "Buat daftar isi otomatis",
+        "longDescription": "Secara otomatis membuat daftar isi dari judul atau bookmark PDF."
+      },
+      "text-color": {
+        "name": "Warna teks",
+        "description": "Ubah warna teks di PDF",
+        "longDescription": "Mengubah warna semua (atau teks terpilih) dalam dokumen PDF."
+      },
+      "linearize": {
+        "name": "Linearisasi (web)",
+        "description": "Optimalkan untuk tampilan online",
+        "longDescription": "Melakukan linearisasi PDF untuk pemuatan cepat di browser (Fast Web View)."
+      },
+      "remove-restrictions": {
+        "name": "Hapus batasan",
+        "description": "Buka kunci cetak/salin",
+        "longDescription": "Menghapus batasan (cetak, salin, edit) dari dokumen PDF."
+      },
+      "sanitize": {
+        "name": "Sanitasi PDF",
+        "description": "Bersihkan data tersembunyi",
+        "longDescription": "Menghapus data tersembunyi dari PDF — JavaScript, skrip, file tertanam, formulir."
       }
     }
   }

@@ -12,12 +12,18 @@ import type { ProcessOutput } from '@/types/pdf';
 
 export interface TableOfContentsToolProps {
   className?: string;
+  /** Optional initial file (skips upload step when prefilled from Studio) */
+  initialFile?: File;
+  /** Hide the FileUploader UI when prefilled */
+  hideUploader?: boolean;
+  /** Callback fired with the resulting blob and original file when processing succeeds */
+  onComplete?: (blob: Blob, originalFile: File) => void;
 }
 
-export function TableOfContentsTool({ className = '' }: TableOfContentsToolProps) {
+export function TableOfContentsTool({ className = '', initialFile, hideUploader, onComplete }: TableOfContentsToolProps) {
   const t = useTranslations('common');
   const tTools = useTranslations('tools.tableOfContents');
-  const [file, setFile] = useState<File | null>(null);
+  const [file, setFile] = useState<File | null>(initialFile ?? null);
   const [status, setStatus] = useState<ProcessingStatus>('idle');
   const [progress, setProgress] = useState(0);
   const [result, setResult] = useState<Blob | null>(null);
@@ -46,6 +52,12 @@ export function TableOfContentsTool({ className = '' }: TableOfContentsToolProps
   const [addBookmark, setAddBookmark] = useState(true);
 
   const cancelledRef = useRef(false);
+  useEffect(() => {
+    if (initialFile) {
+      setFile(initialFile);
+    }
+  }, [initialFile]);
+
 
   const handleFilesSelected = useCallback((files: File[]) => {
     if (files.length > 0) {
@@ -76,8 +88,10 @@ export function TableOfContentsTool({ className = '' }: TableOfContentsToolProps
       });
 
       if (output.success && output.result) {
-        setResult(output.result as Blob);
+        const blob = output.result as Blob;
+        setResult(blob);
         setStatus('complete');
+        if (onComplete && file) onComplete(blob, file);
       } else {
         setError(output.error?.message || 'Failed to generate table of contents.');
         setStatus('error');
@@ -86,14 +100,14 @@ export function TableOfContentsTool({ className = '' }: TableOfContentsToolProps
       setError(err instanceof Error ? err.message : 'An error occurred');
       setStatus('error');
     }
-  }, [file, title, fontSize, fontFamily, addBookmark]);
+  }, [file, title, fontSize, fontFamily, addBookmark, onComplete]);
 
   const isProcessing = status === 'processing';
 
   return (
     <div className={`space-y-6 ${className}`.trim()}>
-      {!file && (
-        <FileUploader
+      {!file && !hideUploader && (
+          <FileUploader
           accept={['application/pdf', '.pdf']}
           multiple={false}
           maxFiles={1}
@@ -103,7 +117,7 @@ export function TableOfContentsTool({ className = '' }: TableOfContentsToolProps
           label={tTools('uploadLabel')}
           description={tTools('uploadDescription')}
         />
-      )}
+        )}
 
       {error && (
         <div className="p-4 rounded bg-red-50 border border-red-200 text-red-700 dark:bg-red-900/20 dark:border-red-800 dark:text-red-400">

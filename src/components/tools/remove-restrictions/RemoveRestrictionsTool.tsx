@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useCallback, useRef } from 'react';
+import React, { useState, useCallback, useRef, useEffect } from 'react';
 import { useTranslations } from 'next-intl';
 import { FileUploader } from '../FileUploader';
 import { ProcessingProgress, ProcessingStatus } from '../ProcessingProgress';
@@ -15,6 +15,12 @@ import { Eye, EyeOff } from 'lucide-react';
 export interface RemoveRestrictionsToolProps {
   /** Custom class name */
   className?: string;
+  /** Optional initial file (skips upload step when prefilled from Studio) */
+  initialFile?: File;
+  /** Hide the FileUploader UI when prefilled */
+  hideUploader?: boolean;
+  /** Callback fired with the resulting blob and original file when processing succeeds */
+  onComplete?: (blob: Blob, originalFile: File) => void;
 }
 
 /**
@@ -24,12 +30,12 @@ export interface RemoveRestrictionsToolProps {
  * Provides the UI for removing security restrictions from PDF files.
  * This removes owner password restrictions that prevent printing, copying, and editing.
  */
-export function RemoveRestrictionsTool({ className = '' }: RemoveRestrictionsToolProps) {
+export function RemoveRestrictionsTool({ className = '', initialFile, hideUploader, onComplete }: RemoveRestrictionsToolProps) {
   const t = useTranslations('common');
   const tTools = useTranslations('tools');
   
   // State
-  const [file, setFile] = useState<File | null>(null);
+  const [file, setFile] = useState<File | null>(initialFile ?? null);
   const [status, setStatus] = useState<ProcessingStatus>('idle');
   const [progress, setProgress] = useState(0);
   const [progressMessage, setProgressMessage] = useState('');
@@ -50,6 +56,12 @@ export function RemoveRestrictionsTool({ className = '' }: RemoveRestrictionsToo
   
   // Ref for cancellation
   const cancelledRef = useRef(false);
+  useEffect(() => {
+    if (initialFile) {
+      setFile(initialFile);
+    }
+  }, [initialFile]);
+
 
   /**
    * Handle file selected from uploader
@@ -121,8 +133,10 @@ export function RemoveRestrictionsTool({ className = '' }: RemoveRestrictionsToo
       }
 
       if (output.success && output.result) {
-        setResult(output.result as Blob);
+        const blob = output.result as Blob;
+        setResult(blob);
         setStatus('complete');
+        if (onComplete && file) onComplete(blob, file);
         
         // Set stats
         if (output.metadata) {
@@ -160,7 +174,7 @@ export function RemoveRestrictionsTool({ className = '' }: RemoveRestrictionsToo
         setStatus('error');
       }
     }
-  }, [file, ownerPassword, tTools]);
+  }, [file, ownerPassword, tTools, onComplete]);
 
   /**
    * Handle cancel operation
@@ -186,7 +200,8 @@ export function RemoveRestrictionsTool({ className = '' }: RemoveRestrictionsToo
   return (
     <div className={`space-y-6 ${className}`.trim()}>
       {/* File Upload Area */}
-      <FileUploader
+      {!file && !hideUploader && (
+        <FileUploader
         accept={['application/pdf', '.pdf']}
         multiple={false}
         maxFiles={1}
@@ -196,6 +211,7 @@ export function RemoveRestrictionsTool({ className = '' }: RemoveRestrictionsToo
         label={tTools('removeRestrictions.uploadLabel') || 'Upload PDF File'}
         description={tTools('removeRestrictions.uploadDescription') || 'Drag and drop a restricted PDF file here, or click to browse.'}
       />
+  )}
 
       {/* Error Message */}
       {error && (

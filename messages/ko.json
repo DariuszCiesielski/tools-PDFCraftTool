@@ -2492,6 +2492,151 @@
         "name": "빈 페이지 제거",
         "description": "PDF에서 빈 페이지 정리",
         "longDescription": "PDF 문서에서 빈 페이지를 자동으로 감지하고 제거하세요."
+      },
+      "alternate-merge": {
+        "name": "교차 병합",
+        "description": "2개 PDF 페이지 교차 병합",
+        "longDescription": "두 PDF 문서의 페이지를 1A, 1B, 2A, 2B… 순서로 교차 병합합니다. 단면 스캔 파일에 유용합니다."
+      },
+      "combine-single-page": {
+        "name": "단일 페이지로 결합",
+        "description": "모든 페이지를 한 장으로",
+        "longDescription": "모든 PDF 페이지를 긴 세로형 단일 페이지로 결합하여 스크롤 뷰에 최적화합니다."
+      },
+      "divide": {
+        "name": "페이지 분할",
+        "description": "선을 따라 페이지 분할",
+        "longDescription": "각 PDF 페이지를 세로 또는 가로로 나누어 여러 개의 작은 페이지로 분할합니다."
+      },
+      "grid-combine": {
+        "name": "그리드 결합",
+        "description": "페이지를 그리드로 결합",
+        "longDescription": "여러 PDF 페이지를 하나의 시트에 2×2, 3×3 등 그리드 형태로 배치하여 결합합니다."
+      },
+      "page-dimensions": {
+        "name": "페이지 크기 조정",
+        "description": "PDF 페이지 크기 변경",
+        "longDescription": "PDF 페이지의 너비와 높이를 A4, 레터, 리걸 또는 사용자 지정 값으로 변경합니다."
+      },
+      "pdf-booklet": {
+        "name": "PDF 소책자",
+        "description": "인쇄용 소책자 레이아웃",
+        "longDescription": "인쇄용 PDF 소책자 레이아웃을 생성합니다. 접었을 때 페이지가 올바르게 펼쳐집니다."
+      },
+      "posterize": {
+        "name": "포스터 분할",
+        "description": "페이지를 타일로 분할",
+        "longDescription": "대형 포스터로 인쇄하기 위해 각 PDF 페이지를 타일 형태로 분할합니다."
+      },
+      "reverse": {
+        "name": "페이지 순서 뒤집기",
+        "description": "페이지 순서 역순 정렬",
+        "longDescription": "PDF 문서의 페이지 순서를 마지막부터 첫 번째까지 역순으로 변경합니다."
+      },
+      "rotate-custom": {
+        "name": "사용자 지정 회전",
+        "description": "임의 각도로 회전",
+        "longDescription": "PDF 페이지를 90도 또는 180도 외에도 임의 각도로 회전합니다."
+      },
+      "background-color": {
+        "name": "배경색 추가",
+        "description": "배경색 설정",
+        "longDescription": "모든 PDF 페이지에 단색 배경을 추가합니다."
+      },
+      "bookmark": {
+        "name": "북마크",
+        "description": "PDF 북마크 편집",
+        "longDescription": "PDF 미리보기가 포함된 시각적 북마크 편집기로 북마크 추가, 제거 및 중첩을 관리합니다."
+      },
+      "decrypt": {
+        "name": "PDF 암호 해제",
+        "description": "PDF 비밀번호 제거",
+        "longDescription": "보호된 PDF 문서의 비밀번호를 제거합니다(비밀번호를 알고 있어야 합니다)."
+      },
+      "deskew": {
+        "name": "기울기 보정",
+        "description": "스캔 기울기 자동 보정",
+        "longDescription": "기울어진 스캔 페이지를 자동으로 바로잡습니다(다중 파일 배치 처리 시 ZIP 출력)."
+      },
+      "edit-pdf": {
+        "name": "PDF 편집",
+        "description": "내장 PDF 편집기",
+        "longDescription": "텍스트, 이미지, 도형 등 PDF 콘텐츠를 시각적으로 편집합니다."
+      },
+      "find-and-redact": {
+        "name": "검색 및 삭제",
+        "description": "텍스트 검색 및 검게 표시",
+        "longDescription": "PDF에서 텍스트를 검색하고 선택한 부분을 검은색으로 가려 민감 정보를 삭제합니다."
+      },
+      "fix-page-size": {
+        "name": "페이지 크기 수정",
+        "description": "페이지 크기 표준화",
+        "longDescription": "서로 다른 페이지 크기를 감지하여 하나의 표준 크기로 통일합니다."
+      },
+      "font-to-outline": {
+        "name": "글꼴을 경로로 변환",
+        "description": "텍스트를 벡터 경로로 변환",
+        "longDescription": "PDF 텍스트를 벡터 경로로 변환하여 글꼴 누락 문제를 방지합니다."
+      },
+      "invert-colors": {
+        "name": "색상 반전",
+        "description": "PDF 색상 반전",
+        "longDescription": "PDF 문서의 색상을 반전시켜 읽기 편하게 합니다(예: 다크 모드)."
+      },
+      "ocg-manager": {
+        "name": "레이어 관리자",
+        "description": "OCG 레이어 편집기",
+        "longDescription": "PDF의 선택적 콘텐츠 그룹(레이어)을 토글, 편집 및 관리합니다."
+      },
+      "pdf-to-greyscale": {
+        "name": "PDF를 흑백으로 변환",
+        "description": "흑백으로 변환",
+        "longDescription": "컬러 PDF를 흑백으로 변환하여 인쇄 시 파일 크기를 줄입니다."
+      },
+      "rasterize": {
+        "name": "래스터화",
+        "description": "벡터 → 비트맵",
+        "longDescription": "PDF 페이지를 벡터에서 래스터(평면 이미지)로 변환합니다."
+      },
+      "remove-metadata": {
+        "name": "메타데이터 제거",
+        "description": "PDF 메타데이터 삭제",
+        "longDescription": "PDF 문서에서 모든 메타데이터(저자, 날짜, 제목 등)를 제거합니다."
+      },
+      "repair": {
+        "name": "PDF 복구",
+        "description": "손상된 PDF 수정",
+        "longDescription": "손상되거나 형식이 잘못된 PDF 파일을 복구하려고 시도합니다."
+      },
+      "stamps": {
+        "name": "스탬프",
+        "description": "PDF에 스탬프 추가",
+        "longDescription": "PDF 페이지에 시각적 스탬프(비밀, 승인, 초안 등)를 삽입합니다."
+      },
+      "table-of-contents": {
+        "name": "목차",
+        "description": "목차 자동 생성",
+        "longDescription": "PDF의 제목 또는 북마크를 기반으로 목차를 자동으로 생성합니다."
+      },
+      "text-color": {
+        "name": "텍스트 색상",
+        "description": "PDF 텍스트 색상 변경",
+        "longDescription": "PDF 문서의 모든(또는 선택한) 텍스트 색상을 변경합니다."
+      },
+      "linearize": {
+        "name": "선형화(웹)",
+        "description": "온라인 보기에 최적화",
+        "longDescription": "브라우저에서 빠르게 로드되도록 PDF를 선형화합니다(Fast Web View)."
+      },
+      "remove-restrictions": {
+        "name": "제한 사항 제거",
+        "description": "인쇄/복사 잠금 해제",
+        "longDescription": "PDF 문서에서 인쇄, 복사, 편집 등의 제한 사항을 제거합니다."
+      },
+      "sanitize": {
+        "name": "PDF 정리",
+        "description": "숨겨진 데이터 제거",
+        "longDescription": "PDF에서 JavaScript, 스크립트, 임베디드 파일, 양식 등 숨겨진 데이터를 제거합니다."
       }
     }
   }

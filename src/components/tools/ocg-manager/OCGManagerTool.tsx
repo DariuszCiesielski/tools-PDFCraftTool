@@ -12,13 +12,17 @@ import { Layers, Eye, EyeOff, Plus, Trash2, Edit2, RefreshCw } from 'lucide-reac
 
 export interface OCGManagerToolProps {
     className?: string;
+  /** Optional initial file (skips upload step when prefilled from Studio) */
+  initialFile?: File;
+  /** Hide the FileUploader UI when prefilled */
+  hideUploader?: boolean;
 }
 
-export function OCGManagerTool({ className = '' }: OCGManagerToolProps) {
+export function OCGManagerTool({ className = '', initialFile, hideUploader }: OCGManagerToolProps) {
     const t = useTranslations('common');
     const tTools = useTranslations('tools');
 
-    const [file, setFile] = useState<File | null>(null);
+    const [file, setFile] = useState<File | null>(initialFile ?? null);
     const [layers, setLayers] = useState<OCGLayer[]>([]);
     const [resultBlob, setResultBlob] = useState<Blob | null>(null);
     const [isProcessing, setIsProcessing] = useState(false);
@@ -28,6 +32,12 @@ export function OCGManagerTool({ className = '' }: OCGManagerToolProps) {
     const [newLayerName, setNewLayerName] = useState('');
     const [editingLayer, setEditingLayer] = useState<string | null>(null);
     const [editName, setEditName] = useState('');
+  useEffect(() => {
+    if (initialFile) {
+      setFile(initialFile);
+    }
+  }, [initialFile]);
+
 
     const handleFilesSelected = useCallback((files: File[]) => {
         if (files.length > 0) {
@@ -192,7 +202,8 @@ export function OCGManagerTool({ className = '' }: OCGManagerToolProps) {
 
     return (
         <div className={`space-y-6 ${className}`.trim()}>
-            <FileUploader
+            {!file && !hideUploader && (
+              <FileUploader
                 accept={['application/pdf', '.pdf']}
                 multiple={false}
                 maxFiles={1}
@@ -202,6 +213,7 @@ export function OCGManagerTool({ className = '' }: OCGManagerToolProps) {
                 label={tTools('ocgManager.uploadLabel') || 'Upload PDF File'}
                 description={tTools('ocgManager.uploadDescription') || 'Drag and drop a PDF to manage its layers (OCG).'}
             />
+            )}
 
             {error && (
                 <div className="p-4 rounded-[var(--radius-md)] bg-red-50 border border-red-200 text-red-700" role="alert">

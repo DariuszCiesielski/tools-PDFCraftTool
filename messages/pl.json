@@ -2465,6 +2465,151 @@
         "name": "Usuń puste strony",
         "description": "Wyczyść puste strony z PDF",
         "longDescription": "Automatycznie wykryj i usuń puste strony z dokumentu PDF."
+      },
+      "alternate-merge": {
+        "name": "Naprzemienne łączenie",
+        "description": "Połącz strony naprzemiennie z 2 PDF",
+        "longDescription": "Łączy strony z dwóch dokumentów PDF naprzemiennie (1A, 1B, 2A, 2B…). Przydatne przy skanach jednostronnych."
+      },
+      "combine-single-page": {
+        "name": "Połącz w jedną stronę",
+        "description": "Wszystkie strony na jednym arkuszu",
+        "longDescription": "Połącz wszystkie strony PDF w jedną wysoką stronę (do długiego scrolla)."
+      },
+      "divide": {
+        "name": "Podziel strony",
+        "description": "Podziel każdą stronę liniami",
+        "longDescription": "Podziel każdą stronę PDF na kilka mniejszych stron pionowo lub poziomo."
+      },
+      "grid-combine": {
+        "name": "Siatka stron",
+        "description": "Połącz strony w siatkę",
+        "longDescription": "Złóż wiele stron PDF w jedną siatkę (np. 2×2, 3×3) na pojedynczej stronie."
+      },
+      "page-dimensions": {
+        "name": "Wymiary strony",
+        "description": "Zmień rozmiar strony PDF",
+        "longDescription": "Zmień szerokość i wysokość stron PDF — A4, Letter, Legal lub własne wartości."
+      },
+      "pdf-booklet": {
+        "name": "Broszura PDF",
+        "description": "Układ broszury do druku",
+        "longDescription": "Stwórz układ broszury z PDF do druku — strony rozkładane przy składaniu."
+      },
+      "posterize": {
+        "name": "Podziel na płachty",
+        "description": "Podziel stronę na kafle",
+        "longDescription": "Podziel każdą stronę PDF na kafle do druku jako duży plakat."
+      },
+      "reverse": {
+        "name": "Odwróć kolejność",
+        "description": "Odwróć kolejność stron",
+        "longDescription": "Odwraca kolejność stron w dokumencie PDF (ostatnia → pierwsza)."
+      },
+      "rotate-custom": {
+        "name": "Obróć dowolnie",
+        "description": "Obrót o dowolny kąt",
+        "longDescription": "Obróć strony PDF o dowolny kąt (nie tylko 90/180°)."
+      },
+      "background-color": {
+        "name": "Kolor tła",
+        "description": "Dodaj kolor tła do stron",
+        "longDescription": "Dodaje jednolity kolor tła do każdej strony PDF."
+      },
+      "bookmark": {
+        "name": "Zakładki",
+        "description": "Edytuj zakładki PDF",
+        "longDescription": "Wizualny edytor zakładek z podglądem PDF — dodaj, usuń, zagnieżdż."
+      },
+      "decrypt": {
+        "name": "Odszyfruj PDF",
+        "description": "Usuń hasło z PDF",
+        "longDescription": "Usuwa hasło z chronionego dokumentu PDF (wymaga znajomości hasła)."
+      },
+      "deskew": {
+        "name": "Wyprostuj",
+        "description": "Auto-prostuj przekrzywione skany",
+        "longDescription": "Automatycznie prostuje przekrzywione strony skanów (ZIP wynik dla wielu plików)."
+      },
+      "edit-pdf": {
+        "name": "Edytuj PDF",
+        "description": "Wbudowany edytor PDF",
+        "longDescription": "Edytuj zawartość PDF wizualnie — tekst, obrazy, kształty."
+      },
+      "find-and-redact": {
+        "name": "Znajdź i zredaguj",
+        "description": "Wyszukaj i zaczerń tekst",
+        "longDescription": "Wyszukaj tekst w PDF i zaczerń wybrane fragmenty (redakcja danych wrażliwych)."
+      },
+      "fix-page-size": {
+        "name": "Napraw rozmiar stron",
+        "description": "Ujednolić rozmiar stron",
+        "longDescription": "Wykrywa różne rozmiary stron i ujednolica je do jednego standardu."
+      },
+      "font-to-outline": {
+        "name": "Fonty na wektory",
+        "description": "Konwertuj tekst na ścieżki",
+        "longDescription": "Konwertuje tekst PDF na ścieżki wektorowe — chroni przed brakiem fontów."
+      },
+      "invert-colors": {
+        "name": "Odwróć kolory",
+        "description": "Negatyw kolorów PDF",
+        "longDescription": "Odwraca kolory w dokumencie PDF (np. dark mode dla czytania)."
+      },
+      "ocg-manager": {
+        "name": "Zarządzaj warstwami",
+        "description": "Edytor warstw OCG",
+        "longDescription": "Włączaj, wyłączaj i edytuj warstwy (OCG) w dokumencie PDF."
+      },
+      "pdf-to-greyscale": {
+        "name": "PDF do skali szarości",
+        "description": "Konwersja na czarno-białe",
+        "longDescription": "Konwertuje kolorowy PDF na skalę szarości (mniejszy rozmiar do druku)."
+      },
+      "rasterize": {
+        "name": "Rasteryzuj",
+        "description": "Wektor → bitmapa",
+        "longDescription": "Konwertuje strony PDF z wektorowych na bitmapowe (płaskie obrazy)."
+      },
+      "remove-metadata": {
+        "name": "Usuń metadane",
+        "description": "Wyczyść metadane PDF",
+        "longDescription": "Usuwa wszystkie metadane (autor, data, tytuł) z dokumentu PDF."
+      },
+      "repair": {
+        "name": "Napraw PDF",
+        "description": "Napraw uszkodzony PDF",
+        "longDescription": "Próbuje naprawić uszkodzone lub niepoprawne pliki PDF."
+      },
+      "stamps": {
+        "name": "Stemple",
+        "description": "Dodaj stemple do PDF",
+        "longDescription": "Wstaw stemple wizualne (POUFNE, ZATWIERDZONE, DRAFT itd.) na strony PDF."
+      },
+      "table-of-contents": {
+        "name": "Spis treści",
+        "description": "Auto-generuj spis treści",
+        "longDescription": "Automatycznie generuje spis treści z nagłówków lub zakładek PDF."
+      },
+      "text-color": {
+        "name": "Kolor tekstu",
+        "description": "Zmień kolor tekstu w PDF",
+        "longDescription": "Zmienia kolor wszystkich (lub wybranych) tekstów w dokumencie PDF."
+      },
+      "linearize": {
+        "name": "Linearyzuj (web)",
+        "description": "Optymalizuj do podglądu online",
+        "longDescription": "Linearyzuje PDF do szybkiego ładowania w przeglądarce (Fast Web View)."
+      },
+      "remove-restrictions": {
+        "name": "Usuń ograniczenia",
+        "description": "Usuń blokady druku/kopiowania",
+        "longDescription": "Usuwa ograniczenia (druk, kopiowanie, edycja) z dokumentu PDF."
+      },
+      "sanitize": {
+        "name": "Sanityzuj PDF",
+        "description": "Wyczyść ukryte dane",
+        "longDescription": "Usuwa ukryte dane z PDF — JavaScript, scripty, embedded files, formularze."
       }
     },
     "a11y": {

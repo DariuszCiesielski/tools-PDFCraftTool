@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useCallback, useRef } from 'react';
+import React, { useState, useCallback, useRef, useEffect } from 'react';
 import { useTranslations } from 'next-intl';
 import { FileUploader } from '../FileUploader';
 import { ProcessingProgress, ProcessingStatus } from '../ProcessingProgress';
@@ -13,6 +13,12 @@ import type { ProcessOutput } from '@/types/pdf';
 export interface SanitizePDFToolProps {
   /** Custom class name */
   className?: string;
+  /** Optional initial file (skips upload step when prefilled from Studio) */
+  initialFile?: File;
+  /** Hide the FileUploader UI when prefilled */
+  hideUploader?: boolean;
+  /** Callback fired with the resulting blob and original file when processing succeeds */
+  onComplete?: (blob: Blob, originalFile: File) => void;
 }
 
 /**
@@ -21,12 +27,12 @@ export interface SanitizePDFToolProps {
  * 
  * Provides the UI for sanitizing PDF files by removing potentially harmful content.
  */
-export function SanitizePDFTool({ className = '' }: SanitizePDFToolProps) {
+export function SanitizePDFTool({ className = '', initialFile, hideUploader, onComplete }: SanitizePDFToolProps) {
   const t = useTranslations('common');
   const tTools = useTranslations('tools');
   
   // State
-  const [file, setFile] = useState<File | null>(null);
+  const [file, setFile] = useState<File | null>(initialFile ?? null);
   const [status, setStatus] = useState<ProcessingStatus>('idle');
   const [progress, setProgress] = useState(0);
   const [progressMessage, setProgressMessage] = useState('');
@@ -46,6 +52,12 @@ export function SanitizePDFTool({ className = '' }: SanitizePDFToolProps) {
   
   // Ref for cancellation
   const cancelledRef = useRef(false);
+  useEffect(() => {
+    if (initialFile) {
+      setFile(initialFile);
+    }
+  }, [initialFile]);
+
 
   const handleFilesSelected = useCallback((files: File[]) => {
     if (files.length > 0) {
@@ -107,8 +119,10 @@ export function SanitizePDFTool({ className = '' }: SanitizePDFToolProps) {
       }
 
       if (output.success && output.result) {
-        setResult(output.result as Blob);
+        const blob = output.result as Blob;
+        setResult(blob);
         setStatus('complete');
+        if (onComplete && file) onComplete(blob, file);
         if (output.metadata?.removedItems) {
           setRemovedItems(output.metadata.removedItems as string[]);
         }
@@ -122,7 +136,7 @@ export function SanitizePDFTool({ className = '' }: SanitizePDFToolProps) {
         setStatus('error');
       }
     }
-  }, [file, options]);
+  }, [file, options, onComplete]);
 
   const handleCancel = useCallback(() => {
     cancelledRef.current = true;
@@ -142,7 +156,8 @@ export function SanitizePDFTool({ className = '' }: SanitizePDFToolProps) {
   return (
     <div className={`space-y-6 ${className}`.trim()}>
       {/* File Upload Area */}
-      <FileUploader
+      {!file && !hideUploader && (
+        <FileUploader
         accept={['application/pdf', '.pdf']}
         multiple={false}
         maxFiles={1}
@@ -152,6 +167,7 @@ export function SanitizePDFTool({ className = '' }: SanitizePDFToolProps) {
         label={tTools('sanitizePdf.uploadLabel') || 'Upload PDF File'}
         description={tTools('sanitizePdf.uploadDescription') || 'Drag and drop a PDF file here, or click to browse.'}
       />
+  )}
 
       {/* Error Message */}
       {error && (

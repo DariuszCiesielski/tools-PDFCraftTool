@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useCallback, useRef } from 'react';
+import React, { useState, useCallback, useRef, useEffect } from 'react';
 import { useTranslations } from 'next-intl';
 import { FileUploader } from '../FileUploader';
 import { ProcessingProgress, ProcessingStatus } from '../ProcessingProgress';
@@ -13,6 +13,12 @@ import type { ProcessOutput } from '@/types/pdf';
 export interface RemoveMetadataToolProps {
   /** Custom class name */
   className?: string;
+  /** Optional initial file (skips upload step when prefilled from Studio) */
+  initialFile?: File;
+  /** Hide the FileUploader UI when prefilled */
+  hideUploader?: boolean;
+  /** Callback fired with the resulting blob and original file when processing succeeds */
+  onComplete?: (blob: Blob, originalFile: File) => void;
 }
 
 /**
@@ -21,12 +27,12 @@ export interface RemoveMetadataToolProps {
  * 
  * Provides the UI for removing metadata from PDF files.
  */
-export function RemoveMetadataTool({ className = '' }: RemoveMetadataToolProps) {
+export function RemoveMetadataTool({ className = '', initialFile, hideUploader, onComplete }: RemoveMetadataToolProps) {
   const t = useTranslations('common');
   const tTools = useTranslations('tools');
   
   // State
-  const [file, setFile] = useState<File | null>(null);
+  const [file, setFile] = useState<File | null>(initialFile ?? null);
   const [status, setStatus] = useState<ProcessingStatus>('idle');
   const [progress, setProgress] = useState(0);
   const [progressMessage, setProgressMessage] = useState('');
@@ -48,6 +54,12 @@ export function RemoveMetadataTool({ className = '' }: RemoveMetadataToolProps) 
   
   // Ref for cancellation
   const cancelledRef = useRef(false);
+  useEffect(() => {
+    if (initialFile) {
+      setFile(initialFile);
+    }
+  }, [initialFile]);
+
 
   const handleFilesSelected = useCallback((files: File[]) => {
     if (files.length > 0) {
@@ -135,8 +147,10 @@ export function RemoveMetadataTool({ className = '' }: RemoveMetadataToolProps) 
       }
 
       if (output.success && output.result) {
-        setResult(output.result as Blob);
+        const blob = output.result as Blob;
+        setResult(blob);
         setStatus('complete');
+        if (onComplete && file) onComplete(blob, file);
         if (output.metadata?.removedFields) {
           setRemovedFields(output.metadata.removedFields as string[]);
         }
@@ -150,7 +164,7 @@ export function RemoveMetadataTool({ className = '' }: RemoveMetadataToolProps) 
         setStatus('error');
       }
     }
-  }, [file, options]);
+  }, [file, options, onComplete]);
 
   const handleCancel = useCallback(() => {
     cancelledRef.current = true;
@@ -181,7 +195,8 @@ export function RemoveMetadataTool({ className = '' }: RemoveMetadataToolProps) 
   return (
     <div className={`space-y-6 ${className}`.trim()}>
       {/* File Upload Area */}
-      <FileUploader
+      {!file && !hideUploader && (
+        <FileUploader
         accept={['application/pdf', '.pdf']}
         multiple={false}
         maxFiles={1}
@@ -191,6 +206,7 @@ export function RemoveMetadataTool({ className = '' }: RemoveMetadataToolProps) 
         label={tTools('removeMetadata.uploadLabel') || 'Upload PDF File'}
         description={tTools('removeMetadata.uploadDescription') || 'Drag and drop a PDF file here, or click to browse.'}
       />
+  )}
 
       {/* Error Message */}
       {error && (

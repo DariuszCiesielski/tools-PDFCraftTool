@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useCallback, useRef } from 'react';
+import React, { useState, useCallback, useRef, useEffect } from 'react';
 import { useTranslations } from 'next-intl';
 import { FileUploader } from '../FileUploader';
 import { ProcessingProgress, ProcessingStatus } from '../ProcessingProgress';
@@ -19,6 +19,12 @@ import type { ProcessOutput } from '@/types/pdf';
 export interface FixPageSizeToolProps {
   /** Custom class name */
   className?: string;
+  /** Optional initial file (skips upload step when prefilled from Studio) */
+  initialFile?: File;
+  /** Hide the FileUploader UI when prefilled */
+  hideUploader?: boolean;
+  /** Callback fired with the resulting blob and original file when processing succeeds */
+  onComplete?: (blob: Blob, originalFile: File) => void;
 }
 
 /**
@@ -27,12 +33,12 @@ export interface FixPageSizeToolProps {
  * 
  * Provides the UI for standardizing PDF page sizes.
  */
-export function FixPageSizeTool({ className = '' }: FixPageSizeToolProps) {
+export function FixPageSizeTool({ className = '', initialFile, hideUploader, onComplete }: FixPageSizeToolProps) {
   const t = useTranslations('common');
   const tTools = useTranslations('tools');
   
   // State
-  const [file, setFile] = useState<File | null>(null);
+  const [file, setFile] = useState<File | null>(initialFile ?? null);
   const [status, setStatus] = useState<ProcessingStatus>('idle');
   const [progress, setProgress] = useState(0);
   const [progressMessage, setProgressMessage] = useState('');
@@ -49,6 +55,12 @@ export function FixPageSizeTool({ className = '' }: FixPageSizeToolProps) {
   
   // Ref for cancellation
   const cancelledRef = useRef(false);
+  useEffect(() => {
+    if (initialFile) {
+      setFile(initialFile);
+    }
+  }, [initialFile]);
+
 
 
   /**
@@ -122,8 +134,10 @@ export function FixPageSizeTool({ className = '' }: FixPageSizeToolProps) {
       }
 
       if (output.success && output.result) {
-        setResult(output.result as Blob);
+        const blob = output.result as Blob;
+        setResult(blob);
         setStatus('complete');
+        if (onComplete && file) onComplete(blob, file);
       } else {
         setError(output.error?.message || 'Failed to fix page sizes.');
         setStatus('error');
@@ -134,7 +148,7 @@ export function FixPageSizeTool({ className = '' }: FixPageSizeToolProps) {
         setStatus('error');
       }
     }
-  }, [file, sizePreset, customWidth, customHeight, scaleMode, maintainAspectRatio, orientation]);
+  }, [file, sizePreset, customWidth, customHeight, scaleMode, maintainAspectRatio, orientation, onComplete]);
 
   /**
    * Handle cancel operation
@@ -160,7 +174,8 @@ export function FixPageSizeTool({ className = '' }: FixPageSizeToolProps) {
   return (
     <div className={`space-y-6 ${className}`.trim()}>
       {/* File Upload Area */}
-      <FileUploader
+      {!file && !hideUploader && (
+        <FileUploader
         accept={['application/pdf', '.pdf']}
         multiple={false}
         maxFiles={1}
@@ -170,6 +185,7 @@ export function FixPageSizeTool({ className = '' }: FixPageSizeToolProps) {
         label={tTools('fixPageSize.uploadLabel') || 'Upload PDF File'}
         description={tTools('fixPageSize.uploadDescription') || 'Drag and drop a PDF file here, or click to browse.'}
       />
+  )}
 
       {/* Error Message */}
       {error && (

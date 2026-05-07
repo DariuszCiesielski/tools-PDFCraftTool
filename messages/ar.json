@@ -2502,6 +2502,151 @@
         "name": "إزالة الصفحات الفارغة",
         "description": "تنظيف الصفحات الفارغة من ملف PDF",
         "longDescription": "اكتشف الصفحات الفارغة تلقائيًا وأزِلها من مستند PDF."
+      },
+      "alternate-merge": {
+        "name": "دمج متناوب",
+        "description": "تداخل صفحات من ملفين PDF",
+        "longDescription": "يخلط صفحات من مستندين PDF بالتناوب (1A، 1B، 2A، 2B…). مفيد للمسح الضوئي من جهة واحدة."
+      },
+      "combine-single-page": {
+        "name": "دمج في صفحة واحدة",
+        "description": "جميع الصفحات في ورقة واحدة",
+        "longDescription": "يجمع كل صفحات PDF في صفحة واحدة طويلة (للعرض التمريري الطويل)."
+      },
+      "divide": {
+        "name": "تقسيم الصفحات",
+        "description": "تقسيم كل صفحة بخطوط",
+        "longDescription": "يقسم كل صفحة PDF إلى عدة صفحات أصغر عمودياً أو أفقياً."
+      },
+      "grid-combine": {
+        "name": "دمج شبكي",
+        "description": "دمج الصفحات في شبكة",
+        "longDescription": "يرتب صفحات PDF متعددة في شبكة واحدة (مثل 2×2، 3×3) على ورقة واحدة."
+      },
+      "page-dimensions": {
+        "name": "أبعاد الصفحة",
+        "description": "تغيير حجم صفحات PDF",
+        "longDescription": "يغير عرض وارتفاع صفحات PDF — A4، Letter، Legal أو قيم مخصصة."
+      },
+      "pdf-booklet": {
+        "name": "كتيب PDF",
+        "description": "تخطيط كتيب للطباعة",
+        "longDescription": "ينشئ تخطيط كتيب من PDF للطباعة — تنفتح الصفحات عند الطي."
+      },
+      "posterize": {
+        "name": "تحويل إلى ملصق",
+        "description": "تقسيم الصفحة إلى مربعات",
+        "longDescription": "يقسم كل صفحة PDF إلى مربعات للطباعة كملصق كبير."
+      },
+      "reverse": {
+        "name": "عكس الصفحات",
+        "description": "عكس ترتيب الصفحات",
+        "longDescription": "يعكس ترتيب الصفحات في مستند PDF (من الأخير إلى الأول)."
+      },
+      "rotate-custom": {
+        "name": "تدوير مخصص",
+        "description": "تدوير بأي زاوية",
+        "longDescription": "يدور صفحات PDF بأي زاوية (ليس محدوداً بـ 90/180°)."
+      },
+      "background-color": {
+        "name": "لون الخلفية",
+        "description": "إضافة لون خلفية",
+        "longDescription": "يضيف لون خلفية ثابتاً لكل صفحة PDF."
+      },
+      "bookmark": {
+        "name": "إشارات مرجعية",
+        "description": "تحرير إشارات PDF",
+        "longDescription": "محرر إشارات مرئي مع معاينة PDF — إضافة، إزالة، وتداخل."
+      },
+      "decrypt": {
+        "name": "فك تشفير PDF",
+        "description": "إزالة كلمة المرور من PDF",
+        "longDescription": "يزيل كلمة المرور من مستند PDF المحمي (يتطلب معرفة كلمة المرور)."
+      },
+      "deskew": {
+        "name": "استقامة تلقائية",
+        "description": "استقامة المسح المائل تلقائياً",
+        "longDescription": "يستقيم المسح الضوئي المائل تلقائياً (إخراج ZIP للحزم متعددة الملفات)."
+      },
+      "edit-pdf": {
+        "name": "تحرير PDF",
+        "description": "محرر PDF مدمج",
+        "longDescription": "يحرر محتوى PDF بصرياً — نصوص، صور، وأشكال."
+      },
+      "find-and-redact": {
+        "name": "بحث وحذف",
+        "description": "البحث عن النص وحجبه",
+        "longDescription": "يبحث عن النص في PDF ويحجب الأجزاء المحددة (حذف البيانات الحساسة)."
+      },
+      "fix-page-size": {
+        "name": "توحيد حجم الصفحة",
+        "description": "توحيد أحجام الصفحات",
+        "longDescription": "يكتشف أحجام الصفحات المختلفة ويوحدها إلى حجم قياسي واحد."
+      },
+      "font-to-outline": {
+        "name": "تحويل الخطوط إلى مسارات",
+        "description": "تحويل النص إلى مسارات",
+        "longDescription": "يحول نصوص PDF إلى مسارات متجهة لحماية المستند من مشاكل الخطوط المفقودة."
+      },
+      "invert-colors": {
+        "name": "عكس الألوان",
+        "description": "عكس ألوان PDF",
+        "longDescription": "يعكس الألوان في مستند PDF (مثل تفعيل الوضع الداكن للقراءة)."
+      },
+      "ocg-manager": {
+        "name": "مدير الطبقات",
+        "description": "محرر طبقات OCG",
+        "longDescription": "تفعيل، تعديل وإدارة مجموعات المحتوى الاختياري (الطبقات) في PDF."
+      },
+      "pdf-to-greyscale": {
+        "name": "PDF إلى تدرج رمادي",
+        "description": "تحويل إلى تدرج رمادي",
+        "longDescription": "يحول PDF الملون إلى تدرج رمادي (لتقليل الحجم عند الطباعة)."
+      },
+      "rasterize": {
+        "name": "تحويل إلى بكسلات",
+        "description": "متجه إلى بكسلات",
+        "longDescription": "يحول صفحات PDF من متجهات إلى صور نقطية (بكسلات)."
+      },
+      "remove-metadata": {
+        "name": "إزالة البيانات الوصفية",
+        "description": "مسح بيانات PDF الوصفية",
+        "longDescription": "يزيل جميع البيانات الوصفية (المؤلف، التاريخ، العنوان) من مستند PDF."
+      },
+      "repair": {
+        "name": "إصلاح PDF",
+        "description": "إصلاح PDF التالف",
+        "longDescription": "يحاول إصلاح ملفات PDF التالفة أو غير الصحيحة."
+      },
+      "stamps": {
+        "name": "الأختام",
+        "description": "إضافة أختام إلى PDF",
+        "longDescription": "إدراج أختام بصرية (سري، معتمد، مسودة) على صفحات PDF."
+      },
+      "table-of-contents": {
+        "name": "فهرس المحتويات",
+        "description": "إنشاء فهرس تلقائي",
+        "longDescription": "ينشئ فهرس محتويات تلقائياً من عناوين أو إشارات مرجعية في PDF."
+      },
+      "text-color": {
+        "name": "لون النص",
+        "description": "تغيير لون النص في PDF",
+        "longDescription": "يغير لون كل (أو جزء محدد) من النص في مستند PDF."
+      },
+      "linearize": {
+        "name": "تحسين العرض (ويب)",
+        "description": "تحسين للعرض عبر الإنترنت",
+        "longDescription": "يحسن PDF لتحميل سريع في المتصفح (عرض الويب السريع)."
+      },
+      "remove-restrictions": {
+        "name": "إزالة القيود",
+        "description": "إزالة قفل الطباعة والنسخ",
+        "longDescription": "يزيل القيود (طباعة، نسخ، تعديل) من مستند PDF."
+      },
+      "sanitize": {
+        "name": "تنظيف PDF",
+        "description": "إزالة البيانات المخفية",
+        "longDescription": "يزيل البيانات المخفية من PDF — جافا سكريبت، نصوص برمجية، ملفات مضمنة، نماذج."
       }
     }
   }

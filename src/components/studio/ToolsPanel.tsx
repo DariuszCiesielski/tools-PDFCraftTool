@@ -33,6 +33,11 @@ import {
   PanelTop,
   Eraser,
   FileX,
+  // Wave-3 Group A icons
+  Shuffle, Palette, Bookmark, Square, Unlock, AlignCenter, SplitSquareHorizontal,
+  Pencil, Maximize, Type, LayoutGrid, Contrast, Zap, Layers3, Ruler, BookOpen,
+  Droplet, Image as ImageIcon2, Grid3x3, ShieldOff, KeyRound, Wrench, Repeat,
+  Rotate3d, ShieldCheck, Stamp, ListTree, Highlighter,
   type LucideIcon,
 } from 'lucide-react';
 import { useStudioStore, type StudioToolId } from '@/lib/stores/studioStore';
@@ -80,6 +85,39 @@ const STUDIO_TOOLS: StudioTool[] = [
   { id: 'word-to-pdf', category: 'convert', icon: FileText },
   { id: 'excel-to-pdf', category: 'convert', icon: Sheet },
   { id: 'image-to-pdf', category: 'convert', icon: ImageIcon },
+  // Wave-3 Group A — pages
+  { id: 'alternate-merge', category: 'pages', icon: Shuffle },
+  { id: 'combine-single-page', category: 'pages', icon: Square },
+  { id: 'divide', category: 'pages', icon: SplitSquareHorizontal },
+  { id: 'grid-combine', category: 'pages', icon: LayoutGrid },
+  { id: 'page-dimensions', category: 'pages', icon: Ruler },
+  { id: 'pdf-booklet', category: 'pages', icon: BookOpen },
+  { id: 'posterize', category: 'pages', icon: ImageIcon2 },
+  { id: 'reverse', category: 'pages', icon: Repeat },
+  { id: 'rotate-custom', category: 'pages', icon: Rotate3d },
+  // Wave-3 Group A — enhance
+  { id: 'background-color', category: 'enhance', icon: Palette },
+  { id: 'bookmark', category: 'enhance', icon: Bookmark },
+  { id: 'decrypt', category: 'enhance', icon: Unlock },
+  { id: 'deskew', category: 'enhance', icon: AlignCenter },
+  { id: 'edit-pdf', category: 'enhance', icon: Pencil },
+  { id: 'find-and-redact', category: 'enhance', icon: Highlighter },
+  { id: 'fix-page-size', category: 'enhance', icon: Maximize },
+  { id: 'font-to-outline', category: 'enhance', icon: Type },
+  { id: 'invert-colors', category: 'enhance', icon: Contrast },
+  { id: 'ocg-manager', category: 'enhance', icon: Layers3 },
+  { id: 'pdf-to-greyscale', category: 'enhance', icon: Droplet },
+  { id: 'rasterize', category: 'enhance', icon: Grid3x3 },
+  { id: 'remove-metadata', category: 'enhance', icon: ShieldOff },
+  { id: 'repair', category: 'enhance', icon: Wrench },
+  { id: 'stamps', category: 'enhance', icon: Stamp },
+  { id: 'table-of-contents', category: 'enhance', icon: ListTree },
+  { id: 'text-color', category: 'enhance', icon: Type },
+  // Wave-3 Group A — compress
+  { id: 'linearize', category: 'compress', icon: Zap },
+  // Wave-3 Group A — security
+  { id: 'remove-restrictions', category: 'security', icon: KeyRound },
+  { id: 'sanitize', category: 'security', icon: ShieldCheck },
 ];
 
 const CATEGORY_ORDER: StudioTool['category'][] = ['pages', 'enhance', 'convert', 'compress', 'security'];
