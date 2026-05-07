@@ -2450,7 +2450,10 @@
       "resetSent": "Check your inbox — we sent a password reset link.",
       "privacyNote": "Your credentials are stored securely. PDF files never leave your browser.",
       "showPassword": "Show password",
-      "hidePassword": "Hide password"
+      "hidePassword": "Hide password",
+      "confirmedToast": "Account confirmed — welcome to PDF Studio!",
+      "recoveryToast": "You can now set a new password.",
+      "dismissToast": "Dismiss notification"
     }
   }
 }

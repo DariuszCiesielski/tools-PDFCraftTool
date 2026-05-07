@@ -2450,7 +2450,10 @@
       "resetSent": "Sprawdź skrzynkę — wysłaliśmy link do resetowania hasła.",
       "privacyNote": "Twoje dane logowania są zapisane bezpiecznie. Pliki PDF nigdy nie opuszczają Twojej przeglądarki.",
       "showPassword": "Pokaż hasło",
-      "hidePassword": "Ukryj hasło"
+      "hidePassword": "Ukryj hasło",
+      "confirmedToast": "Konto potwierdzone — witamy w PDF Studio!",
+      "recoveryToast": "Możesz teraz ustawić nowe hasło.",
+      "dismissToast": "Zamknij powiadomienie"
     }
   }
 }

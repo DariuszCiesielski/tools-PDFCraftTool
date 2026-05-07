@@ -1,6 +1,6 @@
 'use client';
 
-import { useCallback } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useTranslations } from 'next-intl';
 import { type Locale } from '@/lib/i18n/config';
 import { useStudioStore } from '@/lib/stores/studioStore';
@@ -79,6 +79,30 @@ export function StudioLayout({ locale }: StudioLayoutProps) {
 
   const { addRecent } = useRecentDocuments();
 
+  const [confirmationToast, setConfirmationToast] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    // Supabase wraca z type w hash (?type=signup) lub query — sprawdź oba
+    const hashParams = new URLSearchParams(window.location.hash.slice(1));
+    const queryParams = new URLSearchParams(window.location.search);
+    const type = hashParams.get('type') ?? queryParams.get('type');
+    if (type === 'signup') {
+      setConfirmationToast(t('auth.confirmedToast'));
+    } else if (type === 'recovery') {
+      setConfirmationToast(t('auth.recoveryToast'));
+    }
+    if (type === 'signup' || type === 'recovery') {
+      window.history.replaceState({}, '', window.location.pathname);
+    }
+  }, [t]);
+
+  useEffect(() => {
+    if (!confirmationToast) return;
+    const timer = setTimeout(() => setConfirmationToast(null), 5000);
+    return () => clearTimeout(timer);
+  }, [confirmationToast]);
+
   const handleFilesAdded = useCallback(
     (newFiles: File[]) => {
       const pdfFiles = newFiles.filter(
@@ -102,6 +126,24 @@ export function StudioLayout({ locale }: StudioLayoutProps) {
     >
       <StudioHeader locale={locale} onFilesAdded={handleFilesAdded} />
       <StudioMenuBar locale={locale} onFilesAdded={handleFilesAdded} />
+
+      {confirmationToast && (
+        <div
+          role="status"
+          aria-live="polite"
+          className="fixed top-4 left-1/2 -translate-x-1/2 z-50 flex items-center gap-3 px-4 py-3 rounded-lg shadow-lg bg-[hsl(var(--color-primary))] text-[hsl(var(--color-primary-foreground))] animate-in slide-in-from-top-2 duration-300"
+        >
+          <span className="text-sm font-medium">{confirmationToast}</span>
+          <button
+            type="button"
+            onClick={() => setConfirmationToast(null)}
+            aria-label={t('auth.dismissToast')}
+            className="opacity-80 hover:opacity-100 transition-opacity"
+          >
+            ×
+          </button>
+        </div>
+      )}
 
       {hasFiles ? (
         <div className="flex flex-1 overflow-hidden">

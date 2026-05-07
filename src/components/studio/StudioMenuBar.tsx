@@ -1,6 +1,6 @@
 'use client';
 
-import { useRef, useEffect, useCallback, useState } from 'react';
+import { useRef, useEffect, useCallback } from 'react';
 import { useTranslations } from 'next-intl';
 import Link from 'next/link';
 import * as DropdownMenu from '@radix-ui/react-dropdown-menu';
@@ -9,8 +9,6 @@ import { useStudioStore, selectCurrentFile, type StudioToolId } from '@/lib/stor
 import { type Locale } from '@/lib/i18n/config';
 import { downloadBlob, printBlob, suggestSaveAsName } from '@/lib/studio/file-actions';
 import { useRecentDocuments } from '@/lib/hooks/useRecentDocuments';
-import { useAuth } from '@/lib/contexts/AuthContext';
-import { LoginModal } from './LoginModal';
 
 interface StudioMenuBarProps {
   locale: Locale;
@@ -45,11 +43,6 @@ export function StudioMenuBar({ locale, onFilesAdded }: StudioMenuBarProps) {
   const setProcessing = useStudioStore((state) => state.setProcessing);
   const isProcessing = useStudioStore((state) => state.isProcessing);
   const { recent, clearRecent } = useRecentDocuments();
-  const { status: authStatus, user, signOut } = useAuth();
-  const [isLoginOpen, setIsLoginOpen] = useState(false);
-
-  const isAuthenticated = authStatus === 'authenticated';
-
   const exportCurrentFile = useCallback(async () => {
     if (!currentFile) return;
     const data = await useStudioStore.getState().getCurrentBuffer(currentFile.id);
@@ -233,22 +226,6 @@ export function StudioMenuBar({ locale, onFilesAdded }: StudioMenuBarProps) {
           {t('menubar.file.print')}
         </MenuItem>
         <MenuSeparator />
-        {isAuthenticated ? (
-          <>
-            <MenuItem disabled>
-              <span className="text-xs text-[hsl(var(--color-muted-foreground))] truncate max-w-[260px]" title={user?.email ?? ''}>
-                {user?.email}
-              </span>
-            </MenuItem>
-            <MenuItem onSelect={() => signOut()}>
-              {t('menubar.file.signOut')}
-            </MenuItem>
-          </>
-        ) : (
-          <MenuItem onSelect={() => setIsLoginOpen(true)} disabled={authStatus === 'unconfigured'}>
-            {t('menubar.file.signIn')}
-          </MenuItem>
-        )}
         <MenuItem asChild>
           <Link href={`/${locale}`} className="block w-full">
             {t('menubar.file.exit')}
@@ -320,7 +297,6 @@ export function StudioMenuBar({ locale, onFilesAdded }: StudioMenuBarProps) {
         aria-hidden="true"
       />
 
-      <LoginModal isOpen={isLoginOpen} onClose={() => setIsLoginOpen(false)} />
     </nav>
   );
 }

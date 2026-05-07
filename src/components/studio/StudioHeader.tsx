@@ -8,6 +8,7 @@ import { Button } from '@/components/ui/Button';
 import { ThemeToggle } from '@/components/ui/ThemeToggle';
 import { type Locale } from '@/lib/i18n/config';
 import { useStudioStore } from '@/lib/stores/studioStore';
+import { UserAvatarMenu } from './UserAvatarMenu';
 
 interface StudioHeaderProps {
   locale: Locale;
@@ -81,6 +82,7 @@ export function StudioHeader({ locale, onFilesAdded }: StudioHeaderProps) {
       </Button>
 
       <ThemeToggle />
+      <UserAvatarMenu />
     </header>
   );
 }
