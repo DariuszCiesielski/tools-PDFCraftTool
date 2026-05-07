@@ -1,0 +1,166 @@
+'use client';
+
+import { useCallback } from 'react';
+import { useTranslations } from 'next-intl';
+import { type Locale } from '@/lib/i18n/config';
+import { useStudioStore } from '@/lib/stores/studioStore';
+import { useResizable } from '@/lib/hooks/useResizable';
+import { useRecentDocuments } from '@/lib/hooks/useRecentDocuments';
+import { StudioHeader } from './StudioHeader';
+import { StudioMenuBar } from './StudioMenuBar';
+import { StudioFooter } from './StudioFooter';
+import { PagesPanel } from './PagesPanel';
+import { PdfViewer } from './PdfViewer';
+import { ToolsPanel } from './ToolsPanel';
+import { StudioDropZone } from './StudioDropZone';
+
+interface StudioLayoutProps {
+  locale: Locale;
+}
+
+interface ResizeHandleProps {
+  side: 'left' | 'right';
+  isResizing: boolean;
+  handleRef: React.RefObject<HTMLDivElement | null>;
+  onPointerDown: (event: React.PointerEvent<HTMLDivElement>) => void;
+  onPointerMove: (event: React.PointerEvent<HTMLDivElement>) => void;
+  onPointerUp: (event: React.PointerEvent<HTMLDivElement>) => void;
+  ariaLabel: string;
+}
+
+function ResizeHandle({
+  isResizing,
+  handleRef,
+  onPointerDown,
+  onPointerMove,
+  onPointerUp,
+  ariaLabel,
+}: ResizeHandleProps) {
+  return (
+    <div
+      ref={handleRef}
+      role="separator"
+      aria-orientation="vertical"
+      aria-label={ariaLabel}
+      tabIndex={0}
+      onPointerDown={onPointerDown}
+      onPointerMove={onPointerMove}
+      onPointerUp={onPointerUp}
+      onPointerCancel={onPointerUp}
+      className={`group w-1 hover:w-1.5 cursor-col-resize bg-[hsl(var(--color-border))] hover:bg-[hsl(var(--color-primary))] transition-all ${
+        isResizing ? 'w-1.5 bg-[hsl(var(--color-primary))]' : ''
+      }`}
+    />
+  );
+}
+
+export function StudioLayout({ locale }: StudioLayoutProps) {
+  const t = useTranslations('studio');
+  const files = useStudioStore((state) => state.files);
+  const addFiles = useStudioStore((state) => state.addFiles);
+  const showLeftSidebar = useStudioStore((state) => state.showLeftSidebar);
+  const showRightPanel = useStudioStore((state) => state.showRightPanel);
+
+  const leftSidebar = useResizable({
+    initialWidth: 288,
+    minWidth: 200,
+    maxWidth: 480,
+    side: 'left',
+    storageKey: 'studio.leftSidebarWidth',
+  });
+
+  const rightPanel = useResizable({
+    initialWidth: 384,
+    minWidth: 280,
+    maxWidth: 560,
+    side: 'right',
+    storageKey: 'studio.rightPanelWidth',
+  });
+
+  const { addRecent } = useRecentDocuments();
+
+  const handleFilesAdded = useCallback(
+    (newFiles: File[]) => {
+      const pdfFiles = newFiles.filter(
+        (f) => f.type === 'application/pdf' || f.name.toLowerCase().endsWith('.pdf'),
+      );
+      if (pdfFiles.length > 0) {
+        addFiles(pdfFiles);
+        pdfFiles.forEach((file) => addRecent(file));
+      }
+    },
+    [addFiles, addRecent],
+  );
+
+  const hasFiles = files.length > 0;
+
+  return (
+    <div
+      className={`flex flex-col h-screen bg-[hsl(var(--color-background))] text-[hsl(var(--color-foreground))] ${
+        leftSidebar.isResizing || rightPanel.isResizing ? 'select-none cursor-col-resize' : ''
+      }`}
+    >
+      <StudioHeader locale={locale} onFilesAdded={handleFilesAdded} />
+      <StudioMenuBar locale={locale} onFilesAdded={handleFilesAdded} />
+
+      {hasFiles ? (
+        <div className="flex flex-1 overflow-hidden">
+          {showLeftSidebar && (
+            <>
+              <aside
+                style={{ width: leftSidebar.width }}
+                className="border-r border-[hsl(var(--color-border))] bg-[hsl(var(--color-card))] hidden md:flex md:flex-col flex-shrink-0"
+                aria-label={t('a11y.pagesSidebar')}
+              >
+                <PagesPanel onFilesAdded={handleFilesAdded} />
+              </aside>
+              <ResizeHandle
+                side="left"
+                isResizing={leftSidebar.isResizing}
+                handleRef={leftSidebar.handleRef}
+                onPointerDown={leftSidebar.handlePointerDown}
+                onPointerMove={leftSidebar.handlePointerMove}
+                onPointerUp={leftSidebar.handlePointerUp}
+                ariaLabel={t('a11y.resizeLeftSidebar')}
+              />
+            </>
+          )}
+
+          <main
+            className="flex-1 overflow-auto bg-[hsl(var(--color-muted))] min-w-0"
+            aria-label={t('a11y.viewer')}
+          >
+            <PdfViewer />
+          </main>
+
+          {showRightPanel && (
+            <>
+              <ResizeHandle
+                side="right"
+                isResizing={rightPanel.isResizing}
+                handleRef={rightPanel.handleRef}
+                onPointerDown={rightPanel.handlePointerDown}
+                onPointerMove={rightPanel.handlePointerMove}
+                onPointerUp={rightPanel.handlePointerUp}
+                ariaLabel={t('a11y.resizeRightPanel')}
+              />
+              <aside
+                style={{ width: rightPanel.width }}
+                className="border-l border-[hsl(var(--color-border))] bg-[hsl(var(--color-card))] hidden lg:flex lg:flex-col flex-shrink-0"
+                aria-label={t('a11y.toolsPanel')}
+              >
+                <ToolsPanel />
+              </aside>
+            </>
+          )}
+        </div>
+      ) : (
+        <main className="flex-1 overflow-auto" aria-label={t('a11y.dropZone')}>
+          <StudioDropZone onFilesAdded={handleFilesAdded} />
+        </main>
+      )}
+
+      <StudioFooter />
+    </div>
+  );
+}
