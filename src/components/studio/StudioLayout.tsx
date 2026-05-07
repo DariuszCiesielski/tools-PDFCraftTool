@@ -6,6 +6,7 @@ import { type Locale } from '@/lib/i18n/config';
 import { useStudioStore } from '@/lib/stores/studioStore';
 import { useResizable } from '@/lib/hooks/useResizable';
 import { useRecentDocuments } from '@/lib/hooks/useRecentDocuments';
+import { usePreferences } from '@/lib/hooks/usePreferences';
 import { StudioHeader } from './StudioHeader';
 import { StudioMenuBar } from './StudioMenuBar';
 import { StudioFooter } from './StudioFooter';
@@ -78,6 +79,15 @@ export function StudioLayout({ locale }: StudioLayoutProps) {
   });
 
   const { addRecent } = useRecentDocuments();
+  const { setLeftSidebarWidth, setRightPanelWidth } = usePreferences();
+
+  useEffect(() => {
+    setLeftSidebarWidth(leftSidebar.width);
+  }, [leftSidebar.width, setLeftSidebarWidth]);
+
+  useEffect(() => {
+    setRightPanelWidth(rightPanel.width);
+  }, [rightPanel.width, setRightPanelWidth]);
 
   const [confirmationToast, setConfirmationToast] = useState<string | null>(null);
 
@@ -110,7 +120,9 @@ export function StudioLayout({ locale }: StudioLayoutProps) {
       );
       if (pdfFiles.length > 0) {
         addFiles(pdfFiles);
-        pdfFiles.forEach((file) => addRecent(file));
+        pdfFiles.forEach((file) => {
+          void addRecent(file);
+        });
       }
     },
     [addFiles, addRecent],

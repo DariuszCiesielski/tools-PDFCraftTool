@@ -2,26 +2,28 @@
 
 import React, { useEffect, useState } from 'react';
 import { Sun, Moon } from 'lucide-react';
+import { usePreferences } from '@/lib/hooks/usePreferences';
 
 export function ThemeToggle() {
-  const [theme, setTheme] = useState<'light' | 'dark' | null>(null);
+  const [theme, setLocalTheme] = useState<'light' | 'dark' | null>(null);
+  const { setTheme: pushTheme } = usePreferences();
 
   useEffect(() => {
-    // Check initial state injected by script
     const isDark = document.documentElement.classList.contains('dark');
-    setTheme(isDark ? 'dark' : 'light');
+    setLocalTheme(isDark ? 'dark' : 'light');
+
+    const observer = new MutationObserver(() => {
+      const dark = document.documentElement.classList.contains('dark');
+      setLocalTheme(dark ? 'dark' : 'light');
+    });
+    observer.observe(document.documentElement, { attributes: true, attributeFilter: ['class'] });
+    return () => observer.disconnect();
   }, []);
 
   const toggleTheme = () => {
-    if (theme === 'light') {
-      document.documentElement.classList.add('dark');
-      localStorage.setItem('theme', 'dark');
-      setTheme('dark');
-    } else {
-      document.documentElement.classList.remove('dark');
-      localStorage.setItem('theme', 'light');
-      setTheme('light');
-    }
+    const next = theme === 'light' ? 'dark' : 'light';
+    pushTheme(next);
+    setLocalTheme(next);
   };
 
   // Render placeholder before hydrated to avoid mismatch

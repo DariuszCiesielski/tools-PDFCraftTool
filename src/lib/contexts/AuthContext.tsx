@@ -105,3 +105,12 @@ export function useAuth(): AuthContextValue {
   }
   return ctx;
 }
+
+/**
+ * Safe variant: returns null when used outside AuthProvider instead of throwing.
+ * Use in components that may be rendered both inside and outside Studio (e.g. ThemeToggle on
+ * classic /tools/[tool]/ pages which lack AuthProvider).
+ */
+export function useAuthOptional(): AuthContextValue | null {
+  return useContext(AuthContext);
+}

@@ -187,7 +187,7 @@ export function StudioMenuBar({ locale, onFilesAdded }: StudioMenuBarProps) {
               </MenuItem>
             ))}
             <MenuSeparator />
-            <MenuItem onSelect={clearRecent}>
+            <MenuItem onSelect={() => void clearRecent()}>
               {t('menubar.file.clearRecent')}
             </MenuItem>
           </SubMenu>
