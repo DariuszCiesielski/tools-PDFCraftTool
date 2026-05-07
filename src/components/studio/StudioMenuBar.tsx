@@ -258,7 +258,11 @@ export function StudioMenuBar({ locale, onFilesAdded }: StudioMenuBarProps) {
         {TOOL_GROUPS.map(({ group, tools }) => (
           <SubMenu key={group} label={t(`tools.categories.${group}`)}>
             {tools.map((tool) => (
-              <MenuItem key={tool} onSelect={() => selectTool(tool)}>
+              <MenuItem
+                key={tool}
+                onSelect={() => selectTool(tool)}
+                disabled={filesCount === 0}
+              >
                 {t(`tools.${tool}.name`)}
               </MenuItem>
             ))}

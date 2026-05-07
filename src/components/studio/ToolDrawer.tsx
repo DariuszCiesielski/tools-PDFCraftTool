@@ -20,12 +20,36 @@ const MergePDFTool = dynamic(
   { ssr: false, loading: () => <ToolLoader /> },
 );
 
-type SupportedToolId = Extract<NonNullable<StudioToolId>, 'compress' | 'split' | 'merge'>;
+const RotatePDFTool = dynamic(
+  () => import('@/components/tools/rotate/RotatePDFTool').then((m) => m.RotatePDFTool),
+  { ssr: false, loading: () => <ToolLoader /> },
+);
+
+const PageNumbersTool = dynamic(
+  () => import('@/components/tools/page-numbers/PageNumbersTool').then((m) => m.PageNumbersTool),
+  { ssr: false, loading: () => <ToolLoader /> },
+);
+
+const WatermarkTool = dynamic(
+  () => import('@/components/tools/watermark/WatermarkTool').then((m) => m.WatermarkTool),
+  { ssr: false, loading: () => <ToolLoader /> },
+);
+
+const EncryptPDFTool = dynamic(
+  () => import('@/components/tools/encrypt/EncryptPDFTool').then((m) => m.EncryptPDFTool),
+  { ssr: false, loading: () => <ToolLoader /> },
+);
+
+type SupportedToolId = NonNullable<StudioToolId>;
 
 const SUPPORTED_TOOL_IDS: ReadonlySet<string> = new Set<SupportedToolId>([
   'compress',
   'split',
   'merge',
+  'rotate',
+  'page-numbers',
+  'watermark',
+  'encrypt',
 ]);
 
 export function isToolSupportedInDrawer(toolId: StudioToolId): toolId is SupportedToolId {
@@ -48,6 +72,14 @@ function renderTool(toolId: SupportedToolId) {
       return <SplitPDFTool />;
     case 'merge':
       return <MergePDFTool />;
+    case 'rotate':
+      return <RotatePDFTool />;
+    case 'page-numbers':
+      return <PageNumbersTool />;
+    case 'watermark':
+      return <WatermarkTool />;
+    case 'encrypt':
+      return <EncryptPDFTool />;
   }
 }
 
