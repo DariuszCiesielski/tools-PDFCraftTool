@@ -2274,5 +2274,183 @@
       "selectedMatch": "Wybrane",
       "unselectedMatch": "Nie wybrane"
     }
+  },
+  "studio": {
+    "meta": {
+      "title": "Studio PDF — AIwBiznesie | Edycja PDF jak w Adobe Acrobat",
+      "description": "Profesjonalne studio do edycji PDF — tryb pracy w stylu Acrobata. 97 narzędzi w jednym miejscu, prywatność w przeglądarce, bez logowania."
+    },
+    "header": {
+      "appName": "Studio PDF",
+      "home": "Strona główna",
+      "openFiles": "Otwórz pliki",
+      "clearAll": "Wyczyść",
+      "export": "Eksportuj",
+      "classicMode": "Tryb klasyczny"
+    },
+    "footer": {
+      "previousPage": "Poprzednia strona",
+      "nextPage": "Następna strona",
+      "pageOf": "Strona {current} z {total}",
+      "loading": "Ładowanie…",
+      "zoomIn": "Powiększ",
+      "zoomOut": "Pomniejsz",
+      "noFile": "Brak załadowanego pliku — wczytaj PDF z lewego panelu lub upuść tutaj",
+      "pageCount": "{count} stron",
+      "filesLoaded": "{count} plików"
+    },
+    "dropzone": {
+      "title": "Wczytaj plik PDF",
+      "subtitle": "Przeciągnij i upuść pliki tutaj lub kliknij, by wybrać. Obsługujemy wiele plików naraz.",
+      "privacyNote": "Twoje pliki nie są wysyłane na serwer — całe przetwarzanie odbywa się w Twojej przeglądarce.",
+      "aria": "Strefa upuszczania plików PDF — kliknij lub upuść pliki"
+    },
+    "thumbnails": {
+      "heading": "Pliki ({count})",
+      "addMore": "Dodaj więcej plików",
+      "removeFile": "Usuń plik {name}"
+    },
+    "viewer": {
+      "noFile": "Wybierz plik z lewego panelu, aby wyświetlić podgląd",
+      "loading": "Ładowanie podglądu…",
+      "loadError": "Nie udało się wczytać pliku PDF",
+      "canvasAria": "Podgląd dokumentu {fileName}",
+      "zoomHint": "Rolka myszki = zoom"
+    },
+    "tools": {
+      "searchPlaceholder": "Szukaj narzędzia…",
+      "searchAria": "Wyszukaj narzędzie",
+      "noResults": "Nie znaleziono pasujących narzędzi",
+      "runComingSoon": "Uruchom narzędzie (wkrótce)",
+      "uploadFirst": "Najpierw wczytaj plik",
+      "categories": {
+        "pages": "Strony",
+        "enhance": "Wzbogacenie",
+        "compress": "Kompresja",
+        "security": "Bezpieczeństwo"
+      },
+      "split": {
+        "name": "Podziel PDF",
+        "description": "Rozdziel jeden PDF na kilka plików",
+        "longDescription": "Wybierz strony lub zakresy, by podzielić dokument na kilka osobnych plików PDF."
+      },
+      "merge": {
+        "name": "Połącz PDF-y",
+        "description": "Połącz kilka plików w jeden",
+        "longDescription": "Połącz wiele dokumentów PDF w jeden plik. Możesz zmieniać kolejność stron przed scaleniem."
+      },
+      "rotate": {
+        "name": "Obróć strony",
+        "description": "Obróć wybrane strony o 90/180°",
+        "longDescription": "Obracaj pojedyncze strony lub cały dokument PDF o 90, 180 lub 270 stopni."
+      },
+      "page-numbers": {
+        "name": "Numery stron",
+        "description": "Dodaj numerację stron",
+        "longDescription": "Dodaj numery stron z opcjami pozycji, formatu i zakresu — idealne dla dokumentów wielostronicowych."
+      },
+      "compress": {
+        "name": "Skompresuj PDF",
+        "description": "Zmniejsz rozmiar pliku",
+        "longDescription": "Zoptymalizuj rozmiar pliku PDF poprzez kompresję obrazów i usunięcie zbędnych metadanych."
+      },
+      "watermark": {
+        "name": "Znak wodny",
+        "description": "Dodaj tekst lub obraz jako znak wodny",
+        "longDescription": "Dodaj znak wodny tekstowy lub obrazowy z kontrolą przezroczystości, kąta i pozycji."
+      },
+      "encrypt": {
+        "name": "Zaszyfruj PDF",
+        "description": "Zabezpiecz hasłem",
+        "longDescription": "Dodaj hasło i ustaw uprawnienia (drukowanie, kopiowanie, edycja) dla pliku PDF."
+      }
+    },
+    "a11y": {
+      "pagesSidebar": "Panel boczny stron",
+      "viewer": "Podgląd dokumentu",
+      "toolsPanel": "Panel narzędzi",
+      "dropZone": "Strefa upuszczania plików",
+      "footer": "Pasek statusu i nawigacji",
+      "resizeLeftSidebar": "Zmień szerokość panelu stron",
+      "resizeRightPanel": "Zmień szerokość panelu narzędzi"
+    },
+    "viewerToolbar": {
+      "aria": "Pasek narzędzi podglądu",
+      "pageInput": "Numer strony — wpisz, by przeskoczyć",
+      "resetZoom": "Resetuj powiększenie do 100%",
+      "fitWidth": "Dopasuj do szerokości"
+    },
+    "menubar": {
+      "aria": "Pasek menu",
+      "file": {
+        "label": "Plik",
+        "open": "Otwórz pliki…",
+        "clearAll": "Wyczyść wszystko",
+        "export": "Eksportuj…",
+        "print": "Drukuj…",
+        "saveAs": "Zapisz jako…",
+        "saveAsPrompt": "Wprowadź nazwę pliku:",
+        "recent": "Ostatnio używane",
+        "recentEmpty": "Brak ostatnich plików",
+        "clearRecent": "Wyczyść listę",
+        "exportAs": "Eksportuj jako…",
+        "exportDocx": "Word (.docx)",
+        "exportPptx": "PowerPoint (.pptx)",
+        "exportXlsx": "Excel (.xlsx)",
+        "exportPng": "Obraz (.png)",
+        "exportError": "Błąd eksportu: {error}",
+        "save": "Zapisz",
+        "exit": "Wyjdź",
+        "signIn": "Zaloguj się…",
+        "signOut": "Wyloguj się"
+      },
+      "view": {
+        "label": "Widok",
+        "zoomIn": "Powiększ",
+        "zoomOut": "Pomniejsz",
+        "actualSize": "Rzeczywisty rozmiar (100%)",
+        "fitWidth": "Dopasuj do szerokości",
+        "toggleLeftSidebar": "Panel boczny stron",
+        "toggleRightPanel": "Panel narzędzi"
+      },
+      "tools": {
+        "label": "Narzędzia",
+        "allTools": "Wszystkie narzędzia (97)…"
+      },
+      "help": {
+        "label": "Pomoc",
+        "about": "O programie",
+        "shortcuts": "Skróty klawiszowe",
+        "home": "Powrót do strony głównej"
+      },
+      "processing": "Przetwarzam…"
+    },
+    "pagesPanel": {
+      "activeFile": "Aktywny plik",
+      "noFile": "Wczytaj plik PDF, by zobaczyć strony",
+      "loading": "Ładowanie stron…",
+      "deletePage": "Usuń stronę {page}",
+      "dragPage": "Przeciągnij stronę {page}, by zmienić kolejność"
+    },
+    "auth": {
+      "signinTitle": "Zaloguj się",
+      "signupTitle": "Utwórz konto",
+      "forgotTitle": "Resetuj hasło",
+      "email": "Email",
+      "password": "Hasło",
+      "passwordHint": "Min. 6 znaków",
+      "signinSubmit": "Zaloguj się",
+      "signupSubmit": "Załóż konto",
+      "forgotSubmit": "Wyślij link resetujący",
+      "toSignup": "Nie masz konta? Załóż konto",
+      "toSignin": "Masz już konto? Zaloguj się",
+      "toForgot": "Zapomniałeś hasła?",
+      "backToSignin": "Powrót do logowania",
+      "confirmSent": "Sprawdź swoją skrzynkę email i kliknij link potwierdzający, aby aktywować konto.",
+      "resetSent": "Sprawdź skrzynkę — wysłaliśmy link do resetowania hasła.",
+      "privacyNote": "Twoje dane logowania są zapisane bezpiecznie. Pliki PDF nigdy nie opuszczają Twojej przeglądarki.",
+      "showPassword": "Pokaż hasło",
+      "hidePassword": "Ukryj hasło"
+    }
   }
 }

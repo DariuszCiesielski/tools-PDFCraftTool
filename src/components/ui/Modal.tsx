@@ -97,39 +97,43 @@ export const Modal = forwardRef<HTMLDivElement, ModalProps>(
       }
     };
 
-    // Focus management and event listeners
+    // Keep latest handler in ref to avoid effect re-fires on every parent re-render
+    const handleKeyDownRef = useRef(handleKeyDown);
     useEffect(() => {
-      if (isOpen) {
-        // Store the currently focused element
-        previousActiveElement.current = document.activeElement as HTMLElement;
+      handleKeyDownRef.current = handleKeyDown;
+    }, [handleKeyDown]);
 
-        // Add event listener for keyboard navigation
-        document.addEventListener('keydown', handleKeyDown);
+    // Focus management and event listeners — runs only when isOpen toggles
+    useEffect(() => {
+      if (!isOpen) return;
 
-        // Prevent body scroll
-        document.body.style.overflow = 'hidden';
+      previousActiveElement.current = document.activeElement as HTMLElement;
 
-        // Focus the modal or first focusable element
-        if (modalRef.current) {
-          const focusableElements = getFocusableElements(modalRef.current);
-          if (focusableElements.length > 0) {
-            focusableElements[0].focus();
-          } else {
-            modalRef.current.focus();
-          }
+      const stableHandler = (event: KeyboardEvent) => handleKeyDownRef.current(event);
+      document.addEventListener('keydown', stableHandler);
+
+      document.body.style.overflow = 'hidden';
+
+      if (modalRef.current) {
+        const focusableElements = getFocusableElements(modalRef.current);
+        if (focusableElements.length > 0) {
+          // Skip the close button (first focusable) — focus first interactive content
+          const target = focusableElements[1] ?? focusableElements[0];
+          target.focus();
+        } else {
+          modalRef.current.focus();
         }
       }
 
       return () => {
-        document.removeEventListener('keydown', handleKeyDown);
+        document.removeEventListener('keydown', stableHandler);
         document.body.style.overflow = '';
 
-        // Restore focus to the previously focused element
         if (previousActiveElement.current) {
           previousActiveElement.current.focus();
         }
       };
-    }, [isOpen, handleKeyDown]);
+    }, [isOpen]);
 
     if (!isOpen) return null;
 

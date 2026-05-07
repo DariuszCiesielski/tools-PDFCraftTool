@@ -2274,5 +2274,183 @@
       "selectedMatch": "Selected",
       "unselectedMatch": "Not selected"
     }
+  },
+  "studio": {
+    "meta": {
+      "title": "PDF Studio — AIwBiznesie | Adobe Acrobat-style PDF Editor",
+      "description": "Professional PDF studio with Acrobat-inspired workflow. 97 tools in one place, browser-only privacy, no signup."
+    },
+    "header": {
+      "appName": "PDF Studio",
+      "home": "Home",
+      "openFiles": "Open files",
+      "clearAll": "Clear",
+      "export": "Export",
+      "classicMode": "Classic mode"
+    },
+    "footer": {
+      "previousPage": "Previous page",
+      "nextPage": "Next page",
+      "pageOf": "Page {current} of {total}",
+      "loading": "Loading…",
+      "zoomIn": "Zoom in",
+      "zoomOut": "Zoom out",
+      "noFile": "No file loaded — open a PDF from the left panel or drop one here",
+      "pageCount": "{count} pages",
+      "filesLoaded": "{count} files"
+    },
+    "dropzone": {
+      "title": "Load a PDF file",
+      "subtitle": "Drag & drop files here or click to select. Multiple files supported.",
+      "privacyNote": "Your files never leave the browser — all processing is done locally.",
+      "aria": "PDF file drop zone — click or drop files"
+    },
+    "thumbnails": {
+      "heading": "Files ({count})",
+      "addMore": "Add more files",
+      "removeFile": "Remove file {name}"
+    },
+    "viewer": {
+      "noFile": "Select a file from the left panel to preview",
+      "loading": "Loading preview…",
+      "loadError": "Failed to load PDF file",
+      "canvasAria": "Document preview: {fileName}",
+      "zoomHint": "Mouse wheel = zoom"
+    },
+    "tools": {
+      "searchPlaceholder": "Search a tool…",
+      "searchAria": "Search tools",
+      "noResults": "No matching tools found",
+      "runComingSoon": "Run tool (coming soon)",
+      "uploadFirst": "Upload a file first",
+      "categories": {
+        "pages": "Pages",
+        "enhance": "Enhance",
+        "compress": "Compress",
+        "security": "Security"
+      },
+      "split": {
+        "name": "Split PDF",
+        "description": "Break one PDF into multiple files",
+        "longDescription": "Choose pages or ranges to split a document into separate PDF files."
+      },
+      "merge": {
+        "name": "Merge PDFs",
+        "description": "Combine multiple files into one",
+        "longDescription": "Combine multiple PDF documents into a single file. Reorder before merging."
+      },
+      "rotate": {
+        "name": "Rotate pages",
+        "description": "Rotate selected pages 90/180°",
+        "longDescription": "Rotate single pages or the entire PDF by 90, 180, or 270 degrees."
+      },
+      "page-numbers": {
+        "name": "Page numbers",
+        "description": "Add page numbering",
+        "longDescription": "Add page numbers with position, format and range options — perfect for multi-page documents."
+      },
+      "compress": {
+        "name": "Compress PDF",
+        "description": "Reduce file size",
+        "longDescription": "Optimize file size by compressing images and removing unnecessary metadata."
+      },
+      "watermark": {
+        "name": "Watermark",
+        "description": "Add text or image watermark",
+        "longDescription": "Add a text or image watermark with control over opacity, angle and position."
+      },
+      "encrypt": {
+        "name": "Encrypt PDF",
+        "description": "Password protect",
+        "longDescription": "Set password and permissions (print, copy, edit) for the PDF file."
+      }
+    },
+    "a11y": {
+      "pagesSidebar": "Pages sidebar",
+      "viewer": "Document viewer",
+      "toolsPanel": "Tools panel",
+      "dropZone": "File drop zone",
+      "footer": "Status and navigation bar",
+      "resizeLeftSidebar": "Resize pages sidebar",
+      "resizeRightPanel": "Resize tools panel"
+    },
+    "viewerToolbar": {
+      "aria": "Viewer toolbar",
+      "pageInput": "Page number — type to jump",
+      "resetZoom": "Reset zoom to 100%",
+      "fitWidth": "Fit to width"
+    },
+    "menubar": {
+      "aria": "Menu bar",
+      "file": {
+        "label": "File",
+        "open": "Open files…",
+        "clearAll": "Clear all",
+        "export": "Export…",
+        "print": "Print…",
+        "saveAs": "Save as…",
+        "saveAsPrompt": "Enter file name:",
+        "recent": "Recent",
+        "recentEmpty": "No recent files",
+        "clearRecent": "Clear list",
+        "exportAs": "Export as…",
+        "exportDocx": "Word (.docx)",
+        "exportPptx": "PowerPoint (.pptx)",
+        "exportXlsx": "Excel (.xlsx)",
+        "exportPng": "Image (.png)",
+        "exportError": "Export error: {error}",
+        "save": "Save",
+        "exit": "Exit",
+        "signIn": "Sign in…",
+        "signOut": "Sign out"
+      },
+      "view": {
+        "label": "View",
+        "zoomIn": "Zoom in",
+        "zoomOut": "Zoom out",
+        "actualSize": "Actual size (100%)",
+        "fitWidth": "Fit to width",
+        "toggleLeftSidebar": "Pages sidebar",
+        "toggleRightPanel": "Tools panel"
+      },
+      "tools": {
+        "label": "Tools",
+        "allTools": "All tools (97)…"
+      },
+      "help": {
+        "label": "Help",
+        "about": "About",
+        "shortcuts": "Keyboard shortcuts",
+        "home": "Back to home"
+      },
+      "processing": "Processing…"
+    },
+    "pagesPanel": {
+      "activeFile": "Active file",
+      "noFile": "Load a PDF to see pages",
+      "loading": "Loading pages…",
+      "deletePage": "Delete page {page}",
+      "dragPage": "Drag page {page} to reorder"
+    },
+    "auth": {
+      "signinTitle": "Sign in",
+      "signupTitle": "Create account",
+      "forgotTitle": "Reset password",
+      "email": "Email",
+      "password": "Password",
+      "passwordHint": "Min. 6 characters",
+      "signinSubmit": "Sign in",
+      "signupSubmit": "Create account",
+      "forgotSubmit": "Send reset link",
+      "toSignup": "Don't have an account? Sign up",
+      "toSignin": "Already have an account? Sign in",
+      "toForgot": "Forgot password?",
+      "backToSignin": "Back to sign in",
+      "confirmSent": "Check your inbox and click the confirmation link to activate your account.",
+      "resetSent": "Check your inbox — we sent a password reset link.",
+      "privacyNote": "Your credentials are stored securely. PDF files never leave your browser.",
+      "showPassword": "Show password",
+      "hidePassword": "Hide password"
+    }
   }
 }
