@@ -2323,6 +2323,7 @@
       "noResults": "No matching tools found",
       "runComingSoon": "Run tool (coming soon)",
       "uploadFirst": "Upload a file first",
+      "closeDrawer": "Close tool",
       "categories": {
         "pages": "Pages",
         "enhance": "Enhance",

@@ -3,7 +3,7 @@
 import { useRef } from 'react';
 import { useTranslations } from 'next-intl';
 import Link from 'next/link';
-import { FolderOpen, Download, RefreshCw, Home } from 'lucide-react';
+import { FolderOpen, RefreshCw, Home } from 'lucide-react';
 import { Button } from '@/components/ui/Button';
 import { ThemeToggle } from '@/components/ui/ThemeToggle';
 import { type Locale } from '@/lib/i18n/config';
@@ -75,11 +75,6 @@ export function StudioHeader({ locale, onFilesAdded }: StudioHeaderProps) {
       )}
 
       <div className="flex-1" />
-
-      <Button variant="ghost" size="sm" disabled aria-label={t('header.export')}>
-        <Download className="w-4 h-4 mr-2" />
-        <span className="hidden sm:inline">{t('header.export')}</span>
-      </Button>
 
       <ThemeToggle />
       <UserAvatarMenu />

@@ -17,6 +17,7 @@ import {
 } from 'lucide-react';
 import { useStudioStore, type StudioToolId } from '@/lib/stores/studioStore';
 import { Button } from '@/components/ui/Button';
+import { ToolDrawer, isToolSupportedInDrawer } from './ToolDrawer';
 
 interface StudioTool {
   id: NonNullable<StudioToolId>;
@@ -64,6 +65,10 @@ export function ToolsPanel() {
   }, [filtered]);
 
   const activeToolMeta = currentTool ? STUDIO_TOOLS.find((tool) => tool.id === currentTool) : null;
+
+  if (isToolSupportedInDrawer(currentTool)) {
+    return <ToolDrawer toolId={currentTool} />;
+  }
 
   return (
     <div className="flex flex-col h-full">
