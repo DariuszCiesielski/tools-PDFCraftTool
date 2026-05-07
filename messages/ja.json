@@ -2387,5 +2387,112 @@
       "description": "{brand}に関するよくある質問については、FAQページをご覧ください。",
       "button": "FAQを表示"
     }
+  },
+  "studio": {
+    "tools": {
+      "ocr": {
+        "name": "OCR (文字認識)",
+        "description": "スキャンしたPDFからテキストを抽出します。",
+        "longDescription": "光学式文字認識（OCR）により、PDF内の画像を検索可能なテキストに変換します。多言語に対応しています。"
+      },
+      "pdf-to-docx": {
+        "name": "PDF → Word",
+        "description": "PDFを編集可能なWord文書に変換します。",
+        "longDescription": "PDFのテキストとレイアウトをDOCX形式でエクスポートし、Microsoft WordやLibreOfficeで編集可能にします。"
+      },
+      "pdf-to-excel": {
+        "name": "PDF → Excel",
+        "description": "PDFの表をExcelスプレッドシートに変換します。",
+        "longDescription": "PDFから表を抽出し、Excelでそのまま処理可能なXLSXファイルとして保存します。"
+      },
+      "pdf-to-pptx": {
+        "name": "PDF → PowerPoint",
+        "description": "PDFをPowerPointプレゼンテーションに変換します。",
+        "longDescription": "PDFの各ページが個別のスライドになります。PDF資料を講義用プレゼンテーションに最適化できます。"
+      },
+      "word-to-pdf": {
+        "name": "Word → PDF",
+        "description": "Word文書をPDFに変換します。",
+        "longDescription": "DOC/DOCXファイルをPDFとして保存し、書式やフォントを完全に保持します。"
+      },
+      "excel-to-pdf": {
+        "name": "Excel → PDF",
+        "description": "ExcelスプレッドシートをPDFに変換します。",
+        "longDescription": "XLSX/XLSファイルをPDFとして保存し、レイアウトと数式をそのまま保持します。"
+      },
+      "image-to-pdf": {
+        "name": "画像 → PDF",
+        "description": "複数の画像を1つのPDFに結合します。",
+        "longDescription": "JPGやPNGなどの画像をドロップして、1つの多ページPDFに変換します。"
+      },
+      "edit-metadata": {
+        "name": "メタデータ編集",
+        "description": "タイトル、著者、キーワードを変更します。",
+        "longDescription": "文書のメタ情報（タイトル、著者、件名、キーワード、作成者、プロデューサー）を編集します。"
+      },
+      "extract-images": {
+        "name": "画像の抽出",
+        "description": "PDF内のすべての画像をダウンロードします。",
+        "longDescription": "PDFに含まれるすべての画像を抽出し、個別またはZIP形式でダウンロードできます。"
+      },
+      "sign": {
+        "name": "PDFに署名",
+        "description": "手書き署名またはスタンプを追加します。",
+        "longDescription": "署名を描画、テキストを入力、または署名画像をアップロードして、PDFの任意のページに配置します。"
+      },
+      "categories": {
+        "convert": "変換"
+      },
+      "delete": {
+        "name": "ページ削除",
+        "description": "PDFから選択したページを削除",
+        "longDescription": "PDFドキュメントから削除するページを選択し、整理されたバージョンをダウンロードします。"
+      },
+      "organize": {
+        "name": "ページ整理",
+        "description": "PDFのページ順序を変更",
+        "longDescription": "ドラッグ＆ドロップでページ順序を変更、回転、または不要なページを削除します。"
+      },
+      "extract": {
+        "name": "ページ抽出",
+        "description": "ページを新しいPDFに抽出",
+        "longDescription": "特定のページを選択し、新しいスタンドアロンのPDFドキュメントとして保存します。"
+      },
+      "crop": {
+        "name": "ページトリミング",
+        "description": "選択したページ領域をトリミング",
+        "longDescription": "各PDFページの余白をトリミングするか、保持する領域を選択します。"
+      },
+      "add-blank-page": {
+        "name": "空白ページの追加",
+        "description": "PDFに空白ページを挿入",
+        "longDescription": "ドキュメント内の任意の位置に1ページ以上の空白ページを追加します。"
+      },
+      "n-up": {
+        "name": "N-Upレイアウト",
+        "description": "複数ページを1ページに結合",
+        "longDescription": "印刷時の紙の節約のため、2、4、9、または16ページのPDFを1ページに配置します。"
+      },
+      "flatten": {
+        "name": "PDFのフラット化",
+        "description": "フォームと注記を固定",
+        "longDescription": "フォームフィールド、注記、レイヤーを静的なページコンテンツに変換し、それ以上の編集をロックします。"
+      },
+      "header-footer": {
+        "name": "ヘッダーとフッター",
+        "description": "PDFにヘッダーとフッターを追加",
+        "longDescription": "すべてのPDFページのヘッダーとフッターにテキスト、日付、またはページ番号を挿入します。"
+      },
+      "remove-annotations": {
+        "name": "注記の削除",
+        "description": "メモとハイライトをクリア",
+        "longDescription": "PDFドキュメントからすべての注記、コメント、下線、ハイライトを削除します。"
+      },
+      "remove-blank-pages": {
+        "name": "空白ページの削除",
+        "description": "PDFから空白ページをクリーンアップ",
+        "longDescription": "PDFドキュメントから空白ページを自動的に検出し、削除します。"
+      }
+    }
   }
 }

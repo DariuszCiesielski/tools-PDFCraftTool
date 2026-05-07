@@ -2397,5 +2397,112 @@
       "selectedMatch": "محدد",
       "unselectedMatch": "غير محدد"
     }
+  },
+  "studio": {
+    "tools": {
+      "ocr": {
+        "name": "التعرف الضوئي على الحروف",
+        "description": "استخراج النصوص من ملفات PDF الممسوحة ضوئياً",
+        "longDescription": "التعرف الضوئي على الحروف — تحويل الصور في ملف PDF إلى نص قابل للبحث. يدعم لغات متعددة."
+      },
+      "pdf-to-docx": {
+        "name": "PDF → Word",
+        "description": "تحويل ملف PDF إلى مستند Word قابل للتعديل",
+        "longDescription": "تصدير نص وتنسيق ملف PDF إلى ملف DOCX قابل للتعديل في Microsoft Word أو LibreOffice."
+      },
+      "pdf-to-excel": {
+        "name": "PDF → Excel",
+        "description": "تحويل جداول PDF إلى جدول بيانات Excel",
+        "longDescription": "استخراج الجداول من ملف PDF وحفظها كملف XLSX جاهز للمعالجة في Excel."
+      },
+      "pdf-to-pptx": {
+        "name": "PDF → PowerPoint",
+        "description": "تحويل ملف PDF إلى عرض تقديمي PowerPoint",
+        "longDescription": "تتحول كل صفحة من ملف PDF إلى شريحة منفصلة. مثالي لعروض المحاضرات المستمدة من ملفات PDF."
+      },
+      "word-to-pdf": {
+        "name": "Word → PDF",
+        "description": "تحويل مستند Word إلى PDF",
+        "longDescription": "حفظ ملف DOC/DOCX بصيغة PDF مع الحفاظ على التنسيق والخطوط الكاملة."
+      },
+      "excel-to-pdf": {
+        "name": "Excel → PDF",
+        "description": "تحويل جدول بيانات Excel إلى PDF",
+        "longDescription": "حفظ ملف XLSX/XLS بصيغة PDF مع الحفاظ على التخطيط والصيغ."
+      },
+      "image-to-pdf": {
+        "name": "صورة → PDF",
+        "description": "دمج الصور في ملف PDF واحد",
+        "longDescription": "أفلت صور JPG أو PNG أو غيرها وحولها إلى ملف PDF متعدد الصفحات."
+      },
+      "edit-metadata": {
+        "name": "تعديل البيانات الوصفية",
+        "description": "تغيير العنوان والمؤلف والكلمات المفتاحية",
+        "longDescription": "تعديل معلومات المستند الوصفية: العنوان، المؤلف، الموضوع، الكلمات المفتاحية، المنشئ والمُنتِج."
+      },
+      "extract-images": {
+        "name": "استخراج الصور",
+        "description": "تنزيل جميع الصور من ملف PDF",
+        "longDescription": "يستخرج جميع الصور الموجودة في ملف PDF ويتيح لك تنزيلها بشكل فردي أو كملف ZIP."
+      },
+      "sign": {
+        "name": "توقيع PDF",
+        "description": "إضافة توقيع بخط اليد أو ختم",
+        "longDescription": "ارسم توقيعاً، أو اكتب نصاً، أو ارفع صورة توقيع. ضعها في أي صفحة من ملف PDF."
+      },
+      "categories": {
+        "convert": "تحويل"
+      },
+      "delete": {
+        "name": "حذف الصفحات",
+        "description": "إزالة الصفحات المحددة من ملف PDF",
+        "longDescription": "حدد الصفحات المراد حذفها من مستند PDF وقم بتنزيل النسخة النظيفة."
+      },
+      "organize": {
+        "name": "ترتيب الصفحات",
+        "description": "إعادة ترتيب صفحات ملف PDF",
+        "longDescription": "اسحب وأفلت لإعادة ترتيب الصفحات، أو قم بتدويرها، أو إزالة الصفحات غير المرغوب فيها."
+      },
+      "extract": {
+        "name": "استخراج الصفحات",
+        "description": "استخراج صفحات إلى ملف PDF جديد",
+        "longDescription": "حدد صفحات معينة واحفظها كمستند PDF مستقل جديد."
+      },
+      "crop": {
+        "name": "قص الصفحات",
+        "description": "تقليم مناطق الصفحات المحددة",
+        "longDescription": "قص الهوامش أو حدد المنطقة المراد الاحتفاظ بها في كل صفحة من صفحات PDF."
+      },
+      "add-blank-page": {
+        "name": "إضافة صفحات فارغة",
+        "description": "إدراج صفحات فارغة في ملف PDF",
+        "longDescription": "أضف صفحة فارغة واحدة أو أكثر في موضع محدد داخل المستند."
+      },
+      "n-up": {
+        "name": "تخطيط N-Up",
+        "description": "دمج عدة صفحات في صفحة واحدة",
+        "longDescription": "ضع 2 أو 4 أو 9 أو 16 صفحة من PDF في صفحة واحدة واحدة لتوفير الورق عند الطباعة."
+      },
+      "flatten": {
+        "name": "تسطيح ملف PDF",
+        "description": "تحويل النماذج والتعليقات إلى محتوى ثابت",
+        "longDescription": "قم بتسطيح حقول النماذج والتعليقات والطبقات لتصبح محتوى صفحة ثابتًا — مما يمنع التعديل عليها لاحقًا."
+      },
+      "header-footer": {
+        "name": "رأس وتذييل الصفحة",
+        "description": "إضافة رؤوس وتذييلات إلى ملف PDF",
+        "longDescription": "أدخل نصًا أو تاريخًا أو أرقام صفحات في رأس وتذييل كل صفحة من صفحات PDF."
+      },
+      "remove-annotations": {
+        "name": "إزالة التعليقات",
+        "description": "مسح الملاحظات والتظليلات",
+        "longDescription": "إزالة جميع التعليقات والتعليقات التوضيحية والتسطيرات والتظليلات من مستند PDF."
+      },
+      "remove-blank-pages": {
+        "name": "إزالة الصفحات الفارغة",
+        "description": "تنظيف الصفحات الفارغة من ملف PDF",
+        "longDescription": "اكتشف الصفحات الفارغة تلقائيًا وأزِلها من مستند PDF."
+      }
+    }
   }
 }

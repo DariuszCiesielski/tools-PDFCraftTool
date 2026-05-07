@@ -2387,5 +2387,112 @@
       "description": "Consultez notre page FAQ pour des réponses aux questions courantes sur {brand}.",
       "button": "Voir la FAQ"
     }
+  },
+  "studio": {
+    "tools": {
+      "ocr": {
+        "name": "Reconnaissance de texte (OCR)",
+        "description": "Extraire le texte des PDF numérisés",
+        "longDescription": "Reconnaissance optique de caractères — convertissez les images du PDF en texte consultable. Prise en charge multilingue."
+      },
+      "pdf-to-docx": {
+        "name": "PDF → Word",
+        "description": "Convertir le PDF en document Word modifiable",
+        "longDescription": "Exportez le texte et la mise en page du PDF vers un fichier DOCX éditable dans Microsoft Word ou LibreOffice."
+      },
+      "pdf-to-excel": {
+        "name": "PDF → Excel",
+        "description": "Convertir les tableaux PDF en feuille de calcul Excel",
+        "longDescription": "Extrayez les tableaux du PDF et enregistrez-les au format XLSX, prêts à être traités dans Excel."
+      },
+      "pdf-to-pptx": {
+        "name": "PDF → PowerPoint",
+        "description": "Convertir le PDF en présentation PowerPoint",
+        "longDescription": "Chaque page du PDF devient une diapositive distincte. Idéal pour les présentations de cours issues de PDF."
+      },
+      "word-to-pdf": {
+        "name": "Word → PDF",
+        "description": "Convertir le document Word en PDF",
+        "longDescription": "Enregistrez le fichier DOC/DOCX au format PDF en conservant la mise en forme et les polices complètes."
+      },
+      "excel-to-pdf": {
+        "name": "Excel → PDF",
+        "description": "Convertir la feuille de calcul Excel en PDF",
+        "longDescription": "Enregistrez le fichier XLSX/XLS au format PDF en conservant la mise en page et les formules."
+      },
+      "image-to-pdf": {
+        "name": "Image → PDF",
+        "description": "Combiner des images en un seul PDF",
+        "longDescription": "Glissez-déposez des images JPG, PNG ou autres et convertissez-les en un seul PDF multi-pages."
+      },
+      "edit-metadata": {
+        "name": "Modifier les métadonnées",
+        "description": "Changer le titre, l'auteur, les mots-clés",
+        "longDescription": "Modifiez les métadonnées du document : titre, auteur, sujet, mots-clés, créateur et producteur."
+      },
+      "extract-images": {
+        "name": "Extraire les images",
+        "description": "Télécharger toutes les images du PDF",
+        "longDescription": "Extrait toutes les images contenues dans le PDF et permet de les télécharger individuellement ou en ZIP."
+      },
+      "sign": {
+        "name": "Signer le PDF",
+        "description": "Ajouter une signature manuscrite ou un cachet",
+        "longDescription": "Dessinez une signature, tapez du texte ou téléchargez une image de signature. Placez-la sur n'importe quelle page du PDF."
+      },
+      "categories": {
+        "convert": "Convertir"
+      },
+      "delete": {
+        "name": "Supprimer des pages",
+        "description": "Supprimer les pages sélectionnées du PDF",
+        "longDescription": "Sélectionnez les pages à retirer d'un document PDF et téléchargez la version finale."
+      },
+      "organize": {
+        "name": "Organiser les pages",
+        "description": "Réorganiser les pages du PDF",
+        "longDescription": "Faites glisser les pages pour les réordonner, les faire pivoter ou supprimer celles qui ne sont pas nécessaires."
+      },
+      "extract": {
+        "name": "Extraire des pages",
+        "description": "Extraire des pages vers un nouveau PDF",
+        "longDescription": "Sélectionnez des pages spécifiques et enregistrez-les dans un nouveau document PDF indépendant."
+      },
+      "crop": {
+        "name": "Rogner les pages",
+        "description": "Rogner les zones sélectionnées",
+        "longDescription": "Définissez les marges à retirer ou sélectionnez la zone à conserver sur chaque page du PDF."
+      },
+      "add-blank-page": {
+        "name": "Ajouter des pages vierges",
+        "description": "Insérer des pages vierges dans le PDF",
+        "longDescription": "Ajoutez une ou plusieurs pages vierges à un emplacement précis du document."
+      },
+      "n-up": {
+        "name": "Mise en page N-Up",
+        "description": "Combiner plusieurs pages sur une seule",
+        "longDescription": "Placez 2, 4, 9 ou 16 pages du PDF sur une seule feuille pour économiser du papier à l'impression."
+      },
+      "flatten": {
+        "name": "Aplatir le PDF",
+        "description": "Rendre les formulaires et annotations statiques",
+        "longDescription": "Aplatissez les champs de formulaire, annotations et calques en contenu fixe pour les verrouiller contre toute modification."
+      },
+      "header-footer": {
+        "name": "En-tête et pied de page",
+        "description": "Ajouter des en-têtes et pieds de page au PDF",
+        "longDescription": "Insérez du texte, une date ou des numéros de page dans l'en-tête et le pied de page de chaque page du PDF."
+      },
+      "remove-annotations": {
+        "name": "Supprimer les annotations",
+        "description": "Effacer les notes et surlignages",
+        "longDescription": "Supprimez toutes les annotations, commentaires, soulignements et surlignages d'un document PDF."
+      },
+      "remove-blank-pages": {
+        "name": "Supprimer les pages vierges",
+        "description": "Nettoyer les pages vierges du PDF",
+        "longDescription": "Détectez et supprimez automatiquement les pages vierges d'un document PDF."
+      }
+    }
   }
 }

@@ -30,13 +30,16 @@ const loadPdfjsLib = async () => {
 
 export interface HeaderFooterToolProps {
   className?: string;
+  initialFile?: File;
+  hideUploader?: boolean;
+  onComplete?: (blob: Blob, originalFile: File) => void;
 }
 
-export function HeaderFooterTool({ className = '' }: HeaderFooterToolProps) {
+export function HeaderFooterTool({ className = '', initialFile, hideUploader, onComplete }: HeaderFooterToolProps) {
   const t = useTranslations('common');
   const tTools = useTranslations('tools');
 
-  const [file, setFile] = useState<File | null>(null);
+  const [file, setFile] = useState<File | null>(initialFile ?? null);
   const [status, setStatus] = useState<ProcessingStatus>('idle');
   const [progress, setProgress] = useState(0);
   const [progressMessage, setProgressMessage] = useState('');
@@ -61,6 +64,12 @@ export function HeaderFooterTool({ className = '' }: HeaderFooterToolProps) {
   const [currentPreviewPage, setCurrentPreviewPage] = useState(1);
 
   const cancelledRef = useRef(false);
+  useEffect(() => {
+    if (initialFile) {
+      setFile(initialFile);
+    }
+  }, [initialFile]); // eslint-disable-line react-hooks/exhaustive-deps
+
   const previewCanvasRef = useRef<HTMLCanvasElement>(null);
 
   // Load PDF and generate preview
@@ -190,7 +199,7 @@ export function HeaderFooterTool({ className = '' }: HeaderFooterToolProps) {
       };
       loadAndRender();
     }
-  }, [file, headerLeft, headerCenter, headerRight, footerLeft, footerCenter, footerRight, fontSize, fontColor, margin, skipFirstPage, pageRange, currentPreviewPage, totalPages]);
+  }, [file, headerLeft, headerCenter, headerRight, footerLeft, footerCenter, footerRight, fontSize, fontColor, margin, skipFirstPage, pageRange, currentPreviewPage, totalPages, onComplete]);
 
   const handleFilesSelected = useCallback((files: File[]) => {
     if (files.length > 0) {
@@ -237,8 +246,10 @@ export function HeaderFooterTool({ className = '' }: HeaderFooterToolProps) {
       });
 
       if (output.success && output.result) {
-        setResult(output.result as Blob);
+        const blob = output.result as Blob;
+        setResult(blob);
         setStatus('complete');
+        if (onComplete && file) onComplete(blob, file);
       } else {
         setError(output.error?.message || 'Failed to add header/footer.');
         setStatus('error');
@@ -247,7 +258,7 @@ export function HeaderFooterTool({ className = '' }: HeaderFooterToolProps) {
       setError(err instanceof Error ? err.message : 'Error');
       setStatus('error');
     }
-  }, [file, headerLeft, headerCenter, headerRight, footerLeft, footerCenter, footerRight, fontSize, fontColor, margin, skipFirstPage, pageRange]);
+  }, [file, headerLeft, headerCenter, headerRight, footerLeft, footerCenter, footerRight, fontSize, fontColor, margin, skipFirstPage, pageRange, onComplete]);
 
   const formatSize = (bytes: number): string => {
     if (bytes < 1024) return `${bytes} B`;
@@ -267,7 +278,7 @@ export function HeaderFooterTool({ className = '' }: HeaderFooterToolProps) {
 
   return (
     <div className={`space-y-6 ${className}`.trim()}>
-      {!file && (
+      {!file && !hideUploader && (
         <FileUploader
           accept={['application/pdf', '.pdf']}
           multiple={false}

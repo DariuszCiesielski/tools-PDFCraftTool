@@ -1509,6 +1509,112 @@
       "selectedMatch": "Terpilih",
       "unselectedMatch": "Tidak terpilih"
     }
+  },
+  "studio": {
+    "tools": {
+      "ocr": {
+        "name": "OCR (Pengenalan Teks)",
+        "description": "Ekstrak teks dari PDF hasil pindaian",
+        "longDescription": "Optical Character Recognition — ubah gambar di PDF menjadi teks yang dapat dicari. Mendukung banyak bahasa."
+      },
+      "pdf-to-docx": {
+        "name": "PDF → Word",
+        "description": "Konversi PDF ke dokumen Word yang dapat diedit",
+        "longDescription": "Ekspor teks dan tata letak PDF ke file DOCX yang dapat diedit di Microsoft Word atau LibreOffice."
+      },
+      "pdf-to-excel": {
+        "name": "PDF → Excel",
+        "description": "Konversi tabel PDF ke spreadsheet Excel",
+        "longDescription": "Ekstrak tabel dari PDF dan simpan sebagai file XLSX yang siap diproses di Excel."
+      },
+      "pdf-to-pptx": {
+        "name": "PDF → PowerPoint",
+        "description": "Konversi PDF ke presentasi PowerPoint",
+        "longDescription": "Setiap halaman PDF menjadi slide terpisah. Cocok untuk presentasi kuliah dari PDF."
+      },
+      "word-to-pdf": {
+        "name": "Word → PDF",
+        "description": "Konversi dokumen Word ke PDF",
+        "longDescription": "Simpan file DOC/DOCX sebagai PDF dengan mempertahankan format dan font sepenuhnya."
+      },
+      "excel-to-pdf": {
+        "name": "Excel → PDF",
+        "description": "Konversi spreadsheet Excel ke PDF",
+        "longDescription": "Simpan file XLSX/XLS sebagai PDF dengan mempertahankan tata letak dan rumus."
+      },
+      "image-to-pdf": {
+        "name": "Gambar → PDF",
+        "description": "Gabungkan gambar menjadi satu PDF",
+        "longDescription": "Jatuhkan JPG, PNG, atau gambar lain dan konversikan menjadi satu PDF multi-halaman."
+      },
+      "edit-metadata": {
+        "name": "Edit metadata",
+        "description": "Ubah judul, penulis, kata kunci",
+        "longDescription": "Edit informasi meta dokumen: judul, penulis, subjek, kata kunci, pembuat, dan produsen."
+      },
+      "extract-images": {
+        "name": "Ekstrak gambar",
+        "description": "Unduh semua gambar dari PDF",
+        "longDescription": "Ekstrak semua gambar yang terkandung dalam PDF dan memungkinkan Anda mengunduhnya secara individual atau sebagai ZIP."
+      },
+      "sign": {
+        "name": "Tanda tangani PDF",
+        "description": "Tambahkan tanda tangan tangan atau stempel",
+        "longDescription": "Gambar tanda tangan, ketik teks, atau unggah gambar tanda tangan. Tempatkan di halaman PDF mana pun."
+      },
+      "categories": {
+        "convert": "Konversi"
+      },
+      "delete": {
+        "name": "Hapus halaman",
+        "description": "Hapus halaman yang dipilih dari PDF",
+        "longDescription": "Pilih halaman yang ingin dihapus dari dokumen PDF dan unduh versi yang sudah dibersihkan."
+      },
+      "organize": {
+        "name": "Atur halaman",
+        "description": "Susun ulang halaman PDF",
+        "longDescription": "Seret dan lepas untuk mengubah urutan halaman, memutar, atau menghapus halaman yang tidak diinginkan."
+      },
+      "extract": {
+        "name": "Ekstrak halaman",
+        "description": "Pilih halaman untuk PDF baru",
+        "longDescription": "Pilih halaman tertentu dan simpan sebagai dokumen PDF baru yang berdiri sendiri."
+      },
+      "crop": {
+        "name": "Potong halaman",
+        "description": "Potong area halaman yang dipilih",
+        "longDescription": "Potong margin atau pilih area yang ingin dipertahankan pada setiap halaman PDF."
+      },
+      "add-blank-page": {
+        "name": "Tambah halaman kosong",
+        "description": "Sisipkan halaman kosong ke PDF",
+        "longDescription": "Tambahkan satu atau lebih halaman kosong pada posisi yang ditentukan dalam dokumen."
+      },
+      "n-up": {
+        "name": "Tata letak N-Up",
+        "description": "Gabungkan beberapa halaman menjadi satu",
+        "longDescription": "Tempatkan 2, 4, 9, atau 16 halaman PDF menjadi satu halaman untuk menghemat kertas saat mencetak."
+      },
+      "flatten": {
+        "name": "Flatten PDF",
+        "description": "Jadikan formulir dan anotasi statis",
+        "longDescription": "Jadikan bidang formulir, anotasi, dan lapisan menjadi konten halaman statis — menguncinya dari pengeditan lebih lanjut."
+      },
+      "header-footer": {
+        "name": "Header & footer",
+        "description": "Tambahkan header dan footer ke PDF",
+        "longDescription": "Sisipkan teks, tanggal, atau nomor halaman ke dalam header dan footer setiap halaman PDF."
+      },
+      "remove-annotations": {
+        "name": "Hapus anotasi",
+        "description": "Bersihkan catatan dan sorotan",
+        "longDescription": "Hapus semua anotasi, komentar, garis bawah, dan sorotan dari dokumen PDF."
+      },
+      "remove-blank-pages": {
+        "name": "Hapus halaman kosong",
+        "description": "Bersihkan halaman kosong dari PDF",
+        "longDescription": "Secara otomatis mendeteksi dan menghapus halaman kosong dari dokumen PDF."
+      }
+    }
   }
 }
-

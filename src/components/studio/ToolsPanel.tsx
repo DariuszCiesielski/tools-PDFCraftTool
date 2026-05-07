@@ -22,6 +22,17 @@ import {
   Tags,
   ImageDown,
   PenLine,
+  // Wave-2 icons
+  Trash2,
+  ArrowUpDown,
+  FileOutput,
+  Crop,
+  FilePlus,
+  Grid2x2,
+  Layers,
+  PanelTop,
+  Eraser,
+  FileX,
   type LucideIcon,
 } from 'lucide-react';
 import { useStudioStore, type StudioToolId } from '@/lib/stores/studioStore';
@@ -40,12 +51,24 @@ const STUDIO_TOOLS: StudioTool[] = [
   { id: 'merge', category: 'pages', icon: Combine },
   { id: 'rotate', category: 'pages', icon: RotateCw },
   { id: 'extract-images', category: 'pages', icon: ImageDown },
+  // Wave-2 page operations
+  { id: 'delete', category: 'pages', icon: Trash2 },
+  { id: 'organize', category: 'pages', icon: ArrowUpDown },
+  { id: 'extract', category: 'pages', icon: FileOutput },
+  { id: 'crop', category: 'pages', icon: Crop },
+  { id: 'add-blank-page', category: 'pages', icon: FilePlus },
+  { id: 'n-up', category: 'pages', icon: Grid2x2 },
   // Enhance
   { id: 'page-numbers', category: 'enhance', icon: Hash },
   { id: 'watermark', category: 'enhance', icon: Droplets },
   { id: 'edit-metadata', category: 'enhance', icon: Tags },
   { id: 'sign', category: 'enhance', icon: PenLine },
   { id: 'ocr', category: 'enhance', icon: ScanText },
+  // Wave-2 enhance
+  { id: 'flatten', category: 'enhance', icon: Layers },
+  { id: 'header-footer', category: 'enhance', icon: PanelTop },
+  { id: 'remove-annotations', category: 'enhance', icon: Eraser },
+  { id: 'remove-blank-pages', category: 'enhance', icon: FileX },
   // Compress
   { id: 'compress', category: 'compress', icon: Minimize2 },
   // Security

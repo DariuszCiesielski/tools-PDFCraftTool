@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useCallback, useRef } from 'react';
+import React, { useState, useCallback, useRef, useEffect } from 'react';
 import { useTranslations } from 'next-intl';
 import { FileUploader } from '../FileUploader';
 import { ProcessingProgress, ProcessingStatus } from '../ProcessingProgress';
@@ -10,12 +10,17 @@ import { Card } from '@/components/ui/Card';
 import { removeBlankPages } from '@/lib/pdf/processors/remove-blank-pages';
 import type { ProcessOutput } from '@/types/pdf';
 
-export interface RemoveBlankPagesToolProps { className?: string; }
+export interface RemoveBlankPagesToolProps {
+  className?: string;
+  initialFile?: File;
+  hideUploader?: boolean;
+  onComplete?: (blob: Blob, originalFile: File) => void;
+}
 
-export function RemoveBlankPagesTool({ className = '' }: RemoveBlankPagesToolProps) {
+export function RemoveBlankPagesTool({ className = '', initialFile, hideUploader, onComplete }: RemoveBlankPagesToolProps) {
   const t = useTranslations('common');
   const tTools = useTranslations('tools');
-  const [file, setFile] = useState<File | null>(null);
+  const [file, setFile] = useState<File | null>(initialFile ?? null);
   const [status, setStatus] = useState<ProcessingStatus>('idle');
   const [progress, setProgress] = useState(0);
   const [result, setResult] = useState<Blob | null>(null);
@@ -23,6 +28,12 @@ export function RemoveBlankPagesTool({ className = '' }: RemoveBlankPagesToolPro
   const [threshold, setThreshold] = useState(99);
   const [removedCount, setRemovedCount] = useState(0);
   const cancelledRef = useRef(false);
+  useEffect(() => {
+    if (initialFile) {
+      setFile(initialFile);
+    }
+  }, [initialFile]); // eslint-disable-line react-hooks/exhaustive-deps
+
 
   const handleProcess = useCallback(async () => {
     if (!file) return;
@@ -31,18 +42,20 @@ export function RemoveBlankPagesTool({ className = '' }: RemoveBlankPagesToolPro
     try {
       const output: ProcessOutput = await removeBlankPages(file, { threshold }, (prog) => { if (!cancelledRef.current) setProgress(prog); });
       if (output.success && output.result) {
-        setResult(output.result as Blob);
+        const blob = output.result as Blob;
+        setResult(blob);
         setRemovedCount(output.metadata?.blankPagesRemoved as number || 0);
         setStatus('complete');
+        if (onComplete && file) onComplete(blob, file);
       } else { setError(output.error?.message || 'Failed.'); setStatus('error'); }
     } catch (err) { setError(err instanceof Error ? err.message : 'Error'); setStatus('error'); }
-  }, [file, threshold]);
+  }, [file, threshold, onComplete]);
 
   const isProcessing = status === 'processing';
 
   return (
     <div className={`space-y-6 ${className}`.trim()}>
-      {!file && <FileUploader accept={['application/pdf', '.pdf']} multiple={false} maxFiles={1} onFilesSelected={(files) => { if (files.length > 0) { setFile(files[0]); setError(null); setResult(null); } }} onError={setError} disabled={isProcessing} label={tTools('removeBlankPages.uploadLabel') || t('buttons.upload')} description={tTools('removeBlankPages.uploadDescription')} />}
+      {!file && !hideUploader && <FileUploader accept={['application/pdf', '.pdf']} multiple={false} maxFiles={1} onFilesSelected={(files) => { if (files.length > 0) { setFile(files[0]); setError(null); setResult(null); } }} onError={setError} disabled={isProcessing} label={tTools('removeBlankPages.uploadLabel') || t('buttons.upload')} description={tTools('removeBlankPages.uploadDescription')} />}
       {error && <div className="p-4 rounded bg-red-50 border border-red-200 text-red-700"><p className="text-sm">{error}</p></div>}
       {file && (
         <>

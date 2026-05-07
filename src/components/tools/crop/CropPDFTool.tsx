@@ -15,6 +15,12 @@ import type { ProcessOutput } from '@/types/pdf';
 
 export interface CropPDFToolProps {
   className?: string;
+  /** Optional initial file to use (skips upload step when prefilled from Studio) */
+  initialFile?: File;
+  /** Hide the FileUploader UI when prefilled */
+  hideUploader?: boolean;
+  /** Callback fired with the resulting blob and original file when processing succeeds */
+  onComplete?: (blob: Blob, originalFile: File) => void;
 }
 
 interface CropState {
@@ -26,12 +32,12 @@ interface CropState {
   crops: Record<number, CropData>; // Store crops for each page
 }
 
-export function CropPDFTool({ className = '' }: CropPDFToolProps) {
+export function CropPDFTool({ className = '', initialFile, hideUploader, onComplete }: CropPDFToolProps) {
   const t = useTranslations('common');
   const tTools = useTranslations('tools');
 
   const [state, setState] = useState<CropState>({
-    file: null,
+    file: initialFile ?? null,
     numPages: 0,
     currentPage: 1,
     pdfDoc: null,
@@ -179,6 +185,12 @@ export function CropPDFTool({ className = '' }: CropPDFToolProps) {
       setError('Failed to load PDF file.');
     }
   }, []);
+
+  useEffect(() => {
+    if (initialFile && !state.pdfDoc) {
+      void handleFilesSelected([initialFile]);
+    }
+  }, [initialFile]); // eslint-disable-line react-hooks/exhaustive-deps
 
   // Render PDF page to image
   const renderPage = async (pdfDoc: any, pageNum: number) => {
@@ -347,7 +359,9 @@ export function CropPDFTool({ className = '' }: CropPDFToolProps) {
       );
 
       if (output.success && output.result) {
-        setResult(output.result as Blob);
+        const blob = output.result as Blob;
+        setResult(blob);
+        if (onComplete && state.file) onComplete(blob, state.file);
         setStatus('complete');
       } else {
         setError(output.error?.message || 'Failed.');
@@ -357,7 +371,7 @@ export function CropPDFTool({ className = '' }: CropPDFToolProps) {
       setError(err instanceof Error ? err.message : 'Error');
       setStatus('error');
     }
-  }, [state.file, state.crops, state.currentPage, state.numPages, applyToAll]);
+  }, [state.file, state.crops, state.currentPage, state.numPages, applyToAll, onComplete]);
 
   const isProcessing = status === 'processing';
 
@@ -386,7 +400,7 @@ export function CropPDFTool({ className = '' }: CropPDFToolProps) {
 
   return (
     <div className={`space-y-6 ${className}`.trim()}>
-      {!state.file && (
+      {!state.file && !hideUploader && (
         <FileUploader
           accept={['application/pdf', '.pdf']}
           multiple={false}

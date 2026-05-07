@@ -14,6 +14,9 @@ import type { ProcessOutput } from '@/types/pdf';
 export interface OrganizePDFToolProps {
   /** Custom class name */
   className?: string;
+  initialFile?: File;
+  hideUploader?: boolean;
+  onComplete?: (blob: Blob, originalFile: File) => void;
 }
 
 interface PagePreview {
@@ -27,12 +30,12 @@ interface PagePreview {
  * 
  * Provides the UI for reordering PDF pages with drag-and-drop functionality.
  */
-export function OrganizePDFTool({ className = '' }: OrganizePDFToolProps) {
+export function OrganizePDFTool({ className = '', initialFile, hideUploader, onComplete }: OrganizePDFToolProps) {
   const t = useTranslations('common');
   const tTools = useTranslations('tools');
 
   // State
-  const [file, setFile] = useState<File | null>(null);
+  const [file, setFile] = useState<File | null>(initialFile ?? null);
   const [totalPages, setTotalPages] = useState<number>(0);
   const [status, setStatus] = useState<ProcessingStatus>('idle');
   const [progress, setProgress] = useState(0);
@@ -51,6 +54,13 @@ export function OrganizePDFTool({ className = '' }: OrganizePDFToolProps) {
 
   // Ref for cancellation
   const cancelledRef = useRef(false);
+
+  useEffect(() => {
+    if (initialFile) {
+      setFile(initialFile);
+      void loadPdfPreviews(initialFile);
+    }
+  }, [initialFile]); // eslint-disable-line react-hooks/exhaustive-deps
 
   /**
    * Load PDF and generate page previews
@@ -281,8 +291,10 @@ export function OrganizePDFTool({ className = '' }: OrganizePDFToolProps) {
       }
 
       if (output.success && output.result) {
-        setResult(output.result as Blob);
+        const blob = output.result as Blob;
+        setResult(blob);
         setStatus('complete');
+        if (onComplete && file) onComplete(blob, file);
       } else {
         setError(output.error?.message || 'Failed to organize PDF file.');
         setStatus('error');
@@ -293,7 +305,7 @@ export function OrganizePDFTool({ className = '' }: OrganizePDFToolProps) {
         setStatus('error');
       }
     }
-  }, [file, pageOrder]);
+  }, [file, pageOrder, onComplete]);
 
   /**
    * Handle cancel operation
@@ -326,7 +338,7 @@ export function OrganizePDFTool({ className = '' }: OrganizePDFToolProps) {
   return (
     <div className={`space-y-6 ${className}`.trim()}>
       {/* File Upload Area */}
-      {!file && (
+      {!file && !hideUploader && (
         <FileUploader
           accept={['application/pdf', '.pdf']}
           multiple={false}

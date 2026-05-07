@@ -2387,5 +2387,112 @@
       "description": "{brand}에 대한 자주 묻는 질문은 FAQ 페이지에서 확인하세요.",
       "button": "FAQ 보기"
     }
+  },
+  "studio": {
+    "tools": {
+      "ocr": {
+        "name": "OCR (텍스트 인식)",
+        "description": "스캔한 PDF에서 텍스트 추출",
+        "longDescription": "광학 문자 인식(OCR)으로 PDF 내 이미지를 검색 가능한 텍스트로 변환합니다. 다중 언어를 지원합니다."
+      },
+      "pdf-to-docx": {
+        "name": "PDF → Word",
+        "description": "PDF를 편집 가능한 Word 문서로 변환",
+        "longDescription": "PDF의 텍스트와 레이아웃을 Microsoft Word 또는 LibreOffice에서 편집 가능한 DOCX 파일로 내보냅니다."
+      },
+      "pdf-to-excel": {
+        "name": "PDF → Excel",
+        "description": "PDF 표를 Excel 스프레드시트로 변환",
+        "longDescription": "PDF에서 표를 추출하여 Excel에서 바로 사용할 수 있는 XLSX 파일로 저장합니다."
+      },
+      "pdf-to-pptx": {
+        "name": "PDF → PowerPoint",
+        "description": "PDF를 PowerPoint 발표 자료로 변환",
+        "longDescription": "PDF 페이지마다 개별 슬라이드가 생성됩니다. PDF 기반 강의 자료 제작에 적합합니다."
+      },
+      "word-to-pdf": {
+        "name": "Word → PDF",
+        "description": "Word 문서를 PDF로 변환",
+        "longDescription": "DOC/DOCX 파일의 전체 서식과 글꼴을 유지한 채 PDF로 저장합니다."
+      },
+      "excel-to-pdf": {
+        "name": "Excel → PDF",
+        "description": "Excel 스프레드시트를 PDF로 변환",
+        "longDescription": "XLSX/XLS 파일의 레이아웃과 수식을 유지한 채 PDF로 저장합니다."
+      },
+      "image-to-pdf": {
+        "name": "이미지 → PDF",
+        "description": "여러 이미지를 단일 PDF로 결합",
+        "longDescription": "JPG, PNG 등의 이미지를 드롭하여 단일 다중 페이지 PDF로 변환합니다."
+      },
+      "edit-metadata": {
+        "name": "메타데이터 편집",
+        "description": "제목, 작성자, 키워드 변경",
+        "longDescription": "문서의 제목, 작성자, 주제, 키워드, 생성자 및 제작자 등 메타정보를 수정합니다."
+      },
+      "extract-images": {
+        "name": "이미지 추출",
+        "description": "PDF 내 모든 이미지 다운로드",
+        "longDescription": "PDF에 포함된 모든 이미지를 추출하여 개별 또는 ZIP 파일로 다운로드할 수 있습니다."
+      },
+      "sign": {
+        "name": "PDF 서명",
+        "description": "손글씨 서명 또는 도장 추가",
+        "longDescription": "서명을 그리거나 텍스트를 입력, 이미지를 업로드하여 PDF의 원하는 페이지에 배치합니다."
+      },
+      "categories": {
+        "convert": "변환"
+      },
+      "delete": {
+        "name": "페이지 삭제",
+        "description": "PDF에서 선택한 페이지 제거",
+        "longDescription": "PDF 문서에서 삭제할 페이지를 선택하고 정리된 버전을 다운로드하세요."
+      },
+      "organize": {
+        "name": "페이지 정리",
+        "description": "PDF 페이지 순서 변경",
+        "longDescription": "드래그 앤 드롭으로 페이지 순서를 바꾸거나 회전하고, 원치 않는 페이지를 제거하세요."
+      },
+      "extract": {
+        "name": "페이지 추출",
+        "description": "새로운 PDF로 페이지 분리",
+        "longDescription": "특정 페이지를 선택하여 독립적인 새로운 PDF 문서로 저장하세요."
+      },
+      "crop": {
+        "name": "페이지 자르기",
+        "description": "선택한 영역 자르기",
+        "longDescription": "각 PDF 페이지의 여백을 자르거나 유지할 영역을 선택하세요."
+      },
+      "add-blank-page": {
+        "name": "빈 페이지 추가",
+        "description": "PDF에 빈 페이지 삽입",
+        "longDescription": "문서 내 원하는 위치에 하나 이상의 빈 페이지를 추가하세요."
+      },
+      "n-up": {
+        "name": "N-Up 레이아웃",
+        "description": "여러 페이지를 하나로 합치기",
+        "longDescription": "인쇄 시 용지를 절약하기 위해 2, 4, 9, 16장의 PDF 페이지를 한 장에 배치하세요."
+      },
+      "flatten": {
+        "name": "PDF 평면화",
+        "description": "양식 및 주석 고정",
+        "longDescription": "양식 필드, 주석 및 레이어를 정적 페이지 콘텐츠로 변환하여 추가 편집을 방지합니다."
+      },
+      "header-footer": {
+        "name": "머리말 & 꼬리말",
+        "description": "PDF에 머리말과 꼬리말 추가",
+        "longDescription": "모든 PDF 페이지의 머리말과 꼬리말에 텍스트, 날짜 또는 페이지 번호를 삽입하세요."
+      },
+      "remove-annotations": {
+        "name": "주석 제거",
+        "description": "노트 및 하이라이트 삭제",
+        "longDescription": "PDF 문서에서 모든 주석, 댓글, 밑줄 및 하이라이트를 제거하세요."
+      },
+      "remove-blank-pages": {
+        "name": "빈 페이지 제거",
+        "description": "PDF에서 빈 페이지 정리",
+        "longDescription": "PDF 문서에서 빈 페이지를 자동으로 감지하고 제거하세요."
+      }
+    }
   }
 }

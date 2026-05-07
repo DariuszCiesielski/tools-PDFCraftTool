@@ -2168,5 +2168,112 @@
       "selectedMatch": "已選取",
       "unselectedMatch": "未選取"
     }
+  },
+  "studio": {
+    "tools": {
+      "ocr": {
+        "name": "OCR 文字辨識",
+        "description": "從掃描的 PDF 中提取文字",
+        "longDescription": "光學字元辨識 — 將 PDF 中的影像轉換為可搜尋的文字。支援多國語言。"
+      },
+      "pdf-to-docx": {
+        "name": "PDF → Word",
+        "description": "將 PDF 轉換為可編輯的 Word 文件",
+        "longDescription": "將 PDF 的文字與版面配置匯出為 DOCX 檔案，可在 Microsoft Word 或 LibreOffice 中編輯。"
+      },
+      "pdf-to-excel": {
+        "name": "PDF → Excel",
+        "description": "將 PDF 表格轉換為 Excel 試算表",
+        "longDescription": "從 PDF 中提取表格並儲存為 XLSX 檔案，以便在 Excel 中進行處理。"
+      },
+      "pdf-to-pptx": {
+        "name": "PDF → PowerPoint",
+        "description": "將 PDF 轉換為 PowerPoint 簡報",
+        "longDescription": "每個 PDF 頁面都會變成一張獨立投影片。非常適合將 PDF 轉換為講義簡報。"
+      },
+      "word-to-pdf": {
+        "name": "Word → PDF",
+        "description": "將 Word 文件轉換為 PDF",
+        "longDescription": "將 DOC/DOCX 檔案儲存為 PDF，並保留完整的格式與字型。"
+      },
+      "excel-to-pdf": {
+        "name": "Excel → PDF",
+        "description": "將 Excel 試算表轉換為 PDF",
+        "longDescription": "將 XLSX/XLS 檔案儲存為 PDF，並保留版面配置與公式。"
+      },
+      "image-to-pdf": {
+        "name": "影像 → PDF",
+        "description": "將多張影像合併為單一 PDF",
+        "longDescription": "拖曳 JPG、PNG 或其他影像，並將其轉換為單一多頁 PDF。"
+      },
+      "edit-metadata": {
+        "name": "編輯中繼資料",
+        "description": "修改標題、作者、關鍵字",
+        "longDescription": "編輯文件的中繼資訊：標題、作者、主題、關鍵字、建立者與製作工具。"
+      },
+      "extract-images": {
+        "name": "提取影像",
+        "description": "下載 PDF 中的所有影像",
+        "longDescription": "提取 PDF 中包含的所有影像，並允許您單獨下載或打包為 ZIP 檔案。"
+      },
+      "sign": {
+        "name": "簽署 PDF",
+        "description": "新增手寫簽名或印章",
+        "longDescription": "繪製簽名、輸入文字或上傳簽名影像。將其放置於 PDF 的任何頁面上。"
+      },
+      "categories": {
+        "convert": "轉換"
+      },
+      "delete": {
+        "name": "刪除頁面",
+        "description": "移除 PDF 中的指定頁面",
+        "longDescription": "選取要刪除的頁面，並下載清理後的 PDF 檔案。"
+      },
+      "organize": {
+        "name": "整理頁面",
+        "description": "重新排列 PDF 頁面順序",
+        "longDescription": "透過拖曳重新排列頁面順序、旋轉頁面，或移除不需要的頁面。"
+      },
+      "extract": {
+        "name": "擷取頁面",
+        "description": "將指定頁面匯出為新 PDF",
+        "longDescription": "選取特定頁面，並將其儲存為獨立的新 PDF 檔案。"
+      },
+      "crop": {
+        "name": "裁切頁面",
+        "description": "裁切頁面指定區域",
+        "longDescription": "裁切頁面邊距，或選取要保留的頁面區域。"
+      },
+      "add-blank-page": {
+        "name": "新增空白頁面",
+        "description": "在 PDF 中插入空白頁面",
+        "longDescription": "在文件中的指定位置插入一或多個空白頁面。"
+      },
+      "n-up": {
+        "name": "N-Up 版面",
+        "description": "將多頁合併至單頁",
+        "longDescription": "將 2、4、9 或 16 頁 PDF 內容合併至單頁，以節省列印用紙。"
+      },
+      "flatten": {
+        "name": "PDF 扁平化",
+        "description": "將表單與註解轉為靜態內容",
+        "longDescription": "將表單欄位、註解與圖層轉換為靜態頁面內容，並鎖定以防進一步編輯。"
+      },
+      "header-footer": {
+        "name": "頁首與頁尾",
+        "description": "在 PDF 中加入頁首與頁尾",
+        "longDescription": "在 PDF 每一頁的頁首與頁尾插入文字、日期或頁碼。"
+      },
+      "remove-annotations": {
+        "name": "移除註解",
+        "description": "清除筆記與標記",
+        "longDescription": "移除 PDF 文件中的所有註解、評論、底線與標記。"
+      },
+      "remove-blank-pages": {
+        "name": "移除空白頁面",
+        "description": "清除 PDF 中的空白頁面",
+        "longDescription": "自動偵測並移除 PDF 文件中的空白頁面。"
+      }
+    }
   }
 }

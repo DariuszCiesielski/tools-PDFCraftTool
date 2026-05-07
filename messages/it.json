@@ -2172,5 +2172,112 @@
       "selectedMatch": "Selezionato",
       "unselectedMatch": "Non selezionato"
     }
+  },
+  "studio": {
+    "tools": {
+      "ocr": {
+        "name": "OCR (Riconoscimento testo)",
+        "description": "Estrai testo da PDF scansionati",
+        "longDescription": "Riconoscimento ottico dei caratteri: converte le immagini nei PDF in testo ricercabile. Supporto multilingue."
+      },
+      "pdf-to-docx": {
+        "name": "PDF → Word",
+        "description": "Converti PDF in documento Word modificabile",
+        "longDescription": "Esporta testo e layout del PDF in un file DOCX modificabile con Microsoft Word o LibreOffice."
+      },
+      "pdf-to-excel": {
+        "name": "PDF → Excel",
+        "description": "Converti tabelle PDF in fogli di calcolo Excel",
+        "longDescription": "Estrai tabelle dai PDF e salvale come file XLSX pronto per l'elaborazione in Excel."
+      },
+      "pdf-to-pptx": {
+        "name": "PDF → PowerPoint",
+        "description": "Converti PDF in presentazione PowerPoint",
+        "longDescription": "Ogni pagina del PDF diventa una diapositiva separata. Ideale per presentazioni di lezioni derivate da PDF."
+      },
+      "word-to-pdf": {
+        "name": "Word → PDF",
+        "description": "Converti documento Word in PDF",
+        "longDescription": "Salva file DOC/DOCX in PDF mantenendo formattazione e font originali."
+      },
+      "excel-to-pdf": {
+        "name": "Excel → PDF",
+        "description": "Converti foglio di calcolo Excel in PDF",
+        "longDescription": "Salva file XLSX/XLS in PDF mantenendo layout e formule."
+      },
+      "image-to-pdf": {
+        "name": "Immagine → PDF",
+        "description": "Unisci immagini in un unico PDF",
+        "longDescription": "Trascina JPG, PNG o altre immagini e convertile in un unico PDF multipagina."
+      },
+      "edit-metadata": {
+        "name": "Modifica metadati",
+        "description": "Modifica titolo, autore e parole chiave",
+        "longDescription": "Modifica le informazioni del documento: titolo, autore, argomento, parole chiave, creatore e produttore."
+      },
+      "extract-images": {
+        "name": "Estrai immagini",
+        "description": "Scarica tutte le immagini dal PDF",
+        "longDescription": "Estrae tutte le immagini contenute nel PDF e permette di scaricarle singolarmente o come file ZIP."
+      },
+      "sign": {
+        "name": "Firma PDF",
+        "description": "Aggiungi firma manuale o timbro",
+        "longDescription": "Disegna la firma, digita testo o carica un'immagine della firma. Posizionala su qualsiasi pagina del PDF."
+      },
+      "categories": {
+        "convert": "Converti"
+      },
+      "delete": {
+        "name": "Elimina pagine",
+        "description": "Rimuovi le pagine selezionate dal PDF",
+        "longDescription": "Seleziona le pagine da eliminare da un documento PDF e scarica la versione pulita."
+      },
+      "organize": {
+        "name": "Organizza pagine",
+        "description": "Riordina le pagine del PDF",
+        "longDescription": "Trascina e rilascia per riordinare le pagine, ruotarle o rimuovere quelle non desiderate."
+      },
+      "extract": {
+        "name": "Estrai pagine",
+        "description": "Estrai pagine in un nuovo PDF",
+        "longDescription": "Seleziona pagine specifiche e salvale come un nuovo documento PDF autonomo."
+      },
+      "crop": {
+        "name": "Ritaglia pagine",
+        "description": "Ritaglia le aree selezionate delle pagine",
+        "longDescription": "Ritaglia i margini o seleziona l'area da mantenere su ogni pagina del PDF."
+      },
+      "add-blank-page": {
+        "name": "Aggiungi pagine bianche",
+        "description": "Inserisci pagine bianche nel PDF",
+        "longDescription": "Aggiungi una o più pagine bianche in una posizione scelta del documento."
+      },
+      "n-up": {
+        "name": "Layout N-Up",
+        "description": "Combina più pagine in una",
+        "longDescription": "Raggruppa 2, 4, 9 o 16 pagine del PDF in una sola per risparmiare carta durante la stampa."
+      },
+      "flatten": {
+        "name": "Appiattisci PDF",
+        "description": "Rendi statici moduli e annotazioni",
+        "longDescription": "Appiattisci campi modulo, annotazioni e livelli nel contenuto statico della pagina, bloccandoli da ulteriori modifiche."
+      },
+      "header-footer": {
+        "name": "Intestazione e piè di pagina",
+        "description": "Aggiungi intestazioni e piè di pagina al PDF",
+        "longDescription": "Inserisci testo, data o numeri di pagina nell'intestazione e nel piè di pagina di ogni pagina del PDF."
+      },
+      "remove-annotations": {
+        "name": "Rimuovi annotazioni",
+        "description": "Cancella note e evidenziazioni",
+        "longDescription": "Rimuovi tutte le annotazioni, commenti, sottolineature ed evidenziazioni da un documento PDF."
+      },
+      "remove-blank-pages": {
+        "name": "Rimuovi pagine bianche",
+        "description": "Pulisci il PDF dalle pagine bianche",
+        "longDescription": "Rileva e rimuovi automaticamente le pagine bianche da un documento PDF."
+      }
+    }
   }
 }

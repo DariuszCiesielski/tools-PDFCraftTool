@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useCallback, useRef } from 'react';
+import React, { useState, useCallback, useRef, useEffect } from 'react';
 import { useTranslations } from 'next-intl';
 import { FileUploader } from '../FileUploader';
 import { ProcessingProgress, ProcessingStatus } from '../ProcessingProgress';
@@ -14,6 +14,12 @@ import type { ProcessOutput } from '@/types/pdf';
 export interface AddBlankPageToolProps {
   /** Custom class name */
   className?: string;
+  /** Optional initial file to use (skips upload step when prefilled from Studio) */
+  initialFile?: File;
+  /** Hide the FileUploader UI when prefilled */
+  hideUploader?: boolean;
+  /** Callback fired with the resulting blob and original file when processing succeeds */
+  onComplete?: (blob: Blob, originalFile: File) => void;
 }
 
 /**
@@ -22,12 +28,12 @@ export interface AddBlankPageToolProps {
  * 
  * Provides the UI for adding blank pages to a PDF.
  */
-export function AddBlankPageTool({ className = '' }: AddBlankPageToolProps) {
+export function AddBlankPageTool({ className = '', initialFile, hideUploader, onComplete }: AddBlankPageToolProps) {
   const t = useTranslations('common');
   const tTools = useTranslations('tools');
-  
+
   // State
-  const [file, setFile] = useState<File | null>(null);
+  const [file, setFile] = useState<File | null>(initialFile ?? null);
   const [totalPages, setTotalPages] = useState<number>(0);
   const [status, setStatus] = useState<ProcessingStatus>('idle');
   const [progress, setProgress] = useState(0);
@@ -41,6 +47,13 @@ export function AddBlankPageTool({ className = '' }: AddBlankPageToolProps) {
   
   // Ref for cancellation
   const cancelledRef = useRef(false);
+
+  useEffect(() => {
+    if (initialFile) {
+      setFile(initialFile);
+      void loadPdfInfo(initialFile);
+    }
+  }, [initialFile]); // eslint-disable-line react-hooks/exhaustive-deps
 
   /**
    * Load PDF to get page count
@@ -139,8 +152,10 @@ export function AddBlankPageTool({ className = '' }: AddBlankPageToolProps) {
       }
 
       if (output.success && output.result) {
-        setResult(output.result as Blob);
+        const blob = output.result as Blob;
+        setResult(blob);
         setStatus('complete');
+        if (onComplete && file) onComplete(blob, file);
       } else {
         setError(output.error?.message || 'Failed to add blank pages.');
         setStatus('error');
@@ -151,7 +166,7 @@ export function AddBlankPageTool({ className = '' }: AddBlankPageToolProps) {
         setStatus('error');
       }
     }
-  }, [file, position, count, totalPages]);
+  }, [file, position, count, totalPages, onComplete]);
 
   /**
    * Handle cancel operation
@@ -177,7 +192,7 @@ export function AddBlankPageTool({ className = '' }: AddBlankPageToolProps) {
   return (
     <div className={`space-y-6 ${className}`.trim()}>
       {/* File Upload Area */}
-      {!file && (
+      {!file && !hideUploader && (
         <FileUploader
           accept={['application/pdf', '.pdf']}
           multiple={false}

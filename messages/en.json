@@ -2415,6 +2415,56 @@
         "name": "Sign PDF",
         "description": "Add handwritten signature or stamp",
         "longDescription": "Draw signature, type text or upload signature image. Place it on any page of the PDF."
+      },
+      "delete": {
+        "name": "Delete pages",
+        "description": "Remove selected pages from PDF",
+        "longDescription": "Select pages to delete from a PDF document and download the cleaned version."
+      },
+      "organize": {
+        "name": "Organize pages",
+        "description": "Reorder PDF pages",
+        "longDescription": "Drag and drop to reorder pages, rotate them, or remove unwanted ones."
+      },
+      "extract": {
+        "name": "Extract pages",
+        "description": "Pick pages into a new PDF",
+        "longDescription": "Select specific pages and save them as a new standalone PDF document."
+      },
+      "crop": {
+        "name": "Crop pages",
+        "description": "Trim selected page areas",
+        "longDescription": "Crop margins or select the area to keep on each PDF page."
+      },
+      "add-blank-page": {
+        "name": "Add blank pages",
+        "description": "Insert blank pages into PDF",
+        "longDescription": "Add one or more blank pages at a chosen position in the document."
+      },
+      "n-up": {
+        "name": "N-Up layout",
+        "description": "Combine multiple pages on one",
+        "longDescription": "Place 2, 4, 9 or 16 PDF pages onto one to save paper when printing."
+      },
+      "flatten": {
+        "name": "Flatten PDF",
+        "description": "Make forms and annotations static",
+        "longDescription": "Flatten form fields, annotations and layers into static page content — locks them from further editing."
+      },
+      "header-footer": {
+        "name": "Header & footer",
+        "description": "Add headers and footers to PDF",
+        "longDescription": "Insert text, date or page numbers into the header and footer of every PDF page."
+      },
+      "remove-annotations": {
+        "name": "Remove annotations",
+        "description": "Clear notes and highlights",
+        "longDescription": "Remove all annotations, comments, underlines and highlights from a PDF document."
+      },
+      "remove-blank-pages": {
+        "name": "Remove blank pages",
+        "description": "Clean blank pages from PDF",
+        "longDescription": "Automatically detect and remove blank pages from a PDF document."
       }
     },
     "a11y": {

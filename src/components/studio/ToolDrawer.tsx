@@ -90,6 +90,57 @@ const SignPDFTool = dynamic(
   { ssr: false, loading: () => <ToolLoader /> },
 );
 
+// Wave-2: PDF→PDF page operations
+const DeletePagesTool = dynamic(
+  () => import('@/components/tools/delete/DeletePagesTool').then((m) => m.DeletePagesTool),
+  { ssr: false, loading: () => <ToolLoader /> },
+);
+
+const OrganizePDFTool = dynamic(
+  () => import('@/components/tools/organize/OrganizePDFTool').then((m) => m.OrganizePDFTool),
+  { ssr: false, loading: () => <ToolLoader /> },
+);
+
+const ExtractPagesTool = dynamic(
+  () => import('@/components/tools/extract/ExtractPagesTool').then((m) => m.ExtractPagesTool),
+  { ssr: false, loading: () => <ToolLoader /> },
+);
+
+const CropPDFTool = dynamic(
+  () => import('@/components/tools/crop/CropPDFTool').then((m) => m.CropPDFTool),
+  { ssr: false, loading: () => <ToolLoader /> },
+);
+
+const AddBlankPageTool = dynamic(
+  () => import('@/components/tools/add-blank-page/AddBlankPageTool').then((m) => m.AddBlankPageTool),
+  { ssr: false, loading: () => <ToolLoader /> },
+);
+
+const NUpPDFTool = dynamic(
+  () => import('@/components/tools/n-up/NUpPDFTool').then((m) => m.NUpPDFTool),
+  { ssr: false, loading: () => <ToolLoader /> },
+);
+
+const FlattenPDFTool = dynamic(
+  () => import('@/components/tools/flatten/FlattenPDFTool').then((m) => m.FlattenPDFTool),
+  { ssr: false, loading: () => <ToolLoader /> },
+);
+
+const HeaderFooterTool = dynamic(
+  () => import('@/components/tools/header-footer/HeaderFooterTool').then((m) => m.HeaderFooterTool),
+  { ssr: false, loading: () => <ToolLoader /> },
+);
+
+const RemoveAnnotationsTool = dynamic(
+  () => import('@/components/tools/remove-annotations/RemoveAnnotationsTool').then((m) => m.RemoveAnnotationsTool),
+  { ssr: false, loading: () => <ToolLoader /> },
+);
+
+const RemoveBlankPagesTool = dynamic(
+  () => import('@/components/tools/remove-blank-pages/RemoveBlankPagesTool').then((m) => m.RemoveBlankPagesTool),
+  { ssr: false, loading: () => <ToolLoader /> },
+);
+
 type SupportedToolId = NonNullable<StudioToolId>;
 
 const SUPPORTED_TOOL_IDS: ReadonlySet<string> = new Set<SupportedToolId>([
@@ -110,6 +161,17 @@ const SUPPORTED_TOOL_IDS: ReadonlySet<string> = new Set<SupportedToolId>([
   'edit-metadata',
   'extract-images',
   'sign',
+  // Wave-2
+  'delete',
+  'organize',
+  'extract',
+  'crop',
+  'add-blank-page',
+  'n-up',
+  'flatten',
+  'header-footer',
+  'remove-annotations',
+  'remove-blank-pages',
 ]);
 
 // Tools that produce a PDF as their primary output. Only these get the onComplete callback
@@ -124,6 +186,17 @@ const PDF_OUTPUT_TOOLS: ReadonlySet<string> = new Set<SupportedToolId>([
   'sign',
   'edit-metadata',
   'ocr', // ocr only calls onComplete when outputFormat === 'searchable-pdf' (logic in OCRPDFTool)
+  // Wave-2: all are PDF→PDF page operations
+  'delete',
+  'organize',
+  'extract',
+  'crop',
+  'add-blank-page',
+  'n-up',
+  'flatten',
+  'header-footer',
+  'remove-annotations',
+  'remove-blank-pages',
 ]);
 
 export function isToolSupportedInDrawer(toolId: StudioToolId): toolId is SupportedToolId {
@@ -157,6 +230,17 @@ const RESULT_FILENAME_PREFIX: Record<SupportedToolId, string> = {
   'excel-to-pdf': '',
   'image-to-pdf': '',
   'extract-images': '',
+  // Wave-2 PDF→PDF
+  delete: 'edited',
+  organize: 'reordered',
+  extract: 'extracted',
+  crop: 'cropped',
+  'add-blank-page': 'edited',
+  'n-up': 'nup',
+  flatten: 'flattened',
+  'header-footer': 'with-headers',
+  'remove-annotations': 'cleaned',
+  'remove-blank-pages': 'cleaned',
 };
 
 function renamedFilename(toolId: SupportedToolId, original: string): string {
@@ -218,6 +302,27 @@ function renderTool({ toolId, initialFile, onComplete }: RenderToolProps) {
       return <SplitPDFTool />;
     case 'merge':
       return <MergePDFTool />;
+    // Wave-2: PDF→PDF page operations, prefilled + onComplete
+    case 'delete':
+      return <DeletePagesTool initialFile={initialFile} hideUploader={!!initialFile} onComplete={onComplete} />;
+    case 'organize':
+      return <OrganizePDFTool initialFile={initialFile} hideUploader={!!initialFile} onComplete={onComplete} />;
+    case 'extract':
+      return <ExtractPagesTool initialFile={initialFile} hideUploader={!!initialFile} onComplete={onComplete} />;
+    case 'crop':
+      return <CropPDFTool initialFile={initialFile} hideUploader={!!initialFile} onComplete={onComplete} />;
+    case 'add-blank-page':
+      return <AddBlankPageTool initialFile={initialFile} hideUploader={!!initialFile} onComplete={onComplete} />;
+    case 'n-up':
+      return <NUpPDFTool initialFile={initialFile} hideUploader={!!initialFile} onComplete={onComplete} />;
+    case 'flatten':
+      return <FlattenPDFTool initialFile={initialFile} hideUploader={!!initialFile} onComplete={onComplete} />;
+    case 'header-footer':
+      return <HeaderFooterTool initialFile={initialFile} hideUploader={!!initialFile} onComplete={onComplete} />;
+    case 'remove-annotations':
+      return <RemoveAnnotationsTool initialFile={initialFile} hideUploader={!!initialFile} onComplete={onComplete} />;
+    case 'remove-blank-pages':
+      return <RemoveBlankPagesTool initialFile={initialFile} hideUploader={!!initialFile} onComplete={onComplete} />;
   }
 }
 

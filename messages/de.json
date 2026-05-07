@@ -2169,5 +2169,112 @@
       "selectedMatch": "Ausgewählt",
       "unselectedMatch": "Nicht ausgewählt"
     }
+  },
+  "studio": {
+    "tools": {
+      "ocr": {
+        "name": "OCR (Texterkennung)",
+        "description": "Text aus gescannten PDFs extrahieren",
+        "longDescription": "Optische Zeichenerkennung — wandelt Bilder in PDFs in durchsuchbaren Text um. Unterstützt mehrere Sprachen."
+      },
+      "pdf-to-docx": {
+        "name": "PDF → Word",
+        "description": "PDF in bearbeitbares Word-Dokument konvertieren",
+        "longDescription": "Exportieren Sie PDF-Text und Layout in eine DOCX-Datei, die in Microsoft Word oder LibreOffice bearbeitet werden kann."
+      },
+      "pdf-to-excel": {
+        "name": "PDF → Excel",
+        "description": "PDF-Tabellen in Excel-Tabellenkalkulation konvertieren",
+        "longDescription": "Extrahieren Sie Tabellen aus PDFs und speichern Sie sie als XLSX-Datei zur weiteren Verarbeitung in Excel."
+      },
+      "pdf-to-pptx": {
+        "name": "PDF → PowerPoint",
+        "description": "PDF in PowerPoint-Präsentation konvertieren",
+        "longDescription": "Jede PDF-Seite wird zu einer separaten Folie. Ideal für Vorlesungspräsentationen aus PDFs."
+      },
+      "word-to-pdf": {
+        "name": "Word → PDF",
+        "description": "Word-Dokument in PDF konvertieren",
+        "longDescription": "Speichern Sie DOC/DOCX-Dateien als PDF unter Beibehaltung des vollständigen Formats und der Schriftarten."
+      },
+      "excel-to-pdf": {
+        "name": "Excel → PDF",
+        "description": "Excel-Tabellenkalkulation in PDF konvertieren",
+        "longDescription": "Speichern Sie XLSX/XLS-Dateien als PDF unter Beibehaltung des Layouts und der Formeln."
+      },
+      "image-to-pdf": {
+        "name": "Bild → PDF",
+        "description": "Bilder zu einem einzigen PDF zusammenfassen",
+        "longDescription": "Ziehen Sie JPG-, PNG- oder andere Bilder hinein und konvertieren Sie sie in ein einzelnes mehrseitiges PDF."
+      },
+      "edit-metadata": {
+        "name": "Metadaten bearbeiten",
+        "description": "Titel, Autor, Schlüsselwörter ändern",
+        "longDescription": "Bearbeiten Sie Dokument-Metainformationen: Titel, Autor, Betreff, Schlüsselwörter, Ersteller und Produzent."
+      },
+      "extract-images": {
+        "name": "Bilder extrahieren",
+        "description": "Alle Bilder aus PDF herunterladen",
+        "longDescription": "Extrahiert alle im PDF enthaltenen Bilder und ermöglicht den individuellen Download oder als ZIP-Archiv."
+      },
+      "sign": {
+        "name": "PDF signieren",
+        "description": "Handschriftliche Unterschrift oder Stempel hinzufügen",
+        "longDescription": "Zeichnen Sie eine Unterschrift, geben Sie Text ein oder laden Sie ein Unterschriftsbild hoch. Platzieren Sie es auf jeder Seite des PDFs."
+      },
+      "categories": {
+        "convert": "Konvertieren"
+      },
+      "delete": {
+        "name": "Seiten löschen",
+        "description": "Ausgewählte Seiten aus dem PDF entfernen",
+        "longDescription": "Wählen Sie Seiten aus, die aus einem PDF-Dokument gelöscht werden sollen, und laden Sie die bereinigte Version herunter."
+      },
+      "organize": {
+        "name": "Seiten organisieren",
+        "description": "PDF-Seiten neu anordnen",
+        "longDescription": "Ziehen und ablegen, um Seiten neu anzuordnen, sie zu drehen oder unerwünschte zu entfernen."
+      },
+      "extract": {
+        "name": "Seiten extrahieren",
+        "description": "Seiten in ein neues PDF kopieren",
+        "longDescription": "Wählen Sie bestimmte Seiten aus und speichern Sie diese als neues, eigenständiges PDF-Dokument."
+      },
+      "crop": {
+        "name": "Seiten zuschneiden",
+        "description": "Ausgewählte Seitenbereiche beschneiden",
+        "longDescription": "Beschränken Sie die Ränder oder wählen Sie den auf jeder PDF-Seite zu behaltenden Bereich aus."
+      },
+      "add-blank-page": {
+        "name": "Leere Seiten einfügen",
+        "description": "Leere Seiten in das PDF einfügen",
+        "longDescription": "Fügen Sie eine oder mehrere leere Seiten an einer gewählten Position im Dokument ein."
+      },
+      "n-up": {
+        "name": "N-Up-Layout",
+        "description": "Mehrere Seiten auf einer kombinieren",
+        "longDescription": "Platzieren Sie 2, 4, 9 oder 16 PDF-Seiten auf einer Seite, um beim Drucken Papier zu sparen."
+      },
+      "flatten": {
+        "name": "PDF plätten",
+        "description": "Formulare und Anmerkungen statisch machen",
+        "longDescription": "Plätten Sie Formularfelder, Anmerkungen und Ebenen in statischen Seiteninhalt – sperrt sie vor weiterer Bearbeitung."
+      },
+      "header-footer": {
+        "name": "Kopf- & Fußzeile",
+        "description": "Kopf- und Fußzeilen zum PDF hinzufügen",
+        "longDescription": "Fügen Sie Text, Datum oder Seitenzahlen in die Kopf- und Fußzeile jeder PDF-Seite ein."
+      },
+      "remove-annotations": {
+        "name": "Anmerkungen entfernen",
+        "description": "Notizen und Hervorhebungen löschen",
+        "longDescription": "Entfernen Sie alle Anmerkungen, Kommentare, Unterstreichungen und Hervorhebungen aus einem PDF-Dokument."
+      },
+      "remove-blank-pages": {
+        "name": "Leere Seiten entfernen",
+        "description": "Leere Seiten aus dem PDF bereinigen",
+        "longDescription": "Erkennen und entfernen Sie automatisch leere Seiten aus einem PDF-Dokument."
+      }
+    }
   }
 }

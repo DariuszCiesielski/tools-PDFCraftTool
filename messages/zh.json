@@ -2244,5 +2244,112 @@
       "selectedMatch": "已选中",
       "unselectedMatch": "未选中"
     }
+  },
+  "studio": {
+    "tools": {
+      "ocr": {
+        "name": "OCR (文字识别)",
+        "description": "从扫描版PDF中提取文字",
+        "longDescription": "光学字符识别 — 将PDF中的图像转换为可搜索文本。支持多语言。"
+      },
+      "pdf-to-docx": {
+        "name": "PDF → Word",
+        "description": "将PDF转换为可编辑的Word文档",
+        "longDescription": "将PDF的文字与版式导出为DOCX文件，可在Microsoft Word或LibreOffice中编辑。"
+      },
+      "pdf-to-excel": {
+        "name": "PDF → Excel",
+        "description": "将PDF表格转换为Excel电子表格",
+        "longDescription": "从PDF中提取表格并保存为XLSX文件，可直接在Excel中处理。"
+      },
+      "pdf-to-pptx": {
+        "name": "PDF → PowerPoint",
+        "description": "将PDF转换为PowerPoint演示文稿",
+        "longDescription": "每页PDF自动转为独立幻灯片。非常适合将PDF课件转为演示文稿。"
+      },
+      "word-to-pdf": {
+        "name": "Word → PDF",
+        "description": "将Word文档转换为PDF",
+        "longDescription": "将DOC/DOCX文件保存为PDF，完整保留格式与字体。"
+      },
+      "excel-to-pdf": {
+        "name": "Excel → PDF",
+        "description": "将Excel电子表格转换为PDF",
+        "longDescription": "将XLSX/XLS文件保存为PDF，保留版式与公式。"
+      },
+      "image-to-pdf": {
+        "name": "图片 → PDF",
+        "description": "将多张图片合并为单个PDF",
+        "longDescription": "拖入JPG、PNG或其他图片，一键转换为多页PDF文件。"
+      },
+      "edit-metadata": {
+        "name": "编辑元数据",
+        "description": "修改标题、作者与关键词",
+        "longDescription": "编辑文档元信息：包括标题、作者、主题、关键词、创建者与生产者。"
+      },
+      "extract-images": {
+        "name": "提取图片",
+        "description": "从PDF中下载所有图片",
+        "longDescription": "提取PDF内含的所有图片，支持单独下载或打包为ZIP文件。"
+      },
+      "sign": {
+        "name": "签署PDF",
+        "description": "添加手写签名或电子印章",
+        "longDescription": "支持绘制签名、输入文字或上传签名图片，可放置于PDF任意页面。"
+      },
+      "categories": {
+        "convert": "转换"
+      },
+      "delete": {
+        "name": "删除页面",
+        "description": "从 PDF 中移除选定的页面",
+        "longDescription": "选择要删除的页面，下载清理后的 PDF 文档。"
+      },
+      "organize": {
+        "name": "整理页面",
+        "description": "重新排列 PDF 页面顺序",
+        "longDescription": "通过拖拽调整页面顺序、旋转方向或移除不需要的页面。"
+      },
+      "extract": {
+        "name": "提取页面",
+        "description": "将指定页面提取为新的 PDF 文件",
+        "longDescription": "选择特定页面，并将其保存为独立的 PDF 文档。"
+      },
+      "crop": {
+        "name": "裁剪页面",
+        "description": "裁剪 PDF 页面的指定区域",
+        "longDescription": "裁剪页边距或自定义保留的页面区域。"
+      },
+      "add-blank-page": {
+        "name": "添加空白页",
+        "description": "向 PDF 中插入空白页面",
+        "longDescription": "在文档指定位置插入一个或多个空白页面。"
+      },
+      "n-up": {
+        "name": "N-Up 排版",
+        "description": "将多页合并至单页",
+        "longDescription": "将 2、4、9 或 16 页 PDF 合并到一页上，打印时节省纸张。"
+      },
+      "flatten": {
+        "name": "扁平化 PDF",
+        "description": "将表单与批注转换为静态内容",
+        "longDescription": "将表单字段、批注和图层合并为静态页面内容，锁定后无法再次编辑。"
+      },
+      "header-footer": {
+        "name": "页眉与页脚",
+        "description": "为 PDF 添加页眉和页脚",
+        "longDescription": "在每页 PDF 的页眉和页脚中插入文本、日期或页码。"
+      },
+      "remove-annotations": {
+        "name": "移除批注",
+        "description": "清除笔记与高亮标记",
+        "longDescription": "一键清除 PDF 文档中的所有批注、评论、下划线和高亮。"
+      },
+      "remove-blank-pages": {
+        "name": "删除空白页",
+        "description": "清理 PDF 中的空白页面",
+        "longDescription": "自动检测并移除 PDF 文档中的空白页面。"
+      }
+    }
   }
 }

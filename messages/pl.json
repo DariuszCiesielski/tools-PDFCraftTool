@@ -2415,6 +2415,56 @@
         "name": "Podpisz PDF",
         "description": "Dodaj odręczny podpis lub stempel",
         "longDescription": "Narysuj podpis, wpisz tekst lub wgraj obraz podpisu. Umieść go na dowolnej stronie PDF."
+      },
+      "delete": {
+        "name": "Usuń strony",
+        "description": "Usuń wybrane strony z PDF",
+        "longDescription": "Wybierz strony do usunięcia z dokumentu PDF i pobierz oczyszczoną wersję."
+      },
+      "organize": {
+        "name": "Organizuj strony",
+        "description": "Zmień kolejność stron PDF",
+        "longDescription": "Przeciągnij i upuść, aby zmienić kolejność stron, obróć je lub usuń."
+      },
+      "extract": {
+        "name": "Wyodrębnij strony",
+        "description": "Wybierz strony do nowego PDF",
+        "longDescription": "Wybierz konkretne strony i zapisz je jako nowy dokument PDF."
+      },
+      "crop": {
+        "name": "Przytnij strony",
+        "description": "Wykadruj wybrane obszary stron",
+        "longDescription": "Przytnij marginesy lub wybierz obszar do zachowania na każdej stronie PDF."
+      },
+      "add-blank-page": {
+        "name": "Dodaj puste strony",
+        "description": "Wstaw puste strony w PDF",
+        "longDescription": "Dodaj jedną lub więcej pustych stron w wybranym miejscu dokumentu."
+      },
+      "n-up": {
+        "name": "Wiele na stronie (N-Up)",
+        "description": "Łącz wiele stron na jednej",
+        "longDescription": "Złóż 2, 4, 9 lub 16 stron PDF na jednej, aby oszczędzić papier przy druku."
+      },
+      "flatten": {
+        "name": "Spłaszcz PDF",
+        "description": "Zamień formularze i adnotacje na statyczne",
+        "longDescription": "Spłaszcz pola formularza, adnotacje i warstwy do statycznej zawartości stron — uniemożliwia dalszą edycję."
+      },
+      "header-footer": {
+        "name": "Nagłówek i stopka",
+        "description": "Dodaj nagłówki i stopki do PDF",
+        "longDescription": "Wstaw tekst, datę lub numerację w nagłówku i stopce każdej strony PDF."
+      },
+      "remove-annotations": {
+        "name": "Usuń adnotacje",
+        "description": "Wyczyść notatki i podkreślenia",
+        "longDescription": "Usuń wszystkie adnotacje, komentarze, podkreślenia i highlights z dokumentu PDF."
+      },
+      "remove-blank-pages": {
+        "name": "Usuń puste strony",
+        "description": "Wyczyść puste strony z PDF",
+        "longDescription": "Automatycznie wykryj i usuń puste strony z dokumentu PDF."
       }
     },
     "a11y": {

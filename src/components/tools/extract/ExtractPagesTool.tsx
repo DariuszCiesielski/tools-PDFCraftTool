@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useCallback, useRef } from 'react';
+import React, { useState, useCallback, useRef, useEffect } from 'react';
 import { useTranslations } from 'next-intl';
 import { FileUploader } from '../FileUploader';
 import { ProcessingProgress, ProcessingStatus } from '../ProcessingProgress';
@@ -14,6 +14,12 @@ import type { ProcessOutput } from '@/types/pdf';
 export interface ExtractPagesToolProps {
   /** Custom class name */
   className?: string;
+  /** Optional initial file to use (skips upload step when prefilled from Studio) */
+  initialFile?: File;
+  /** Hide the FileUploader UI when prefilled */
+  hideUploader?: boolean;
+  /** Callback fired with the resulting blob and original file when processing succeeds */
+  onComplete?: (blob: Blob, originalFile: File) => void;
 }
 
 interface PagePreview {
@@ -27,12 +33,12 @@ interface PagePreview {
  * 
  * Provides the UI for extracting specific pages from a PDF.
  */
-export function ExtractPagesTool({ className = '' }: ExtractPagesToolProps) {
+export function ExtractPagesTool({ className = '', initialFile, hideUploader, onComplete }: ExtractPagesToolProps) {
   const t = useTranslations('common');
   const tTools = useTranslations('tools');
-  
+
   // State
-  const [file, setFile] = useState<File | null>(null);
+  const [file, setFile] = useState<File | null>(initialFile ?? null);
   const [totalPages, setTotalPages] = useState<number>(0);
   const [status, setStatus] = useState<ProcessingStatus>('idle');
   const [progress, setProgress] = useState(0);
@@ -48,6 +54,13 @@ export function ExtractPagesTool({ className = '' }: ExtractPagesToolProps) {
   
   // Ref for cancellation
   const cancelledRef = useRef(false);
+
+  useEffect(() => {
+    if (initialFile) {
+      setFile(initialFile);
+      void loadPdfPreviews(initialFile);
+    }
+  }, [initialFile]); // eslint-disable-line react-hooks/exhaustive-deps
 
   /**
    * Load PDF and generate page previews
@@ -226,8 +239,10 @@ export function ExtractPagesTool({ className = '' }: ExtractPagesToolProps) {
       }
 
       if (output.success && output.result) {
-        setResult(output.result as Blob);
+        const blob = output.result as Blob;
+        setResult(blob);
         setStatus('complete');
+        if (onComplete && file) onComplete(blob, file);
       } else {
         setError(output.error?.message || 'Failed to extract pages.');
         setStatus('error');
@@ -238,7 +253,7 @@ export function ExtractPagesTool({ className = '' }: ExtractPagesToolProps) {
         setStatus('error');
       }
     }
-  }, [file, selectedPages]);
+  }, [file, selectedPages, onComplete]);
 
   /**
    * Handle cancel operation
@@ -264,7 +279,7 @@ export function ExtractPagesTool({ className = '' }: ExtractPagesToolProps) {
   return (
     <div className={`space-y-6 ${className}`.trim()}>
       {/* File Upload Area */}
-      {!file && (
+      {!file && !hideUploader && (
         <FileUploader
           accept={['application/pdf', '.pdf']}
           multiple={false}

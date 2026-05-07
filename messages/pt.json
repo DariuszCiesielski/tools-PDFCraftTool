@@ -2387,5 +2387,112 @@
       "description": "Confira nossa página de perguntas frequentes para obter respostas sobre o {brand}.",
       "button": "Ver FAQ"
     }
+  },
+  "studio": {
+    "tools": {
+      "ocr": {
+        "name": "OCR (Reconhecimento de Texto)",
+        "description": "Extraia texto de PDFs digitalizados",
+        "longDescription": "Reconhecimento Óptico de Caracteres: converta imagens em PDF em texto pesquisável. Suporte a vários idiomas."
+      },
+      "pdf-to-docx": {
+        "name": "PDF → Word",
+        "description": "Converta PDF em documento Word editável",
+        "longDescription": "Exporte o texto e a formatação do PDF para um arquivo DOCX editável no Microsoft Word ou LibreOffice."
+      },
+      "pdf-to-excel": {
+        "name": "PDF → Excel",
+        "description": "Converta tabelas de PDF em planilha do Excel",
+        "longDescription": "Extraia tabelas do PDF e salve-as como arquivo XLSX pronto para uso no Excel."
+      },
+      "pdf-to-pptx": {
+        "name": "PDF → PowerPoint",
+        "description": "Converta PDF em apresentação do PowerPoint",
+        "longDescription": "Cada página do PDF se torna um slide separado. Ideal para criar apresentações a partir de PDFs."
+      },
+      "word-to-pdf": {
+        "name": "Word → PDF",
+        "description": "Converta documento Word em PDF",
+        "longDescription": "Salve arquivos DOC/DOCX como PDF mantendo toda a formatação e fontes."
+      },
+      "excel-to-pdf": {
+        "name": "Excel → PDF",
+        "description": "Converta planilha do Excel em PDF",
+        "longDescription": "Salve arquivos XLSX/XLS como PDF mantendo o layout e as fórmulas."
+      },
+      "image-to-pdf": {
+        "name": "Imagem → PDF",
+        "description": "Combine imagens em um único PDF",
+        "longDescription": "Arraste JPG, PNG ou outras imagens e converta-as em um único PDF multipágina."
+      },
+      "edit-metadata": {
+        "name": "Editar metadados",
+        "description": "Altere título, autor e palavras-chave",
+        "longDescription": "Edite as informações do documento: título, autor, assunto, palavras-chave, criador e produtor."
+      },
+      "extract-images": {
+        "name": "Extrair imagens",
+        "description": "Baixe todas as imagens do PDF",
+        "longDescription": "Extraia todas as imagens contidas no PDF e baixe-as individualmente ou como arquivo ZIP."
+      },
+      "sign": {
+        "name": "Assinar PDF",
+        "description": "Adicione assinatura manuscrita ou carimbo",
+        "longDescription": "Desenhe a assinatura, digite texto ou envie uma imagem. Posicione-a em qualquer página do PDF."
+      },
+      "categories": {
+        "convert": "Converter"
+      },
+      "delete": {
+        "name": "Excluir páginas",
+        "description": "Remova as páginas selecionadas do PDF",
+        "longDescription": "Selecione as páginas a excluir de um documento PDF e baixe a versão limpa."
+      },
+      "organize": {
+        "name": "Organizar páginas",
+        "description": "Reordene as páginas do PDF",
+        "longDescription": "Arraste e solte para reordenar páginas, girá-las ou remover as indesejadas."
+      },
+      "extract": {
+        "name": "Extrair páginas",
+        "description": "Extraia páginas para um novo PDF",
+        "longDescription": "Selecione páginas específicas e salve-as como um novo documento PDF independente."
+      },
+      "crop": {
+        "name": "Cortar páginas",
+        "description": "Recorte áreas selecionadas das páginas",
+        "longDescription": "Corte as margens ou selecione a área a manter em cada página do PDF."
+      },
+      "add-blank-page": {
+        "name": "Adicionar páginas em branco",
+        "description": "Insira páginas em branco no PDF",
+        "longDescription": "Adicione uma ou mais páginas em branco em uma posição escolhida do documento."
+      },
+      "n-up": {
+        "name": "Layout N-Up",
+        "description": "Combine várias páginas em uma",
+        "longDescription": "Coloque 2, 4, 9 ou 16 páginas do PDF em uma única para economizar papel na impressão."
+      },
+      "flatten": {
+        "name": "Achatar PDF",
+        "description": "Torne formulários e anotações estáticos",
+        "longDescription": "Achate campos de formulário, anotações e camadas em conteúdo de página estático, bloqueando edições futuras."
+      },
+      "header-footer": {
+        "name": "Cabeçalho e rodapé",
+        "description": "Adicione cabeçalhos e rodapés ao PDF",
+        "longDescription": "Insira texto, data ou números de página no cabeçalho e rodapé de cada página do PDF."
+      },
+      "remove-annotations": {
+        "name": "Remover anotações",
+        "description": "Limpe notas e destaques",
+        "longDescription": "Remova todas as anotações, comentários, sublinhados e destaques de um documento PDF."
+      },
+      "remove-blank-pages": {
+        "name": "Remover páginas em branco",
+        "description": "Limpe páginas em branco do PDF",
+        "longDescription": "Detecte e remova automaticamente páginas em branco de um documento PDF."
+      }
+    }
   }
 }

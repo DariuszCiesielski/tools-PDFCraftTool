@@ -18,6 +18,17 @@ export type StudioToolId =
   | 'edit-metadata'
   | 'extract-images'
   | 'sign'
+  // Wave-2: PDF→PDF page operations
+  | 'delete'
+  | 'organize'
+  | 'extract'
+  | 'crop'
+  | 'add-blank-page'
+  | 'n-up'
+  | 'flatten'
+  | 'header-footer'
+  | 'remove-annotations'
+  | 'remove-blank-pages'
   | null;
 
 export interface StudioFile {

@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useCallback, useRef } from 'react';
+import React, { useState, useCallback, useRef, useEffect } from 'react';
 import { useTranslations } from 'next-intl';
 import { FileUploader } from '../FileUploader';
 import { ProcessingProgress, ProcessingStatus } from '../ProcessingProgress';
@@ -10,18 +10,29 @@ import { Card } from '@/components/ui/Card';
 import { removeAnnotations } from '@/lib/pdf/processors/remove-annotations';
 import type { ProcessOutput } from '@/types/pdf';
 
-export interface RemoveAnnotationsToolProps { className?: string; }
+export interface RemoveAnnotationsToolProps {
+  className?: string;
+  initialFile?: File;
+  hideUploader?: boolean;
+  onComplete?: (blob: Blob, originalFile: File) => void;
+}
 
-export function RemoveAnnotationsTool({ className = '' }: RemoveAnnotationsToolProps) {
+export function RemoveAnnotationsTool({ className = '', initialFile, hideUploader, onComplete }: RemoveAnnotationsToolProps) {
   const t = useTranslations('common');
   const tTools = useTranslations('tools');
-  const [file, setFile] = useState<File | null>(null);
+  const [file, setFile] = useState<File | null>(initialFile ?? null);
   const [status, setStatus] = useState<ProcessingStatus>('idle');
   const [progress, setProgress] = useState(0);
   const [result, setResult] = useState<Blob | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [removeAll, setRemoveAll] = useState(true);
   const cancelledRef = useRef(false);
+  useEffect(() => {
+    if (initialFile) {
+      setFile(initialFile);
+    }
+  }, [initialFile]); // eslint-disable-line react-hooks/exhaustive-deps
+
 
   const handleProcess = useCallback(async () => {
     if (!file) return;
@@ -29,16 +40,16 @@ export function RemoveAnnotationsTool({ className = '' }: RemoveAnnotationsToolP
     setStatus('processing'); setProgress(0); setError(null); setResult(null);
     try {
       const output: ProcessOutput = await removeAnnotations(file, { removeAll, pages: 'all' }, (prog) => { if (!cancelledRef.current) setProgress(prog); });
-      if (output.success && output.result) { setResult(output.result as Blob); setStatus('complete'); }
+      if (output.success && output.result) { const blob = output.result as Blob; setResult(blob); setStatus('complete'); if (onComplete && file) onComplete(blob, file); }
       else { setError(output.error?.message || 'Failed.'); setStatus('error'); }
     } catch (err) { setError(err instanceof Error ? err.message : 'Error'); setStatus('error'); }
-  }, [file, removeAll]);
+  }, [file, removeAll, onComplete]);
 
   const isProcessing = status === 'processing';
 
   return (
     <div className={`space-y-6 ${className}`.trim()}>
-      {!file && <FileUploader accept={['application/pdf', '.pdf']} multiple={false} maxFiles={1} onFilesSelected={(files) => { if (files.length > 0) { setFile(files[0]); setError(null); setResult(null); } }} onError={setError} disabled={isProcessing} label={tTools('removeAnnotations.uploadLabel') || t('buttons.upload')} description={tTools('removeAnnotations.uploadDescription')} />}
+      {!file && !hideUploader && <FileUploader accept={['application/pdf', '.pdf']} multiple={false} maxFiles={1} onFilesSelected={(files) => { if (files.length > 0) { setFile(files[0]); setError(null); setResult(null); } }} onError={setError} disabled={isProcessing} label={tTools('removeAnnotations.uploadLabel') || t('buttons.upload')} description={tTools('removeAnnotations.uploadDescription')} />}
       {error && <div className="p-4 rounded bg-red-50 border border-red-200 text-red-700"><p className="text-sm">{error}</p></div>}
       {file && (
         <>
