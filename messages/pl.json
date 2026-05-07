@@ -2432,6 +2432,18 @@
       "deletePage": "Usuń stronę {page}",
       "dragPage": "Przeciągnij stronę {page}, by zmienić kolejność"
     },
+    "landing": {
+      "heroTitle": "PDF Studio",
+      "heroSubtitle": "AIwBiznesie",
+      "heroTagline": "Profesjonalna edycja PDF prosto w przeglądarce. Twoje pliki nigdy nie opuszczają Twojego urządzenia.",
+      "bullet1Title": "Pełna edycja PDF",
+      "bullet1Body": "Drag & drop reorganizacja stron, konwersja DOCX/PPTX/XLSX, podpisy, znaki wodne, OCR i 80+ profesjonalnych narzędzi.",
+      "bullet2Title": "Zero uploadu",
+      "bullet2Body": "Przetwarzanie odbywa się lokalnie w przeglądarce. Twoje dokumenty pozostają prywatne — nie wysyłamy ich na serwery.",
+      "bullet3Title": "Synchronizacja między urządzeniami",
+      "bullet3Body": "Po zalogowaniu zachowasz swoje preferencje i ostatnio otwierane pliki dostępne na każdym urządzeniu.",
+      "formIntro": "Zaloguj się, aby uzyskać pełen dostęp do PDF Studio."
+    },
     "auth": {
       "signinTitle": "Zaloguj się",
       "signupTitle": "Utwórz konto",

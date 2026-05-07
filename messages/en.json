@@ -2432,6 +2432,18 @@
       "deletePage": "Delete page {page}",
       "dragPage": "Drag page {page} to reorder"
     },
+    "landing": {
+      "heroTitle": "PDF Studio",
+      "heroSubtitle": "AIwBiznesie",
+      "heroTagline": "Professional PDF editing right in your browser. Your files never leave your device.",
+      "bullet1Title": "Full PDF Editing",
+      "bullet1Body": "Drag-and-drop page reordering, DOCX/PPTX/XLSX conversion, signatures, watermarks, OCR and 80+ professional tools.",
+      "bullet2Title": "Zero Uploads",
+      "bullet2Body": "All processing happens locally in your browser. Your documents stay private — we never send them to servers.",
+      "bullet3Title": "Cross-device Sync",
+      "bullet3Body": "Sign in to keep your preferences and recent files available on every device.",
+      "formIntro": "Sign in to get full access to PDF Studio."
+    },
     "auth": {
       "signinTitle": "Sign in",
       "signupTitle": "Create account",
