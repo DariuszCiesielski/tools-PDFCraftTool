@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useCallback, useRef } from 'react';
+import React, { useState, useCallback, useRef, useEffect } from 'react';
 import { useTranslations } from 'next-intl';
 import { FileUploader } from '../FileUploader';
 import { ProcessingProgress, ProcessingStatus } from '../ProcessingProgress';
@@ -14,6 +14,12 @@ import type { ProcessOutput } from '@/types/pdf';
 export interface RotatePDFToolProps {
   /** Custom class name */
   className?: string;
+  /** Pre-fill the tool with this file (e.g. from Studio Mode current file) */
+  initialFile?: File;
+  /** Hide the FileUploader UI (useful when initialFile is provided from outside) */
+  hideUploader?: boolean;
+  /** Callback fired with the result Blob when processing completes successfully */
+  onComplete?: (result: Blob, originalFile: File) => void;
 }
 
 interface PagePreview {
@@ -28,7 +34,12 @@ interface PagePreview {
  * 
  * Provides the UI for rotating PDF pages.
  */
-export function RotatePDFTool({ className = '' }: RotatePDFToolProps) {
+export function RotatePDFTool({
+  className = '',
+  initialFile,
+  hideUploader = false,
+  onComplete,
+}: RotatePDFToolProps) {
   const t = useTranslations('common');
   const tTools = useTranslations('tools');
   
@@ -118,6 +129,14 @@ export function RotatePDFTool({ className = '' }: RotatePDFToolProps) {
       loadPdfPreviews(selectedFile);
     }
   }, [loadPdfPreviews]);
+
+  // Pre-fill from Studio Mode (initialFile prop) — runs once on mount.
+  useEffect(() => {
+    if (initialFile) {
+      handleFilesSelected([initialFile]);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   /**
    * Handle file upload error
@@ -218,8 +237,10 @@ export function RotatePDFTool({ className = '' }: RotatePDFToolProps) {
       }
 
       if (output.success && output.result) {
-        setResult(output.result as Blob);
+        const resultBlob = output.result as Blob;
+        setResult(resultBlob);
         setStatus('complete');
+        onComplete?.(resultBlob, file);
       } else {
         setError(output.error?.message || 'Failed to rotate PDF.');
         setStatus('error');

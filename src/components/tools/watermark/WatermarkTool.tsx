@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useCallback, useRef } from 'react';
+import React, { useState, useCallback, useRef, useEffect } from 'react';
 import { useTranslations } from 'next-intl';
 import { FileUploader } from '../FileUploader';
 import { ProcessingProgress, ProcessingStatus } from '../ProcessingProgress';
@@ -12,6 +12,9 @@ import type { ProcessOutput } from '@/types/pdf';
 
 export interface WatermarkToolProps {
   className?: string;
+  initialFile?: File;
+  hideUploader?: boolean;
+  onComplete?: (result: Blob, originalFile: File) => void;
 }
 
 /**
@@ -63,7 +66,12 @@ async function convertImageToPng(file: File): Promise<ArrayBuffer> {
 
 type WatermarkType = 'text' | 'image';
 
-export function WatermarkTool({ className = '' }: WatermarkToolProps) {
+export function WatermarkTool({
+  className = '',
+  initialFile,
+  hideUploader: _hideUploader = false,
+  onComplete,
+}: WatermarkToolProps) {
   const t = useTranslations('common');
   const tTools = useTranslations('tools.watermark');
 
@@ -95,6 +103,16 @@ export function WatermarkTool({ className = '' }: WatermarkToolProps) {
   const [repeatSpacingY, setRepeatSpacingY] = useState(150);
 
   const cancelledRef = useRef(false);
+
+  // Pre-fill from Studio Mode (initialFile prop) — runs once on mount.
+  useEffect(() => {
+    if (initialFile) {
+      setFile(initialFile);
+      setError(null);
+      setResult(null);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const handleFilesSelected = useCallback((files: File[]) => {
     if (files.length > 0) {
@@ -194,8 +212,10 @@ export function WatermarkTool({ className = '' }: WatermarkToolProps) {
       }
 
       if (output.success && output.result) {
-        setResult(output.result as Blob);
+        const resultBlob = output.result as Blob;
+        setResult(resultBlob);
         setStatus('complete');
+        if (file) onComplete?.(resultBlob, file);
       } else {
         setError(output.error?.message || tTools('failed'));
         setStatus('error');

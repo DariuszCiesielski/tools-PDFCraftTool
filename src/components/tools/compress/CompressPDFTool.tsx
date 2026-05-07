@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import { useTranslations } from 'next-intl';
 import { FileUploader } from '../FileUploader';
 import { ProcessingProgress } from '../ProcessingProgress';
@@ -14,6 +14,12 @@ import { Trash2, FileArchive, Check, AlertCircle, Loader2, X } from 'lucide-reac
 export interface CompressPDFToolProps {
   /** Custom class name */
   className?: string;
+  /** Pre-fill the tool with this file (e.g. from Studio Mode current file) */
+  initialFile?: File;
+  /** Hide the FileUploader UI (useful when initialFile is provided from outside) */
+  hideUploader?: boolean;
+  /** Callback fired with the result Blob when single-file processing completes successfully */
+  onComplete?: (result: Blob, originalFile: File) => void;
 }
 
 /**
@@ -23,7 +29,12 @@ export interface CompressPDFToolProps {
  * Provides the UI for compressing PDF files with quality options.
  * Supports batch processing of multiple files with ZIP download.
  */
-export function CompressPDFTool({ className = '' }: CompressPDFToolProps) {
+export function CompressPDFTool({
+  className = '',
+  initialFile,
+  hideUploader = false,
+  onComplete,
+}: CompressPDFToolProps) {
   const t = useTranslations('common');
   const tTools = useTranslations('tools');
 
@@ -50,7 +61,24 @@ export function CompressPDFTool({ className = '' }: CompressPDFToolProps) {
     downloadAsZip,
   } = useBatchProcessing({
     maxConcurrent: 2,
+    onAllComplete: (completed) => {
+      if (!onComplete) return;
+      const successful = completed.filter((f) => f.status === 'completed' && f.result);
+      if (successful.length === 1) {
+        onComplete(successful[0].result as Blob, successful[0].file);
+      }
+    },
   });
+
+  // Pre-fill with initialFile when provided (Studio Mode integration)
+  useEffect(() => {
+    if (initialFile) {
+      addFiles([initialFile]);
+    }
+    // Intentionally run only on mount: subsequent initialFile changes mean a different
+    // Studio context (handled by parent remounting the component).
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   /**
    * Handle files selected from uploader
@@ -152,16 +180,18 @@ export function CompressPDFTool({ className = '' }: CompressPDFToolProps) {
   return (
     <div className={`space-y-6 ${className}`.trim()}>
       {/* File Upload Area */}
-      <FileUploader
-        accept={['application/pdf', '.pdf']}
-        multiple={true}
-        maxFiles={10}
-        onFilesSelected={handleFilesSelected}
-        onError={handleUploadError}
-        disabled={isProcessing}
-        label={tTools('compressPdf.uploadLabel') || 'Upload PDF Files'}
-        description={tTools('compressPdf.batchUploadDescription') || 'Drag and drop PDF files here. You can compress up to 10 files at once.'}
-      />
+      {!hideUploader && (
+        <FileUploader
+          accept={['application/pdf', '.pdf']}
+          multiple={true}
+          maxFiles={10}
+          onFilesSelected={handleFilesSelected}
+          onError={handleUploadError}
+          disabled={isProcessing}
+          label={tTools('compressPdf.uploadLabel') || 'Upload PDF Files'}
+          description={tTools('compressPdf.batchUploadDescription') || 'Drag and drop PDF files here. You can compress up to 10 files at once.'}
+        />
+      )}
 
       {/* Error Message */}
       {error && (

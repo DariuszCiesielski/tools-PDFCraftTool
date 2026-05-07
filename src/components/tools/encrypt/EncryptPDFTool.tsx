@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useCallback, useRef } from 'react';
+import React, { useState, useCallback, useRef, useEffect } from 'react';
 import { useTranslations } from 'next-intl';
 import { FileUploader } from '../FileUploader';
 import { ProcessingProgress, ProcessingStatus } from '../ProcessingProgress';
@@ -13,6 +13,9 @@ import type { ProcessOutput } from '@/types/pdf';
 export interface EncryptPDFToolProps {
   /** Custom class name */
   className?: string;
+  initialFile?: File;
+  hideUploader?: boolean;
+  onComplete?: (result: Blob, originalFile: File) => void;
 }
 
 /**
@@ -22,7 +25,12 @@ export interface EncryptPDFToolProps {
  * Provides the UI for encrypting PDF files with password protection.
  * All encryption is performed client-side - passwords are never transmitted.
  */
-export function EncryptPDFTool({ className = '' }: EncryptPDFToolProps) {
+export function EncryptPDFTool({
+  className = '',
+  initialFile,
+  hideUploader = false,
+  onComplete,
+}: EncryptPDFToolProps) {
   const t = useTranslations('common');
   const tTools = useTranslations('tools');
   
@@ -53,6 +61,16 @@ export function EncryptPDFTool({ className = '' }: EncryptPDFToolProps) {
   
   // Ref for cancellation
   const cancelledRef = useRef(false);
+
+  // Pre-fill from Studio Mode (initialFile prop) — runs once on mount.
+  useEffect(() => {
+    if (initialFile) {
+      setFile(initialFile);
+      setError(null);
+      setResult(null);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const handleFilesSelected = useCallback((files: File[]) => {
     if (files.length > 0) {
@@ -125,8 +143,10 @@ export function EncryptPDFTool({ className = '' }: EncryptPDFToolProps) {
       }
 
       if (output.success && output.result) {
-        setResult(output.result as Blob);
+        const resultBlob = output.result as Blob;
+        setResult(resultBlob);
         setStatus('complete');
+        if (file) onComplete?.(resultBlob, file);
       } else {
         setError(output.error?.message || 'Failed to encrypt PDF file.');
         setStatus('error');
@@ -157,16 +177,18 @@ export function EncryptPDFTool({ className = '' }: EncryptPDFToolProps) {
   return (
     <div className={`space-y-6 ${className}`.trim()}>
       {/* File Upload Area */}
-      <FileUploader
-        accept={['application/pdf', '.pdf']}
-        multiple={false}
-        maxFiles={1}
-        onFilesSelected={handleFilesSelected}
-        onError={handleUploadError}
-        disabled={isProcessing}
-        label={tTools('encryptPdf.uploadLabel') || 'Upload PDF File'}
-        description={tTools('encryptPdf.uploadDescription') || 'Drag and drop a PDF file here, or click to browse.'}
-      />
+      {!hideUploader && !file && (
+        <FileUploader
+          accept={['application/pdf', '.pdf']}
+          multiple={false}
+          maxFiles={1}
+          onFilesSelected={handleFilesSelected}
+          onError={handleUploadError}
+          disabled={isProcessing}
+          label={tTools('encryptPdf.uploadLabel') || 'Upload PDF File'}
+          description={tTools('encryptPdf.uploadDescription') || 'Drag and drop a PDF file here, or click to browse.'}
+        />
+      )}
 
       {/* Error Message */}
       {error && (

@@ -46,6 +46,7 @@ interface StudioState {
   removePage: (fileId: string, pageIndex: number) => Promise<void>;
   reorderPages: (fileId: string, fromIndex: number, toIndex: number) => Promise<void>;
   getCurrentBuffer: (id: string) => Promise<Uint8Array>;
+  replaceFileData: (fileId: string, blob: Blob, newName?: string) => Promise<void>;
 }
 
 const generateId = () => `${Date.now()}-${Math.random().toString(36).slice(2, 9)}`;
@@ -157,6 +158,26 @@ export const useStudioStore = create<StudioState>((set, get) => ({
         f.id === fileId ? { ...f, pageCount: doc.getPageCount() } : f,
       ),
       currentPage: Math.min(state.currentPage, doc.getPageCount()),
+    }));
+  },
+
+  replaceFileData: async (fileId, blob, newName) => {
+    const buffer = await blob.arrayBuffer();
+    const data = new Uint8Array(buffer);
+    set((state) => ({
+      files: state.files.map((f) => {
+        if (f.id !== fileId) return f;
+        const finalName = newName ?? f.name;
+        return {
+          ...f,
+          file: new File([blob], finalName, { type: 'application/pdf' }),
+          name: finalName,
+          data,
+          version: f.version + 1,
+          size: blob.size,
+          pageCount: null,
+        };
+      }),
     }));
   },
 

@@ -15,12 +15,20 @@ let pdfjsModule: typeof import('pdfjs-dist') | null = null;
 
 export interface PageNumbersToolProps {
   className?: string;
+  initialFile?: File;
+  hideUploader?: boolean;
+  onComplete?: (result: Blob, originalFile: File) => void;
 }
 
 type Position = 'bottom-center' | 'bottom-left' | 'bottom-right' | 'top-center' | 'top-left' | 'top-right';
 type Format = 'number' | 'roman' | 'page-of-total' | 'custom';
 
-export function PageNumbersTool({ className = '' }: PageNumbersToolProps) {
+export function PageNumbersTool({
+  className = '',
+  initialFile,
+  hideUploader: _hideUploader = false,
+  onComplete,
+}: PageNumbersToolProps) {
   const t = useTranslations('common');
   const tTools = useTranslations('tools');
 
@@ -271,6 +279,16 @@ export function PageNumbersTool({ className = '' }: PageNumbersToolProps) {
     }
   }, [file, position, format, customFormat, startNumber, fontSize, fontColor, margin, skipFirstPage, prefix, suffix, currentPreviewPage, totalPages, pageMode, oddPosition, evenPosition]);
 
+  // Pre-fill from Studio Mode (initialFile prop) — runs once on mount.
+  useEffect(() => {
+    if (initialFile) {
+      setFile(initialFile);
+      setError(null);
+      setResult(null);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   const handleFilesSelected = useCallback((files: File[]) => {
     if (files.length > 0) {
       setFile(files[0]);
@@ -323,8 +341,10 @@ export function PageNumbersTool({ className = '' }: PageNumbersToolProps) {
       });
 
       if (output.success && output.result) {
-        setResult(output.result as Blob);
+        const resultBlob = output.result as Blob;
+        setResult(resultBlob);
         setStatus('complete');
+        if (file) onComplete?.(resultBlob, file);
       } else {
         setError(output.error?.message || 'Failed to add page numbers.');
         setStatus('error');
