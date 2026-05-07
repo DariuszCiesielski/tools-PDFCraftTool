@@ -40,6 +40,56 @@ const EncryptPDFTool = dynamic(
   { ssr: false, loading: () => <ToolLoader /> },
 );
 
+const OCRPDFTool = dynamic(
+  () => import('@/components/tools/ocr/OCRPDFTool').then((m) => m.OCRPDFTool),
+  { ssr: false, loading: () => <ToolLoader /> },
+);
+
+const PDFToDocxTool = dynamic(
+  () => import('@/components/tools/pdf-to-docx/PDFToDocxTool').then((m) => m.PDFToDocxTool),
+  { ssr: false, loading: () => <ToolLoader /> },
+);
+
+const PDFToExcelTool = dynamic(
+  () => import('@/components/tools/pdf-to-excel/PDFToExcelTool').then((m) => m.PDFToExcelTool),
+  { ssr: false, loading: () => <ToolLoader /> },
+);
+
+const PDFToPptxTool = dynamic(
+  () => import('@/components/tools/pdf-to-pptx/PDFToPptxTool').then((m) => m.PDFToPptxTool),
+  { ssr: false, loading: () => <ToolLoader /> },
+);
+
+const WordToPDFTool = dynamic(
+  () => import('@/components/tools/word-to-pdf/WordToPDFTool').then((m) => m.WordToPDFTool),
+  { ssr: false, loading: () => <ToolLoader /> },
+);
+
+const ExcelToPDFTool = dynamic(
+  () => import('@/components/tools/excel-to-pdf/ExcelToPDFTool').then((m) => m.ExcelToPDFTool),
+  { ssr: false, loading: () => <ToolLoader /> },
+);
+
+const ImageToPDFTool = dynamic(
+  () => import('@/components/tools/image-to-pdf/ImageToPDFTool').then((m) => m.ImageToPDFTool),
+  { ssr: false, loading: () => <ToolLoader /> },
+);
+
+const EditMetadataTool = dynamic(
+  () => import('@/components/tools/edit-metadata/EditMetadataTool').then((m) => m.EditMetadataTool),
+  { ssr: false, loading: () => <ToolLoader /> },
+);
+
+const ExtractImagesTool = dynamic(
+  () => import('@/components/tools/extract-images/ExtractImagesTool').then((m) => m.ExtractImagesTool),
+  { ssr: false, loading: () => <ToolLoader /> },
+);
+
+const SignPDFTool = dynamic(
+  () => import('@/components/tools/sign/SignPDFTool').then((m) => m.SignPDFTool),
+  { ssr: false, loading: () => <ToolLoader /> },
+);
+
 type SupportedToolId = NonNullable<StudioToolId>;
 
 const SUPPORTED_TOOL_IDS: ReadonlySet<string> = new Set<SupportedToolId>([
@@ -50,6 +100,30 @@ const SUPPORTED_TOOL_IDS: ReadonlySet<string> = new Set<SupportedToolId>([
   'page-numbers',
   'watermark',
   'encrypt',
+  'ocr',
+  'pdf-to-docx',
+  'pdf-to-excel',
+  'pdf-to-pptx',
+  'word-to-pdf',
+  'excel-to-pdf',
+  'image-to-pdf',
+  'edit-metadata',
+  'extract-images',
+  'sign',
+]);
+
+// Tools that produce a PDF as their primary output. Only these get the onComplete callback
+// (which replaces currentFile in studioStore so the viewer shows the result).
+// Tools producing non-PDF output (DOCX, XLSX, PPTX, ZIP) keep their built-in DownloadButton.
+const PDF_OUTPUT_TOOLS: ReadonlySet<string> = new Set<SupportedToolId>([
+  'compress',
+  'rotate',
+  'page-numbers',
+  'watermark',
+  'encrypt',
+  'sign',
+  'edit-metadata',
+  'ocr', // ocr only calls onComplete when outputFormat === 'searchable-pdf' (logic in OCRPDFTool)
 ]);
 
 export function isToolSupportedInDrawer(toolId: StudioToolId): toolId is SupportedToolId {
@@ -72,6 +146,17 @@ const RESULT_FILENAME_PREFIX: Record<SupportedToolId, string> = {
   encrypt: 'encrypted',
   split: '',
   merge: '',
+  ocr: 'ocr',
+  sign: 'signed',
+  'edit-metadata': 'edited',
+  // Non-PDF output (no replaceFileData):
+  'pdf-to-docx': '',
+  'pdf-to-excel': '',
+  'pdf-to-pptx': '',
+  'word-to-pdf': '',
+  'excel-to-pdf': '',
+  'image-to-pdf': '',
+  'extract-images': '',
 };
 
 function renamedFilename(toolId: SupportedToolId, original: string): string {
@@ -89,9 +174,13 @@ interface RenderToolProps {
 }
 
 function renderTool({ toolId, initialFile, onComplete }: RenderToolProps) {
-  // Tools that operate 1→1 (single in, single out) get prefilled file + onComplete callback.
-  // Split (1→N ZIP) and Merge (N→1, needs extra files) keep their own FileUploader.
+  // Tools that operate 1→1 PDF→PDF get prefilled file + onComplete callback (replaces currentFile).
+  // Tools that produce non-PDF output (DOCX/XLSX/PPTX/ZIP) get prefilled file but NO onComplete
+  // (they keep their built-in DownloadButton).
+  // Tools that need non-PDF input (Word/Excel/Image → PDF) keep their own FileUploader.
+  // Split (1→N ZIP) and Merge (N→1) keep their own FileUploader too.
   switch (toolId) {
+    // PDF→PDF, prefilled + onComplete
     case 'compress':
       return <CompressPDFTool initialFile={initialFile} hideUploader={!!initialFile} onComplete={onComplete} />;
     case 'rotate':
@@ -102,6 +191,29 @@ function renderTool({ toolId, initialFile, onComplete }: RenderToolProps) {
       return <WatermarkTool initialFile={initialFile} hideUploader={!!initialFile} onComplete={onComplete} />;
     case 'encrypt':
       return <EncryptPDFTool initialFile={initialFile} hideUploader={!!initialFile} onComplete={onComplete} />;
+    case 'sign':
+      return <SignPDFTool initialFile={initialFile} hideUploader={!!initialFile} onComplete={onComplete} />;
+    case 'edit-metadata':
+      return <EditMetadataTool initialFile={initialFile} hideUploader={!!initialFile} onComplete={onComplete} />;
+    case 'ocr':
+      return <OCRPDFTool initialFile={initialFile} hideUploader={!!initialFile} onComplete={onComplete} />;
+    // PDF→non-PDF, prefilled but no onComplete (DownloadButton stays)
+    case 'pdf-to-docx':
+      return <PDFToDocxTool initialFile={initialFile} hideUploader={!!initialFile} />;
+    case 'pdf-to-excel':
+      return <PDFToExcelTool initialFile={initialFile} hideUploader={!!initialFile} />;
+    case 'pdf-to-pptx':
+      return <PDFToPptxTool initialFile={initialFile} hideUploader={!!initialFile} />;
+    case 'extract-images':
+      return <ExtractImagesTool initialFile={initialFile} hideUploader={!!initialFile} />;
+    // Non-PDF→PDF, own FileUploader (input is not the current PDF)
+    case 'word-to-pdf':
+      return <WordToPDFTool />;
+    case 'excel-to-pdf':
+      return <ExcelToPDFTool />;
+    case 'image-to-pdf':
+      return <ImageToPDFTool />;
+    // Multi-file in/out, own FileUploader
     case 'split':
       return <SplitPDFTool />;
     case 'merge':
@@ -118,7 +230,7 @@ export function ToolDrawer({ toolId }: { toolId: SupportedToolId }) {
   const initialFile = currentFile?.file;
   const fileId = currentFile?.id;
 
-  const handleComplete = fileId
+  const handleComplete = fileId && PDF_OUTPUT_TOOLS.has(toolId)
     ? (blob: Blob, original: File) => {
         const newName = renamedFilename(toolId, original.name);
         void replaceFileData(fileId, blob, newName);

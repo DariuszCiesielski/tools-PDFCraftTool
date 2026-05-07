@@ -13,6 +13,15 @@ import {
   Hash,
   ChevronRight,
   Sparkles,
+  ScanText,
+  FileText,
+  FileSpreadsheet,
+  Presentation,
+  Sheet,
+  Image as ImageIcon,
+  Tags,
+  ImageDown,
+  PenLine,
   type LucideIcon,
 } from 'lucide-react';
 import { useStudioStore, type StudioToolId } from '@/lib/stores/studioStore';
@@ -21,21 +30,36 @@ import { ToolDrawer, isToolSupportedInDrawer } from './ToolDrawer';
 
 interface StudioTool {
   id: NonNullable<StudioToolId>;
-  category: 'pages' | 'compress' | 'security' | 'enhance';
+  category: 'pages' | 'compress' | 'security' | 'enhance' | 'convert';
   icon: LucideIcon;
 }
 
 const STUDIO_TOOLS: StudioTool[] = [
+  // Pages
   { id: 'split', category: 'pages', icon: Scissors },
   { id: 'merge', category: 'pages', icon: Combine },
   { id: 'rotate', category: 'pages', icon: RotateCw },
+  { id: 'extract-images', category: 'pages', icon: ImageDown },
+  // Enhance
   { id: 'page-numbers', category: 'enhance', icon: Hash },
-  { id: 'compress', category: 'compress', icon: Minimize2 },
   { id: 'watermark', category: 'enhance', icon: Droplets },
+  { id: 'edit-metadata', category: 'enhance', icon: Tags },
+  { id: 'sign', category: 'enhance', icon: PenLine },
+  { id: 'ocr', category: 'enhance', icon: ScanText },
+  // Compress
+  { id: 'compress', category: 'compress', icon: Minimize2 },
+  // Security
   { id: 'encrypt', category: 'security', icon: Lock },
+  // Convert
+  { id: 'pdf-to-docx', category: 'convert', icon: FileText },
+  { id: 'pdf-to-excel', category: 'convert', icon: FileSpreadsheet },
+  { id: 'pdf-to-pptx', category: 'convert', icon: Presentation },
+  { id: 'word-to-pdf', category: 'convert', icon: FileText },
+  { id: 'excel-to-pdf', category: 'convert', icon: Sheet },
+  { id: 'image-to-pdf', category: 'convert', icon: ImageIcon },
 ];
 
-const CATEGORY_ORDER: StudioTool['category'][] = ['pages', 'enhance', 'compress', 'security'];
+const CATEGORY_ORDER: StudioTool['category'][] = ['pages', 'enhance', 'convert', 'compress', 'security'];
 
 export function ToolsPanel() {
   const t = useTranslations('studio');

@@ -2328,7 +2328,8 @@
         "pages": "Pages",
         "enhance": "Enhance",
         "compress": "Compress",
-        "security": "Security"
+        "security": "Security",
+        "convert": "Convert"
       },
       "split": {
         "name": "Split PDF",
@@ -2364,6 +2365,56 @@
         "name": "Encrypt PDF",
         "description": "Password protect",
         "longDescription": "Set password and permissions (print, copy, edit) for the PDF file."
+      },
+      "ocr": {
+        "name": "OCR (Text Recognition)",
+        "description": "Extract text from scanned PDFs",
+        "longDescription": "Optical Character Recognition — convert images in PDF to searchable text. Multi-language support."
+      },
+      "pdf-to-docx": {
+        "name": "PDF → Word",
+        "description": "Convert PDF to editable Word document",
+        "longDescription": "Export PDF text and layout to a DOCX file editable in Microsoft Word or LibreOffice."
+      },
+      "pdf-to-excel": {
+        "name": "PDF → Excel",
+        "description": "Convert PDF tables to Excel spreadsheet",
+        "longDescription": "Extract tables from PDF and save as XLSX file ready for processing in Excel."
+      },
+      "pdf-to-pptx": {
+        "name": "PDF → PowerPoint",
+        "description": "Convert PDF to PowerPoint presentation",
+        "longDescription": "Each PDF page becomes a separate slide. Great for lecture presentations from PDFs."
+      },
+      "word-to-pdf": {
+        "name": "Word → PDF",
+        "description": "Convert Word document to PDF",
+        "longDescription": "Save DOC/DOCX file as PDF preserving full formatting and fonts."
+      },
+      "excel-to-pdf": {
+        "name": "Excel → PDF",
+        "description": "Convert Excel spreadsheet to PDF",
+        "longDescription": "Save XLSX/XLS file as PDF preserving layout and formulas."
+      },
+      "image-to-pdf": {
+        "name": "Image → PDF",
+        "description": "Combine images into a single PDF",
+        "longDescription": "Drop JPG, PNG or other images and convert them into a single multi-page PDF."
+      },
+      "edit-metadata": {
+        "name": "Edit metadata",
+        "description": "Change title, author, keywords",
+        "longDescription": "Edit document meta information: title, author, subject, keywords, creator and producer."
+      },
+      "extract-images": {
+        "name": "Extract images",
+        "description": "Download all images from PDF",
+        "longDescription": "Extracts all images contained in the PDF and lets you download them individually or as ZIP."
+      },
+      "sign": {
+        "name": "Sign PDF",
+        "description": "Add handwritten signature or stamp",
+        "longDescription": "Draw signature, type text or upload signature image. Place it on any page of the PDF."
       }
     },
     "a11y": {

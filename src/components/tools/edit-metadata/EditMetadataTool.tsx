@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useCallback, useRef } from 'react';
+import React, { useState, useCallback, useRef, useEffect } from 'react';
 import { useTranslations } from 'next-intl';
 import { FileUploader } from '../FileUploader';
 import { ProcessingProgress, ProcessingStatus } from '../ProcessingProgress';
@@ -78,6 +78,12 @@ function MetadataField({
 export interface EditMetadataToolProps {
   /** Custom class name */
   className?: string;
+  /** Optional initial file to use (skips upload step when prefilled from Studio) */
+  initialFile?: File;
+  /** Hide the FileUploader UI when prefilled */
+  hideUploader?: boolean;
+  /** Callback fired with the resulting blob and original file when save succeeds */
+  onComplete?: (blob: Blob, originalFile: File) => void;
 }
 
 /**
@@ -87,12 +93,12 @@ export interface EditMetadataToolProps {
  * Provides the UI for editing PDF document metadata including
  * title, author, subject, and keywords.
  */
-export function EditMetadataTool({ className = '' }: EditMetadataToolProps) {
+export function EditMetadataTool({ className = '', initialFile, hideUploader, onComplete }: EditMetadataToolProps) {
   const t = useTranslations('common');
   const tTools = useTranslations('tools');
-  
+
   // State
-  const [file, setFile] = useState<File | null>(null);
+  const [file, setFile] = useState<File | null>(initialFile ?? null);
   const [status, setStatus] = useState<ProcessingStatus>('idle');
   const [progress, setProgress] = useState(0);
   const [progressMessage, setProgressMessage] = useState('');
@@ -113,6 +119,13 @@ export function EditMetadataTool({ className = '' }: EditMetadataToolProps) {
   
   // Ref for cancellation
   const cancelledRef = useRef(false);
+
+  useEffect(() => {
+    if (initialFile) {
+      setFile(initialFile);
+      void extractMetadata(initialFile);
+    }
+  }, [initialFile]); // eslint-disable-line react-hooks/exhaustive-deps
 
   /**
    * Extract current metadata from PDF
@@ -275,9 +288,13 @@ export function EditMetadataTool({ className = '' }: EditMetadataToolProps) {
       }
 
       if (result.success && result.result) {
-        setResultBlob(result.result as Blob);
+        const blob = result.result as Blob;
+        setResultBlob(blob);
         setResultFilename(result.filename || 'edited.pdf');
         setStatus('complete');
+        if (onComplete) {
+          onComplete(blob, file);
+        }
       } else {
         setError(result.error?.message || 'Failed to edit metadata.');
         setStatus('error');
@@ -289,7 +306,7 @@ export function EditMetadataTool({ className = '' }: EditMetadataToolProps) {
         setStatus('error');
       }
     }
-  }, [file, metadata, handleProgress]);
+  }, [file, metadata, handleProgress, onComplete]);
 
   /**
    * Check if metadata has changed
@@ -317,7 +334,7 @@ export function EditMetadataTool({ className = '' }: EditMetadataToolProps) {
   return (
     <div className={`space-y-6 ${className}`.trim()}>
       {/* File Upload Area */}
-      {!file && (
+      {!file && !hideUploader && (
         <FileUploader
           accept={['application/pdf', '.pdf']}
           multiple={false}

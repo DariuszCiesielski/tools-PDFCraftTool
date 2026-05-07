@@ -8,6 +8,16 @@ export type StudioToolId =
   | 'encrypt'
   | 'rotate'
   | 'page-numbers'
+  | 'ocr'
+  | 'pdf-to-docx'
+  | 'pdf-to-excel'
+  | 'pdf-to-pptx'
+  | 'word-to-pdf'
+  | 'excel-to-pdf'
+  | 'image-to-pdf'
+  | 'edit-metadata'
+  | 'extract-images'
+  | 'sign'
   | null;
 
 export interface StudioFile {

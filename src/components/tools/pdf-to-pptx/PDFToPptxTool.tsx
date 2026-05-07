@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useCallback, useRef } from 'react';
+import React, { useState, useCallback, useRef, useEffect } from 'react';
 import { useTranslations } from 'next-intl';
 import { Presentation, Trash2, RefreshCw, CheckCircle2, AlertCircle } from 'lucide-react';
 import { FileUploader } from '../FileUploader';
@@ -21,6 +21,12 @@ function generateId(): string {
 export interface PDFToPptxToolProps {
     /** Custom class name */
     className?: string;
+    /** Optional initial file to use (skips upload step when prefilled from Studio) */
+    initialFile?: File;
+    /** Hide the FileUploader UI when prefilled */
+    hideUploader?: boolean;
+    /** Callback fired with the resulting blob and original file when conversion succeeds */
+    onComplete?: (blob: Blob, originalFile: File) => void;
 }
 
 /**
@@ -28,12 +34,22 @@ export interface PDFToPptxToolProps {
  * 
  * Converts PDF files to PowerPoint presentations (PPTX).
  */
-export function PDFToPptxTool({ className = '' }: PDFToPptxToolProps) {
+export function PDFToPptxTool({ className = '', initialFile, hideUploader, onComplete }: PDFToPptxToolProps) {
     const t = useTranslations('common');
     const tTools = useTranslations('tools');
 
     // State
-    const [file, setFile] = useState<UploadedFile | null>(null);
+    const [file, setFile] = useState<UploadedFile | null>(
+        initialFile
+            ? { id: generateId(), file: initialFile, status: 'pending' as const }
+            : null,
+    );
+
+    useEffect(() => {
+        if (initialFile) {
+            setFile({ id: generateId(), file: initialFile, status: 'pending' as const });
+        }
+    }, [initialFile]);
     const [status, setStatus] = useState<ProcessingStatus>('idle');
     const [progress, setProgress] = useState(0);
     const [progressMessage, setProgressMessage] = useState('');
@@ -117,6 +133,9 @@ export function PDFToPptxTool({ className = '' }: PDFToPptxToolProps) {
             if (output.success && output.result) {
                 setResult(output.result);
                 setStatus('complete');
+                if (onComplete && !Array.isArray(output.result)) {
+                    onComplete(output.result, file.file);
+                }
             } else {
                 setError(output.error?.message || t('errors.conversionFailed') || 'Failed to convert PDF to PowerPoint.');
                 setStatus('error');
@@ -127,7 +146,7 @@ export function PDFToPptxTool({ className = '' }: PDFToPptxToolProps) {
                 setStatus('error');
             }
         }
-    }, [file, dpi, t]);
+    }, [file, dpi, t, onComplete]);
 
     /**
      * Handle cancel operation
@@ -153,16 +172,18 @@ export function PDFToPptxTool({ className = '' }: PDFToPptxToolProps) {
     return (
         <div className={`space-y-8 ${className}`.trim()}>
             {/* File Upload Area */}
-            <FileUploader
-                accept={['application/pdf', '.pdf']}
-                multiple={false}
-                maxFiles={1}
-                onFilesSelected={handleFilesSelected}
-                onError={handleUploadError}
-                disabled={isProcessing}
-                label={tTools('pdfToPptx.uploadLabel') || 'Upload PDF'}
-                description={tTools('pdfToPptx.uploadDescription') || 'Drag and drop a PDF file here, or click to browse.'}
-            />
+            {!hideUploader && (
+                <FileUploader
+                    accept={['application/pdf', '.pdf']}
+                    multiple={false}
+                    maxFiles={1}
+                    onFilesSelected={handleFilesSelected}
+                    onError={handleUploadError}
+                    disabled={isProcessing}
+                    label={tTools('pdfToPptx.uploadLabel') || 'Upload PDF'}
+                    description={tTools('pdfToPptx.uploadDescription') || 'Drag and drop a PDF file here, or click to browse.'}
+                />
+            )}
 
             {/* Error Message */}
             {error && (

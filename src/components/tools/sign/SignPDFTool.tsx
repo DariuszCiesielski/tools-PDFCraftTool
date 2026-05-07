@@ -9,6 +9,12 @@ import { PDFDocument } from 'pdf-lib';
 
 export interface SignPDFToolProps {
   className?: string;
+  /** Optional initial file to use (skips upload step when prefilled from Studio) */
+  initialFile?: File;
+  /** Hide the FileUploader UI when prefilled */
+  hideUploader?: boolean;
+  /** Callback fired with the resulting blob and original file when save succeeds */
+  onComplete?: (blob: Blob, originalFile: File) => void;
 }
 
 interface SignState {
@@ -22,15 +28,22 @@ interface SignState {
  * Uses PDF.js viewer with native signature editor for comprehensive signing support.
  * Supports: draw (handwritten), type (text), and image signatures.
  */
-export function SignPDFTool({ className = '' }: SignPDFToolProps) {
+export function SignPDFTool({ className = '', initialFile, hideUploader, onComplete }: SignPDFToolProps) {
   const t = useTranslations('common');
   const tTools = useTranslations('tools');
 
-  const [signState, setSignState] = useState<SignState>({
-    file: null,
-    blobUrl: null,
-    viewerReady: false,
-  });
+  const [signState, setSignState] = useState<SignState>(() =>
+    initialFile
+      ? { file: initialFile, blobUrl: URL.createObjectURL(initialFile), viewerReady: false }
+      : { file: null, blobUrl: null, viewerReady: false },
+  );
+
+  useEffect(() => {
+    if (initialFile && !signState.file) {
+      const blobUrl = URL.createObjectURL(initialFile);
+      setSignState({ file: initialFile, blobUrl, viewerReady: false });
+    }
+  }, [initialFile]); // eslint-disable-line react-hooks/exhaustive-deps
   const [error, setError] = useState<string | null>(null);
   const [isProcessing, setIsProcessing] = useState(false);
   const [flattenSignature, setFlattenSignature] = useState(true);
@@ -172,15 +185,19 @@ export function SignPDFTool({ className = '' }: SignPDFToolProps) {
         const flattenedPdfBytes = await pdfDoc.save();
         const blob = new Blob([new Uint8Array(flattenedPdfBytes).buffer as ArrayBuffer], { type: 'application/pdf' });
 
-        // Download
-        const url = URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = `signed_${signState.file?.name || 'document.pdf'}`;
-        document.body.appendChild(a);
-        a.click();
-        document.body.removeChild(a);
-        URL.revokeObjectURL(url);
+        if (onComplete && signState.file) {
+          onComplete(blob, signState.file);
+        } else {
+          // Standalone mode: download directly
+          const url = URL.createObjectURL(blob);
+          const a = document.createElement('a');
+          a.href = url;
+          a.download = `signed_${signState.file?.name || 'document.pdf'}`;
+          document.body.appendChild(a);
+          a.click();
+          document.body.removeChild(a);
+          URL.revokeObjectURL(url);
+        }
       } else {
         // Use PDF.js native download
         app.eventBus?.dispatch('download', { source: app });
@@ -192,7 +209,7 @@ export function SignPDFTool({ className = '' }: SignPDFToolProps) {
       setError('Failed to save signed PDF. Please try again.');
       setIsProcessing(false);
     }
-  }, [signState.viewerReady, signState.file, flattenSignature]);
+  }, [signState.viewerReady, signState.file, flattenSignature, onComplete]);
 
   /**
    * Clear and start over
@@ -215,8 +232,8 @@ export function SignPDFTool({ className = '' }: SignPDFToolProps) {
 
   return (
     <div className={`space-y-6 ${className}`.trim()}>
-      {/* File Upload Area - Only show when no file */}
-      {!signState.file && (
+      {/* File Upload Area - Only show when no file and uploader not hidden */}
+      {!signState.file && !hideUploader && (
         <FileUploader
           accept={['application/pdf', '.pdf']}
           multiple={false}

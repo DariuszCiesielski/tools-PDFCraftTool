@@ -2328,7 +2328,8 @@
         "pages": "Strony",
         "enhance": "Wzbogacenie",
         "compress": "Kompresja",
-        "security": "Bezpieczeństwo"
+        "security": "Bezpieczeństwo",
+        "convert": "Konwersja"
       },
       "split": {
         "name": "Podziel PDF",
@@ -2364,6 +2365,56 @@
         "name": "Zaszyfruj PDF",
         "description": "Zabezpiecz hasłem",
         "longDescription": "Dodaj hasło i ustaw uprawnienia (drukowanie, kopiowanie, edycja) dla pliku PDF."
+      },
+      "ocr": {
+        "name": "OCR (rozpoznawanie tekstu)",
+        "description": "Wyciągnij tekst ze skanowanego PDF",
+        "longDescription": "Optical Character Recognition — przekształć obrazy w PDF na przeszukiwalny tekst. Obsługa wielu języków."
+      },
+      "pdf-to-docx": {
+        "name": "PDF → Word",
+        "description": "Konwertuj PDF na edytowalny dokument Word",
+        "longDescription": "Wyeksportuj tekst i layout PDF do pliku DOCX, który możesz edytować w Microsoft Word lub LibreOffice."
+      },
+      "pdf-to-excel": {
+        "name": "PDF → Excel",
+        "description": "Konwertuj tabele z PDF do arkusza Excel",
+        "longDescription": "Wyodrębnij tabele z PDF i zapisz jako plik XLSX gotowy do dalszej obróbki w Excel."
+      },
+      "pdf-to-pptx": {
+        "name": "PDF → PowerPoint",
+        "description": "Konwertuj PDF na prezentację PowerPoint",
+        "longDescription": "Każda strona PDF staje się osobnym slajdem. Dobre do prezentacji wykładowych z PDF-ów."
+      },
+      "word-to-pdf": {
+        "name": "Word → PDF",
+        "description": "Konwertuj dokument Word na PDF",
+        "longDescription": "Zapisz plik DOC/DOCX jako PDF zachowując pełen formatowanie i czcionki."
+      },
+      "excel-to-pdf": {
+        "name": "Excel → PDF",
+        "description": "Konwertuj arkusz Excel na PDF",
+        "longDescription": "Zapisz plik XLSX/XLS jako PDF z zachowaniem layoutu i wzorców."
+      },
+      "image-to-pdf": {
+        "name": "Obraz → PDF",
+        "description": "Połącz obrazy w jeden plik PDF",
+        "longDescription": "Wrzuć JPG, PNG lub inne obrazy i zamień je w pojedynczy plik PDF wielostronicowy."
+      },
+      "edit-metadata": {
+        "name": "Edytuj metadane",
+        "description": "Zmień tytuł, autora, słowa kluczowe",
+        "longDescription": "Edytuj informacje meta dokumentu: tytuł, autor, temat, słowa kluczowe, twórca i producent."
+      },
+      "extract-images": {
+        "name": "Wyodrębnij obrazy",
+        "description": "Pobierz wszystkie obrazy z PDF",
+        "longDescription": "Wyodrębnia wszystkie obrazy zawarte w PDF i pozwala pobrać je pojedynczo lub jako ZIP."
+      },
+      "sign": {
+        "name": "Podpisz PDF",
+        "description": "Dodaj odręczny podpis lub stempel",
+        "longDescription": "Narysuj podpis, wpisz tekst lub wgraj obraz podpisu. Umieść go na dowolnej stronie PDF."
       }
     },
     "a11y": {

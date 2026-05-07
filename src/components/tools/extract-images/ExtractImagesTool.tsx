@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useCallback, useRef, useMemo } from 'react';
+import React, { useState, useCallback, useRef, useMemo, useEffect } from 'react';
 import { useTranslations } from 'next-intl';
 import { FileUploader } from '../FileUploader';
 import { ProcessingProgress, ProcessingStatus } from '../ProcessingProgress';
@@ -25,6 +25,10 @@ interface UploadedFile {
 export interface ExtractImagesToolProps {
     /** Custom class name */
     className?: string;
+    /** Optional initial file to use (skips upload step when prefilled from Studio) */
+    initialFile?: File;
+    /** Hide the FileUploader UI when prefilled */
+    hideUploader?: boolean;
 }
 
 /**
@@ -33,12 +37,20 @@ export interface ExtractImagesToolProps {
  * 
  * Provides the UI for extracting images from PDF files.
  */
-export function ExtractImagesTool({ className = '' }: ExtractImagesToolProps) {
+export function ExtractImagesTool({ className = '', initialFile, hideUploader }: ExtractImagesToolProps) {
     const t = useTranslations('common');
     const tTools = useTranslations('tools');
 
     // State
-    const [files, setFiles] = useState<UploadedFile[]>([]);
+    const [files, setFiles] = useState<UploadedFile[]>(
+        initialFile ? [{ id: generateId(), file: initialFile }] : [],
+    );
+
+    useEffect(() => {
+        if (initialFile) {
+            setFiles([{ id: generateId(), file: initialFile }]);
+        }
+    }, [initialFile]);
     const [status, setStatus] = useState<ProcessingStatus>('idle');
     const [progress, setProgress] = useState(0);
     const [progressMessage, setProgressMessage] = useState('');
@@ -264,16 +276,18 @@ export function ExtractImagesTool({ className = '' }: ExtractImagesToolProps) {
     return (
         <div className={`space-y-6 ${className}`.trim()}>
             {/* File Upload Area */}
-            <FileUploader
-                accept={['application/pdf', '.pdf']}
-                multiple
-                maxFiles={20}
-                onFilesSelected={handleFilesSelected}
-                onError={handleUploadError}
-                disabled={isProcessing}
-                label={tTools('extractImages.uploadLabel') || 'Upload PDF Files'}
-                description={tTools('extractImages.uploadDescription') || 'Select PDF files to extract images from.'}
-            />
+            {!hideUploader && (
+                <FileUploader
+                    accept={['application/pdf', '.pdf']}
+                    multiple
+                    maxFiles={20}
+                    onFilesSelected={handleFilesSelected}
+                    onError={handleUploadError}
+                    disabled={isProcessing}
+                    label={tTools('extractImages.uploadLabel') || 'Upload PDF Files'}
+                    description={tTools('extractImages.uploadDescription') || 'Select PDF files to extract images from.'}
+                />
+            )}
 
             {/* Error Message */}
             {error && (
