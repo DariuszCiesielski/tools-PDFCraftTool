@@ -377,7 +377,7 @@ function renderTool({ toolId, initialFile, onComplete }: RenderToolProps) {
       return <ImageToPDFTool />;
     // Multi-file in/out, own FileUploader
     case 'split':
-      return <SplitPDFTool />;
+      return <SplitPDFTool initialFile={initialFile} hideUploader={!!initialFile} />;
     case 'merge':
       return <MergePDFTool />;
     // Wave-2: PDF→PDF page operations, prefilled + onComplete

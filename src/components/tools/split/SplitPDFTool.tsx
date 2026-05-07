@@ -24,6 +24,10 @@ import type { SplitOptions, PageRange, ProcessOutput } from '@/types/pdf';
 export interface SplitPDFToolProps {
   /** Custom class name */
   className?: string;
+  /** Optional initial file (skips upload step when prefilled from Studio) */
+  initialFile?: File;
+  /** Hide the FileUploader UI when prefilled */
+  hideUploader?: boolean;
 }
 
 type SplitMode = 'ranges' | 'even-odd' | 'every-page' | 'visual' | 'bookmarks' | 'n-times';
@@ -39,12 +43,12 @@ interface PagePreview {
  * 
  * Provides the UI for splitting PDF files with page range input and preview.
  */
-export function SplitPDFTool({ className = '' }: SplitPDFToolProps) {
+export function SplitPDFTool({ className = '', initialFile, hideUploader }: SplitPDFToolProps) {
   const t = useTranslations('common');
   const tTools = useTranslations('tools');
 
   // State
-  const [file, setFile] = useState<File | null>(null);
+  const [file, setFile] = useState<File | null>(initialFile ?? null);
   const [totalPages, setTotalPages] = useState<number>(0);
   const [status, setStatus] = useState<ProcessingStatus>('idle');
   const [progress, setProgress] = useState(0);
@@ -70,6 +74,13 @@ export function SplitPDFTool({ className = '' }: SplitPDFToolProps) {
   // Ref for cancellation
   const cancelledRef = useRef(false);
   const pdfDocRef = useRef<any>(null);
+
+  useEffect(() => {
+    if (initialFile) {
+      setFile(initialFile);
+      void loadPdfPreviews(initialFile);
+    }
+  }, [initialFile]); // eslint-disable-line react-hooks/exhaustive-deps
 
   /**
    * Load PDF and generate page previews
@@ -424,7 +435,7 @@ export function SplitPDFTool({ className = '' }: SplitPDFToolProps) {
   return (
     <div className={`space-y-6 ${className}`.trim()}>
       {/* File Upload Area */}
-      {!file && (
+      {!file && !hideUploader && (
         <FileUploader
           accept={['application/pdf', '.pdf']}
           multiple={false}
