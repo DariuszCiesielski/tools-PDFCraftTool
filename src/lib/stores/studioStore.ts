@@ -153,7 +153,7 @@ interface StudioState {
   removeFile: (id: string) => void;
   selectFile: (id: string) => void;
   setPageCount: (id: string, pageCount: number) => void;
-  setFileData: (id: string, data: Uint8Array) => void;
+  setFileData: (id: string, data: Uint8Array, opts?: { initialLoad?: boolean }) => void;
   selectTool: (tool: StudioToolId) => void;
   setCurrentPage: (page: number) => void;
   setZoom: (zoom: number) => void;
@@ -198,6 +198,23 @@ export const useStudioStore = create<StudioState>((set, get) => ({
     for (const sf of studioFiles) {
       sessionStore().openTab(sf.id, sf.name, sf.pageCount);
     }
+    // Eager load + persist KAŻDEGO pliku (nie tylko aktywnego). PdfViewer renderuje
+    // tylko aktywny tab — bez tego eager loada drugi tab nigdy nie trafiłby do IDB.
+    for (const sf of studioFiles) {
+      void (async () => {
+        try {
+          const buffer = await sf.file.arrayBuffer();
+          const data = new Uint8Array(buffer);
+          get().setFileData(sf.id, data, { initialLoad: true });
+          const { loadPdfLib } = await import('@/lib/pdf/loader');
+          const pdfLib = await loadPdfLib();
+          const doc = await pdfLib.PDFDocument.load(data.slice());
+          get().setPageCount(sf.id, doc.getPageCount());
+        } catch (err) {
+          console.warn('[studioStore] addFiles eager load error', err);
+        }
+      })();
+    }
   },
 
   removeFile: (id) => {
@@ -237,14 +254,15 @@ export const useStudioStore = create<StudioState>((set, get) => ({
     }
   },
 
-  setFileData: (id, data) => {
+  setFileData: (id, data, opts) => {
+    const isInitial = opts?.initialLoad === true;
     set((state) => ({
       files: state.files.map((f) =>
         f.id === id
           ? {
               ...f,
               data,
-              version: f.version + 1,
+              version: isInitial ? f.version : f.version + 1,
               size: data.byteLength,
             }
           : f,
@@ -254,8 +272,8 @@ export const useStudioStore = create<StudioState>((set, get) => ({
     if (file) {
       sessionStore().updateTabMeta(id, {
         version: file.version,
-        isDirty: true,
-        lastEditedAt: Date.now(),
+        isDirty: !isInitial,
+        lastEditedAt: isInitial ? null : Date.now(),
       });
       // Faza 2: auto-save do IndexedDB (fire-and-forget)
       void persistDocument({
@@ -310,7 +328,7 @@ export const useStudioStore = create<StudioState>((set, get) => ({
     if (file.data) return file.data;
     const buffer = await file.file.arrayBuffer();
     const data = new Uint8Array(buffer);
-    get().setFileData(id, data);
+    get().setFileData(id, data, { initialLoad: true });
     return data;
   },
 

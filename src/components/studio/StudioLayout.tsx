@@ -119,9 +119,8 @@ export function StudioLayout({ locale }: StudioLayoutProps) {
       addFiles([file]);
       const newFile = useStudioStore.getState().files.find((f) => !beforeIds.has(f.id));
       if (newFile) {
-        // setFileData zaktualizuje tab.version → trafi z powrotem do persistDocument,
-        // ale to OK (idempotentne). Plus setPageCount.
-        setFileData(newFile.id, doc.currentData);
+        // initialLoad: true — restore NIE oznacza dirty (plik wraca w stanie z poprzedniej sesji)
+        setFileData(newFile.id, doc.currentData, { initialLoad: true });
         setPageCount(newFile.id, doc.pageCount);
       }
     }

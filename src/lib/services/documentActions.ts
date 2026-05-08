@@ -344,8 +344,9 @@ export const documentActions = {
     if (!newFile) {
       throw new Error('Failed to add file to studio store');
     }
-    // Ustaw data od razu (bridging do sessionStore.updateTabMeta)
-    useStudioStore.getState().setFileData(newFile.id, data);
+    // Świeżo utworzony przez combine — nie jest "modified" w mental model usera.
+    // initialLoad: true neutralizuje race z eager loadem z addFiles (oba używają tego samego flagu).
+    useStudioStore.getState().setFileData(newFile.id, data, { initialLoad: true });
     useStudioStore.getState().setPageCount(newFile.id, pageCount);
     // Auto-switch
     useStudioStore.getState().selectFile(newFile.id);
