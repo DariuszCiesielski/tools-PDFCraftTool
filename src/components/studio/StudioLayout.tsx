@@ -28,6 +28,8 @@ import { RestoreSessionPrompt } from './RestoreSessionPrompt';
 import { SettingsModal } from './SettingsModal';
 import { useTabStateSync } from '@/lib/hooks/useTabStateSync';
 import { useStudioKeyboard } from '@/lib/hooks/useStudioKeyboard';
+import { useAuthOptional } from '@/lib/contexts/AuthContext';
+import { getSupabaseClient } from '@/lib/supabase/client';
 
 interface StudioLayoutProps {
   locale: Locale;
@@ -108,6 +110,7 @@ export function StudioLayout({ locale }: StudioLayoutProps) {
     };
   }, []);
 
+  const auth = useAuthOptional();
   const handleRestoreSession = useCallback(async () => {
     // restoreFromPersisted używa istniejących ID z IDB (NIE generuje nowych).
     // Bez tego addFiles tworzyłby nowe ID i zostawiał orphan docs w IDB
@@ -115,7 +118,50 @@ export function StudioLayout({ locale }: StudioLayoutProps) {
     useStudioStore.getState().restoreFromPersisted(persistedDocs);
     setPersistedDocs([]);
     setBootState('ready');
-  }, [persistedDocs]);
+
+    // P2.1: viewState restore z chmury (current_page/zoom/scroll_top + is_active_tab).
+    // Tylko gdy user authenticated I sync_metadata_enabled. Match po file_name —
+    // wystarczy bo recent_documents ma UNIQUE(user_id, file_name).
+    const syncEnabled = useStudioSessionStore.getState().syncMetadataEnabled;
+    const user = auth?.user ?? null;
+    if (auth?.status !== 'authenticated' || !user || !syncEnabled) return;
+    try {
+      const supabase = getSupabaseClient();
+      const { data, error } = await supabase
+        .from('recent_documents')
+        .select('file_name, current_page, zoom_level, scroll_top, is_active_tab')
+        .eq('user_id', user.id);
+      if (error || !data) return;
+      const session = useStudioSessionStore.getState();
+      const tabs = session.tabs;
+      let activeTabId: string | null = null;
+      const updates = new Map<
+        string,
+        { currentPage: number; zoomLevel: number; scrollTop: number }
+      >();
+      for (const row of data) {
+        const tab = tabs.find((t) => t.name === row.file_name);
+        if (!tab) continue;
+        updates.set(tab.id, {
+          currentPage: row.current_page ?? 1,
+          zoomLevel: row.zoom_level ?? 1.0,
+          scrollTop: row.scroll_top ?? 0,
+        });
+        if (row.is_active_tab) activeTabId = tab.id;
+      }
+      if (updates.size > 0) {
+        useStudioSessionStore.setState((state) => ({
+          tabs: state.tabs.map((t) => {
+            const vs = updates.get(t.id);
+            return vs ? { ...t, viewState: vs } : t;
+          }),
+        }));
+      }
+      if (activeTabId) session.selectTab(activeTabId);
+    } catch (err) {
+      console.warn('[StudioLayout] cloud viewState restore error', err);
+    }
+  }, [persistedDocs, auth]);
 
   const handleSkipRestore = useCallback(async () => {
     try {

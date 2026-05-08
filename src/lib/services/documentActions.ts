@@ -207,6 +207,8 @@ export const documentActions = {
       isDirty: true,
       lastEditedAt: updated.lastEditedAt,
     });
+    // P3.2: sync studioStore.files (data, pageCount) — PdfViewer renderuje z files.data
+    await syncStudioFromRepo(tabId);
   },
 
   async reorderPages(
@@ -260,6 +262,8 @@ export const documentActions = {
       isDirty: true,
       lastEditedAt: updated.lastEditedAt,
     });
+    // P3.2: sync studioStore.files
+    await syncStudioFromRepo(tabId);
   },
 
   async replaceWithBlob(

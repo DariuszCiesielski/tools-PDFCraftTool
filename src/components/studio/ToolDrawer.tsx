@@ -469,17 +469,40 @@ export function ToolDrawer({ toolId }: { toolId: SupportedToolId }) {
   const t = useTranslations('studio');
   const selectTool = useStudioStore((state) => state.selectTool);
   const currentFile = useStudioStore(selectCurrentFile);
-  const replaceFileData = useStudioStore((state) => state.replaceFileData);
 
   const initialFile = currentFile?.file;
   const fileId = currentFile?.id;
 
   const handleComplete = fileId && PDF_OUTPUT_TOOLS.has(toolId)
-    ? (blob: Blob, original: File) => {
+    ? async (blob: Blob, original: File) => {
         const newName = renamedFilename(toolId, original.name);
-        void replaceFileData(fileId, blob, newName);
-        // Stay in drawer so user sees the success state inside ToolComponent;
-        // file in studioStore (and viewer) is updated automatically via version bump.
+        // P3.1: documentActions.replaceWithBlob zamiast studioStore.replaceFileData —
+        // pushuje do undoStack (replace-blob op) + saveBlob snapshot (Faza 1.5).
+        // Po fakcie sync studioStore.files żeby PdfViewer zobaczył nowy buffer.
+        const { documentActions } = await import('@/lib/services/documentActions');
+        await documentActions.replaceWithBlob(fileId, blob, newName);
+        // Sync studioStore.files (data, pageCount) z repo dla rendering
+        const { getDocumentRepository } = await import(
+          '@/lib/persistence/pdfDocumentRepository'
+        );
+        const doc = await getDocumentRepository().load(fileId);
+        if (doc) {
+          useStudioStore.setState((state) => ({
+            files: state.files.map((f) =>
+              f.id === fileId
+                ? {
+                    ...f,
+                    file: new File([blob], newName, { type: 'application/pdf' }),
+                    name: newName,
+                    data: doc.currentData,
+                    pageCount: doc.pageCount,
+                    version: doc.version,
+                    size: doc.currentData.byteLength,
+                  }
+                : f,
+            ),
+          }));
+        }
       }
     : undefined;
 

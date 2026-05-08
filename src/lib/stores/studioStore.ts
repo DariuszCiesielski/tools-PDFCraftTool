@@ -165,7 +165,6 @@ interface StudioState {
   removePage: (fileId: string, pageIndex: number) => Promise<void>;
   reorderPages: (fileId: string, fromIndex: number, toIndex: number) => Promise<void>;
   getCurrentBuffer: (id: string) => Promise<Uint8Array>;
-  replaceFileData: (fileId: string, blob: Blob, newName?: string) => Promise<void>;
   restoreFromPersisted: (docs: PdfDocument[]) => void;
 }
 
@@ -327,7 +326,11 @@ export const useStudioStore = create<StudioState>((set, get) => ({
     // Restore z IDB: użyj istniejących ID + data + pageCount.
     // NIE używamy addFiles (które generuje nowe ID → orphan docs w IDB).
     // NIE wywołujemy persistDocument (są już w IDB).
-    const studioFiles: StudioFile[] = docs.map((doc) => {
+    // P2.2: sort po createdAt aby kolejność tabs była stabilna (idb-keyval listAll
+    // nie gwarantuje insertion order — bez sort test2.pdf pojawia się czasem
+    // przed test.pdf po reload).
+    const sortedDocs = [...docs].sort((a, b) => a.createdAt - b.createdAt);
+    const studioFiles: StudioFile[] = sortedDocs.map((doc) => {
       const blob = new Blob([doc.currentData.slice() as BlobPart], {
         type: 'application/pdf',
       });
@@ -362,94 +365,26 @@ export const useStudioStore = create<StudioState>((set, get) => ({
   },
 
   removePage: async (fileId, pageIndex) => {
-    const { loadPdfLib } = await import('@/lib/pdf/loader');
-    const buffer = await get().getCurrentBuffer(fileId);
-    const pdfLib = await loadPdfLib();
-    const doc = await pdfLib.PDFDocument.load(buffer.slice());
-    if (doc.getPageCount() <= 1) return;
-    doc.removePage(pageIndex);
-    const newData = await doc.save();
-    get().setFileData(fileId, newData);
+    // P3.2: delegate do documentActions.removePage (single source of truth dla
+    // pdf-lib operacji + persistence + undoStack push + sync studioStore.files).
+    // getCurrentBuffer wciąż potrzebne aby zapewnić że file.data jest dostępne
+    // — documentActions czyta z repo, ale eager load z addFiles może być async.
+    await get().getCurrentBuffer(fileId);
+    const { documentActions } = await import('@/lib/services/documentActions');
+    await documentActions.removePage(fileId, pageIndex);
     set((state) => ({
-      files: state.files.map((f) =>
-        f.id === fileId ? { ...f, pageCount: doc.getPageCount() } : f,
+      currentPage: Math.min(
+        state.currentPage,
+        state.files.find((f) => f.id === fileId)?.pageCount ?? state.currentPage,
       ),
-      currentPage: Math.min(state.currentPage, doc.getPageCount()),
-    }));
-    // Faza 1.5: push op do undoStack w repo (po persistDocument z setFileData)
-    try {
-      const repo = getDocumentRepository();
-      const persisted = await repo.load(fileId);
-      if (persisted) {
-        await repo.save({
-          ...persisted,
-          undoStack: [
-            ...persisted.undoStack,
-            { type: 'remove-page', pageIndex } as const,
-          ].slice(-20),
-          redoStack: [],
-        });
-      }
-    } catch (err) {
-      console.warn('[studioStore] removePage push undo op error', err);
-    }
-  },
-
-  replaceFileData: async (fileId, blob, newName) => {
-    const buffer = await blob.arrayBuffer();
-    const data = new Uint8Array(buffer);
-    set((state) => ({
-      files: state.files.map((f) => {
-        if (f.id !== fileId) return f;
-        const finalName = newName ?? f.name;
-        return {
-          ...f,
-          file: new File([blob], finalName, { type: 'application/pdf' }),
-          name: finalName,
-          data,
-          version: f.version + 1,
-          size: blob.size,
-          pageCount: null,
-        };
-      }),
     }));
   },
 
   reorderPages: async (fileId, fromIndex, toIndex) => {
-    const { loadPdfLib } = await import('@/lib/pdf/loader');
-    const buffer = await get().getCurrentBuffer(fileId);
-    const pdfLib = await loadPdfLib();
-    const sourceDoc = await pdfLib.PDFDocument.load(buffer.slice());
-    const totalPages = sourceDoc.getPageCount();
-    if (fromIndex < 0 || fromIndex >= totalPages || toIndex < 0 || toIndex >= totalPages) return;
-
-    const previousOrder = Array.from({ length: totalPages }, (_, i) => i);
-    const newOrder = [...previousOrder];
-    const [moved] = newOrder.splice(fromIndex, 1);
-    newOrder.splice(toIndex, 0, moved);
-
-    const newDoc = await pdfLib.PDFDocument.create();
-    const copiedPages = await newDoc.copyPages(sourceDoc, newOrder);
-    copiedPages.forEach((page) => newDoc.addPage(page));
-    const newData = await newDoc.save();
-    get().setFileData(fileId, newData);
-    // Faza 1.5: push reorder op z newOrder dla replay forward
-    try {
-      const repo = getDocumentRepository();
-      const persisted = await repo.load(fileId);
-      if (persisted) {
-        await repo.save({
-          ...persisted,
-          undoStack: [
-            ...persisted.undoStack,
-            { type: 'reorder-pages', previousOrder, newOrder } as const,
-          ].slice(-20),
-          redoStack: [],
-        });
-      }
-    } catch (err) {
-      console.warn('[studioStore] reorderPages push undo op error', err);
-    }
+    // P3.2: delegate do documentActions.reorderPages
+    await get().getCurrentBuffer(fileId);
+    const { documentActions } = await import('@/lib/services/documentActions');
+    await documentActions.reorderPages(fileId, fromIndex, toIndex);
   },
 }));
 
