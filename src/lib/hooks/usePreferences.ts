@@ -4,6 +4,7 @@ import { useCallback, useEffect, useRef } from 'react';
 import { useAuthOptional } from '@/lib/contexts/AuthContext';
 import { getSupabaseClient } from '@/lib/supabase/client';
 import { useStudioStore } from '@/lib/stores/studioStore';
+import { useStudioSessionStore } from '@/lib/stores/studioSessionStore';
 
 export interface UserPreferences {
   theme: 'light' | 'dark' | 'system';
@@ -12,6 +13,7 @@ export interface UserPreferences {
   right_panel_width: number;
   show_left_sidebar: boolean;
   show_right_panel: boolean;
+  sync_metadata_enabled: boolean;
 }
 
 const DEBOUNCE_MS = 400;
@@ -56,7 +58,7 @@ async function fetchFromCloud(userId: string): Promise<UserPreferences | null> {
   const { data, error } = await supabase
     .from('user_preferences')
     .select(
-      'theme, locale, left_sidebar_width, right_panel_width, show_left_sidebar, show_right_panel',
+      'theme, locale, left_sidebar_width, right_panel_width, show_left_sidebar, show_right_panel, sync_metadata_enabled',
     )
     .eq('user_id', userId)
     .maybeSingle();
@@ -129,6 +131,10 @@ export function usePreferences() {
       const store = useStudioStore.getState();
       if (store.showLeftSidebar !== cloud.show_left_sidebar) store.toggleLeftSidebar();
       if (store.showRightPanel !== cloud.show_right_panel) store.toggleRightPanel();
+      // Apply sync_metadata_enabled to sessionStore (Faza 3 cross-device sync gate)
+      useStudioSessionStore
+        .getState()
+        .setSyncMetadataEnabled(cloud.sync_metadata_enabled ?? false);
       initialLoadDoneRef.current = true;
     })();
     return () => {
@@ -176,10 +182,19 @@ export function usePreferences() {
     [scheduleWrite],
   );
 
+  const setSyncMetadataEnabled = useCallback(
+    (enabled: boolean) => {
+      useStudioSessionStore.getState().setSyncMetadataEnabled(enabled);
+      scheduleWrite({ sync_metadata_enabled: enabled });
+    },
+    [scheduleWrite],
+  );
+
   return {
     setTheme,
     setLeftSidebarWidth,
     setRightPanelWidth,
+    setSyncMetadataEnabled,
     readCurrentTheme,
   };
 }

@@ -2668,7 +2668,8 @@
         "label": "Help",
         "about": "About",
         "shortcuts": "Keyboard shortcuts",
-        "home": "Back to home"
+        "home": "Back to home",
+        "settings": "Settings…"
       },
       "processing": "Processing…"
     },
@@ -2737,6 +2738,15 @@
       "body": "Found {count} {count, plural, one {file} other {files}} from previous session. Reopen?",
       "restore": "Restore session",
       "skip": "Start fresh"
+    },
+    "settings": {
+      "title": "Settings",
+      "syncMetadata": {
+        "label": "Sync metadata across devices",
+        "description": "Your PDF files NEVER leave your device — we only sync file names, page counts, and reading position (current page, zoom, tab order). This lets you continue working on another device after signing in.",
+        "warning": "Note: file names (e.g. \"divorce-agreement.pdf\") will be stored in our cloud. If sensitive — keep this off."
+      },
+      "close": "Close"
     }
   }
 }

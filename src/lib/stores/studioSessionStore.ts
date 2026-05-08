@@ -38,6 +38,8 @@ interface StudioSessionState {
   showLeftSidebar: boolean;
   showRightPanel: boolean;
   showCombineWizard: boolean;
+  showSettingsModal: boolean;
+  syncMetadataEnabled: boolean;
   isProcessing: boolean;
   isBooting: boolean;
 
@@ -67,6 +69,9 @@ interface StudioSessionState {
   toggleRightPanel: () => void;
   openCombineWizard: () => void;
   closeCombineWizard: () => void;
+  openSettingsModal: () => void;
+  closeSettingsModal: () => void;
+  setSyncMetadataEnabled: (enabled: boolean) => void;
   setBooting: (booting: boolean) => void;
   reset: () => void;
 }
@@ -84,6 +89,8 @@ export const useStudioSessionStore = create<StudioSessionState>((set, get) => ({
   showLeftSidebar: true,
   showRightPanel: true,
   showCombineWizard: false,
+  showSettingsModal: false,
+  syncMetadataEnabled: false,
   isProcessing: false,
   isBooting: true,
 
@@ -190,6 +197,9 @@ export const useStudioSessionStore = create<StudioSessionState>((set, get) => ({
     set((state) => ({ showRightPanel: !state.showRightPanel })),
   openCombineWizard: () => set({ showCombineWizard: true }),
   closeCombineWizard: () => set({ showCombineWizard: false }),
+  openSettingsModal: () => set({ showSettingsModal: true }),
+  closeSettingsModal: () => set({ showSettingsModal: false }),
+  setSyncMetadataEnabled: (enabled) => set({ syncMetadataEnabled: enabled }),
   setBooting: (booting) => set({ isBooting: booting }),
 
   reset: () =>
@@ -198,6 +208,7 @@ export const useStudioSessionStore = create<StudioSessionState>((set, get) => ({
       activeTabId: null,
       currentTool: null,
       showCombineWizard: false,
+      showSettingsModal: false,
       isProcessing: false,
     }),
 }));

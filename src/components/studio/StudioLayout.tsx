@@ -25,6 +25,8 @@ import { StudioDropZone } from './StudioDropZone';
 import { FileTabs } from './FileTabs';
 import { CombineFilesWizard } from './CombineFilesWizard';
 import { RestoreSessionPrompt } from './RestoreSessionPrompt';
+import { SettingsModal } from './SettingsModal';
+import { useTabStateSync } from '@/lib/hooks/useTabStateSync';
 
 interface StudioLayoutProps {
   locale: Locale;
@@ -154,6 +156,8 @@ export function StudioLayout({ locale }: StudioLayoutProps) {
 
   const { addRecent } = useRecentDocuments();
   const { setLeftSidebarWidth, setRightPanelWidth } = usePreferences();
+  // Faza 3: cross-device sync metadata (gate na sync_metadata_enabled w usePreferences)
+  useTabStateSync();
 
   useEffect(() => {
     setLeftSidebarWidth(leftSidebar.width);
@@ -295,6 +299,8 @@ export function StudioLayout({ locale }: StudioLayoutProps) {
         isOpen={showCombineWizard}
         onClose={closeCombineWizard}
       />
+
+      <SettingsModal />
 
       {bootState === 'restore-prompt' && (
         <RestoreSessionPrompt

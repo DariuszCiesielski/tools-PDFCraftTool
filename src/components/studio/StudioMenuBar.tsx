@@ -6,6 +6,7 @@ import Link from 'next/link';
 import * as DropdownMenu from '@radix-ui/react-dropdown-menu';
 import { Check, ChevronRight, Loader2 } from 'lucide-react';
 import { useStudioStore, selectCurrentFile, type StudioToolId } from '@/lib/stores/studioStore';
+import { useStudioSessionStore } from '@/lib/stores/studioSessionStore';
 import { type Locale } from '@/lib/i18n/config';
 import { downloadBlob, printBlob, suggestSaveAsName } from '@/lib/studio/file-actions';
 import { useRecentDocuments } from '@/lib/hooks/useRecentDocuments';
@@ -298,6 +299,9 @@ export function StudioMenuBar({ locale, onFilesAdded }: StudioMenuBarProps) {
       <MenuRoot label={t('menubar.help.label')}>
         <MenuItem disabled>{t('menubar.help.about')}</MenuItem>
         <MenuItem disabled>{t('menubar.help.shortcuts')}</MenuItem>
+        <MenuItem onSelect={() => useStudioSessionStore.getState().openSettingsModal()}>
+          {t('menubar.help.settings')}
+        </MenuItem>
         <MenuSeparator />
         <MenuItem asChild>
           <Link href={`/${locale}`} className="block w-full">

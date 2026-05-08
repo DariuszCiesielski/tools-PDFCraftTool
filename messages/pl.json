@@ -2668,7 +2668,8 @@
         "label": "Pomoc",
         "about": "O programie",
         "shortcuts": "Skróty klawiszowe",
-        "home": "Powrót do strony głównej"
+        "home": "Powrót do strony głównej",
+        "settings": "Ustawienia…"
       },
       "processing": "Przetwarzam…"
     },
@@ -2737,6 +2738,15 @@
       "body": "Znaleziono {count} {count, plural, one {plik} other {plików}} z poprzedniej sesji. Otworzyć je ponownie?",
       "restore": "Przywróć sesję",
       "skip": "Zacznij od nowa"
+    },
+    "settings": {
+      "title": "Ustawienia",
+      "syncMetadata": {
+        "label": "Synchronizuj metadane między urządzeniami",
+        "description": "Twoje pliki PDF NIE opuszczają urządzenia — synchronizujemy tylko nazwy, liczbę stron i pozycję czytania (numer strony, zoom, kolejność zakładek). Dzięki temu możesz kontynuować pracę na innym urządzeniu po zalogowaniu.",
+        "warning": "Pamiętaj: nazwy plików (np. „umowa-rozwodowa.pdf”) będą zapisane w naszej chmurze. Jeśli to wrażliwe — pozostaw wyłączone."
+      },
+      "close": "Zamknij"
     }
   }
 }
