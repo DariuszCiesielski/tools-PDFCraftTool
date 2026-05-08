@@ -97,3 +97,27 @@ Wszystko pushed do `origin/main`.
 ---
 
 **Status:** ZAMKNIĘTE — wszystko działa, brak otwartych zadań krytycznych. Następna sesja może zacząć od czystego stanu albo od jednego z P2 items.
+
+---
+
+## UPDATE 16:50 — P2/P3 cleanup zrobione (5 z 6 items)
+
+Po krótkiej refleksji zrobiłem 5 z 6 odłożonych usprawnień jeszcze w tej sesji (commit `21cf9e1`, deploy `ax6uoe0yp`):
+
+✅ **P3.1**: ToolDrawer.handleComplete migracja `studioStore.replaceFileData` → `documentActions.replaceWithBlob` (push do undoStack + saveBlob snapshot Faza 1.5). `replaceFileData` usunięty (dead code po migracji).
+
+✅ **P2.2**: `restoreFromPersisted` sortuje docs po `createdAt` — kolejność tabs stabilna po reload.
+
+✅ **P2.4**: Vercel alias multi-agent race — feedback memory zapisana globalnie (`feedback_vercel_alias_multi_agent_race.md`). Skipowanie skryptu (overhead bez value dla single-agent).
+
+✅ **P2.1**: viewState cross-device restore — `StudioLayout.handleRestoreSession` po standardowym restore z IDB dorabia fetch `current_page`/`zoom_level`/`scroll_top`/`is_active_tab` z `recent_documents` (gdy `syncMetadataEnabled=true`). Cross-device "kontynuuj na innym urządzeniu" wraca z aktualnym stanem widoku.
+
+✅ **P3.2**: dual code path unify — `studioStore.removePage`/`reorderPages` to teraz cienkie delegaty do `documentActions.*`. `documentActions` na końcu wywołuje `syncStudioFromRepo` aby PdfViewer dostał nowy buffer. Eliminuje duplikację push do undoStack i dwa kanały operacji. Smoke: remove page → status "1 stron" ✅, Cmd+Z → "2 stron" ✅.
+
+⏳ **P2.3** (read-side UI "Continue from another device"): odłożone do osobnej sesji — wymaga design'u modal + matching strategy + edge cases (np. user uploaduje plik różny pod tą samą nazwą cross-device).
+
+**Lekcje globalne dodane do pamięci:**
+- `feedback_supabase_alter_table_notify_pgrst.md` — NOTIFY pgrst po ALTER TABLE
+- `feedback_vercel_alias_multi_agent_race.md` — last-writer-wins gotcha
+
+**Live deploy:** `ax6uoe0yp` (commit `21cf9e1`). Custom alias zaktualizowany.
