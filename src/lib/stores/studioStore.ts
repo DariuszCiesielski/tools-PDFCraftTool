@@ -1,4 +1,10 @@
 import { create } from 'zustand';
+import { useStudioSessionStore } from './studioSessionStore';
+
+// Bridge studioStore -> studioSessionStore (one-way, dopóki istnieją oba w Fazie 0).
+// Zapewnia per-tab viewState (currentPage, zoom) PRZEZ sessionStore — komponenty
+// jak PdfViewer/PagesPanel/ViewerToolbar czytają z sessionStore, nie z legacy currentPage.
+const sessionStore = () => useStudioSessionStore.getState();
 
 export type StudioToolId =
   | 'split'
@@ -116,25 +122,27 @@ export const useStudioStore = create<StudioState>((set, get) => ({
   showLeftSidebar: true,
   showRightPanel: true,
 
-  addFiles: (newFiles) =>
-    set((state) => {
-      const studioFiles: StudioFile[] = newFiles.map((file) => ({
-        id: generateId(),
-        file,
-        name: file.name,
-        size: file.size,
-        pageCount: null,
-        data: null,
-        version: 0,
-      }));
-      const updatedFiles = [...state.files, ...studioFiles];
-      return {
-        files: updatedFiles,
-        currentFileId: state.currentFileId ?? studioFiles[0]?.id ?? null,
-      };
-    }),
+  addFiles: (newFiles) => {
+    const studioFiles: StudioFile[] = newFiles.map((file) => ({
+      id: generateId(),
+      file,
+      name: file.name,
+      size: file.size,
+      pageCount: null,
+      data: null,
+      version: 0,
+    }));
+    set((state) => ({
+      files: [...state.files, ...studioFiles],
+      currentFileId: state.currentFileId ?? studioFiles[0]?.id ?? null,
+    }));
+    // Bridge → sessionStore: open tab per plik (1:1 mapping ID)
+    for (const sf of studioFiles) {
+      sessionStore().openTab(sf.id, sf.name, sf.pageCount);
+    }
+  },
 
-  removeFile: (id) =>
+  removeFile: (id) => {
     set((state) => {
       const updatedFiles = state.files.filter((f) => f.id !== id);
       const newCurrentId =
@@ -144,16 +152,23 @@ export const useStudioStore = create<StudioState>((set, get) => ({
         currentFileId: newCurrentId,
         currentPage: state.currentFileId === id ? 1 : state.currentPage,
       };
-    }),
+    });
+    sessionStore().closeTab(id);
+  },
 
-  selectFile: (id) => set({ currentFileId: id, currentPage: 1 }),
+  selectFile: (id) => {
+    set({ currentFileId: id });
+    sessionStore().selectTab(id);
+  },
 
-  setPageCount: (id, pageCount) =>
+  setPageCount: (id, pageCount) => {
     set((state) => ({
       files: state.files.map((f) => (f.id === id ? { ...f, pageCount } : f)),
-    })),
+    }));
+    sessionStore().updateTabMeta(id, { pageCount });
+  },
 
-  setFileData: (id, data) =>
+  setFileData: (id, data) => {
     set((state) => ({
       files: state.files.map((f) =>
         f.id === id
@@ -165,13 +180,32 @@ export const useStudioStore = create<StudioState>((set, get) => ({
             }
           : f,
       ),
-    })),
+    }));
+    const file = get().files.find((f) => f.id === id);
+    if (file) {
+      sessionStore().updateTabMeta(id, {
+        version: file.version,
+        isDirty: true,
+        lastEditedAt: Date.now(),
+      });
+    }
+  },
 
-  selectTool: (tool) => set({ currentTool: tool }),
+  selectTool: (tool) => {
+    set({ currentTool: tool });
+    sessionStore().selectTool(tool);
+  },
 
-  setCurrentPage: (page) => set({ currentPage: Math.max(1, page) }),
+  setCurrentPage: (page) => {
+    set({ currentPage: Math.max(1, page) });
+    sessionStore().setCurrentPage(page);
+  },
 
-  setZoom: (zoom) => set({ zoomLevel: Math.max(0.25, Math.min(4.0, zoom)) }),
+  setZoom: (zoom) => {
+    const clamped = Math.max(0.25, Math.min(4.0, zoom));
+    set({ zoomLevel: clamped });
+    sessionStore().setZoom(clamped);
+  },
 
   setProcessing: (processing) => set({ isProcessing: processing }),
 
@@ -179,7 +213,7 @@ export const useStudioStore = create<StudioState>((set, get) => ({
 
   toggleRightPanel: () => set((state) => ({ showRightPanel: !state.showRightPanel })),
 
-  reset: () =>
+  reset: () => {
     set({
       files: [],
       currentFileId: null,
@@ -187,7 +221,9 @@ export const useStudioStore = create<StudioState>((set, get) => ({
       currentPage: 1,
       zoomLevel: 1.0,
       isProcessing: false,
-    }),
+    });
+    sessionStore().reset();
+  },
 
   getCurrentBuffer: async (id) => {
     const file = get().files.find((f) => f.id === id);

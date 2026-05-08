@@ -4,6 +4,11 @@ import { useEffect, useRef, useState } from 'react';
 import { useTranslations } from 'next-intl';
 import { Loader2, AlertCircle } from 'lucide-react';
 import { useStudioStore, selectCurrentFile } from '@/lib/stores/studioStore';
+import {
+  useStudioSessionStore,
+  selectCurrentPage,
+  selectZoomLevel,
+} from '@/lib/stores/studioSessionStore';
 import { loadPdfjs } from '@/lib/pdf/loader';
 import { ViewerToolbar } from './ViewerToolbar';
 import type { PDFDocumentProxy } from 'pdfjs-dist';
@@ -14,8 +19,9 @@ export function PdfViewer() {
   const currentFileId = currentFile?.id ?? null;
   const currentFileName = currentFile?.name ?? '';
   const fileVersion = currentFile?.version ?? 0;
-  const currentPage = useStudioStore((state) => state.currentPage);
-  const zoomLevel = useStudioStore((state) => state.zoomLevel);
+  // Per-tab viewState (Faza 0): currentPage + zoom z sessionStore (active tab)
+  const currentPage = useStudioSessionStore(selectCurrentPage);
+  const zoomLevel = useStudioSessionStore(selectZoomLevel);
 
   const containerRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -113,8 +119,12 @@ export function PdfViewer() {
     const handleWheel = (event: WheelEvent) => {
       event.preventDefault();
       const delta = event.deltaY > 0 ? -0.1 : 0.1;
-      const { zoomLevel: current, setZoom } = useStudioStore.getState();
-      setZoom(current + delta);
+      const sessionState = useStudioSessionStore.getState();
+      const current =
+        sessionState.tabs.find((tab) => tab.id === sessionState.activeTabId)
+          ?.viewState.zoomLevel ?? 1.0;
+      // bridge: setZoom w studioStore propaguje do sessionStore.setZoom
+      useStudioStore.getState().setZoom(current + delta);
     };
 
     container.addEventListener('wheel', handleWheel, { passive: false });

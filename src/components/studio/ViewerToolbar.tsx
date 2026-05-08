@@ -3,14 +3,21 @@
 import { useTranslations } from 'next-intl';
 import { ChevronLeft, ChevronRight, ZoomIn, ZoomOut, Maximize2 } from 'lucide-react';
 import { useStudioStore, selectCurrentFile } from '@/lib/stores/studioStore';
+import {
+  useStudioSessionStore,
+  selectCurrentPage,
+  selectZoomLevel,
+} from '@/lib/stores/studioSessionStore';
 import { Button } from '@/components/ui/Button';
 
 export function ViewerToolbar() {
   const t = useTranslations('studio');
   const currentFile = useStudioStore(selectCurrentFile);
-  const currentPage = useStudioStore((state) => state.currentPage);
+  // Per-tab viewState: czytamy z sessionStore aktywnego taba
+  const currentPage = useStudioSessionStore(selectCurrentPage);
+  const zoomLevel = useStudioSessionStore(selectZoomLevel);
+  // Settery: studioStore (legacy) propaguje przez bridge do sessionStore
   const setCurrentPage = useStudioStore((state) => state.setCurrentPage);
-  const zoomLevel = useStudioStore((state) => state.zoomLevel);
   const setZoom = useStudioStore((state) => state.setZoom);
 
   const pageCount = currentFile?.pageCount ?? 0;

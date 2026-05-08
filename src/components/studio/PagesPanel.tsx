@@ -21,6 +21,10 @@ import {
 import { CSS } from '@dnd-kit/utilities';
 import { GripVertical, Trash2, Loader2, FileText, Plus } from 'lucide-react';
 import { useStudioStore, selectCurrentFile } from '@/lib/stores/studioStore';
+import {
+  useStudioSessionStore,
+  selectCurrentPage,
+} from '@/lib/stores/studioSessionStore';
 import { loadPdfjs } from '@/lib/pdf/loader';
 import type { PDFDocumentProxy } from 'pdfjs-dist';
 
@@ -33,7 +37,8 @@ export function PagesPanel({ onFilesAdded }: PagesPanelProps) {
   const currentFile = useStudioStore(selectCurrentFile);
   const files = useStudioStore((state) => state.files);
   const selectFile = useStudioStore((state) => state.selectFile);
-  const currentPage = useStudioStore((state) => state.currentPage);
+  // Per-tab viewState: currentPage z sessionStore aktywnego taba
+  const currentPage = useStudioSessionStore(selectCurrentPage);
   const setCurrentPage = useStudioStore((state) => state.setCurrentPage);
   const removePage = useStudioStore((state) => state.removePage);
   const reorderPages = useStudioStore((state) => state.reorderPages);
