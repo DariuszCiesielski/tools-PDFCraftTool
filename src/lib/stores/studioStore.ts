@@ -166,6 +166,7 @@ interface StudioState {
   reorderPages: (fileId: string, fromIndex: number, toIndex: number) => Promise<void>;
   getCurrentBuffer: (id: string) => Promise<Uint8Array>;
   replaceFileData: (fileId: string, blob: Blob, newName?: string) => Promise<void>;
+  restoreFromPersisted: (docs: PdfDocument[]) => void;
 }
 
 const generateId = () => `${Date.now()}-${Math.random().toString(36).slice(2, 9)}`;
@@ -320,6 +321,34 @@ export const useStudioStore = create<StudioState>((set, get) => ({
     sessionStore().reset();
     // Faza 2: clear IndexedDB
     void getDocumentRepository().clear();
+  },
+
+  restoreFromPersisted: (docs) => {
+    // Restore z IDB: użyj istniejących ID + data + pageCount.
+    // NIE używamy addFiles (które generuje nowe ID → orphan docs w IDB).
+    // NIE wywołujemy persistDocument (są już w IDB).
+    const studioFiles: StudioFile[] = docs.map((doc) => {
+      const blob = new Blob([doc.currentData.slice() as BlobPart], {
+        type: 'application/pdf',
+      });
+      const file = new File([blob], doc.name, { type: 'application/pdf' });
+      return {
+        id: doc.id,
+        file,
+        name: doc.name,
+        size: doc.currentData.byteLength,
+        pageCount: doc.pageCount,
+        data: doc.currentData,
+        version: doc.version,
+      };
+    });
+    set((state) => ({
+      files: [...state.files, ...studioFiles],
+      currentFileId: state.currentFileId ?? studioFiles[0]?.id ?? null,
+    }));
+    for (const sf of studioFiles) {
+      sessionStore().openTab(sf.id, sf.name, sf.pageCount);
+    }
   },
 
   getCurrentBuffer: async (id) => {

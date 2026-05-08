@@ -106,24 +106,10 @@ export function StudioLayout({ locale }: StudioLayoutProps) {
   }, []);
 
   const handleRestoreSession = useCallback(async () => {
-    const setFileData = useStudioStore.getState().setFileData;
-    const addFiles = useStudioStore.getState().addFiles;
-    const setPageCount = useStudioStore.getState().setPageCount;
-    // Każdy doc → File → addFiles → setFileData/setPageCount
-    for (const doc of persistedDocs) {
-      const blob = new Blob([doc.currentData.slice() as BlobPart], {
-        type: 'application/pdf',
-      });
-      const file = new File([blob], doc.name, { type: 'application/pdf' });
-      const beforeIds = new Set(useStudioStore.getState().files.map((f) => f.id));
-      addFiles([file]);
-      const newFile = useStudioStore.getState().files.find((f) => !beforeIds.has(f.id));
-      if (newFile) {
-        // initialLoad: true — restore NIE oznacza dirty (plik wraca w stanie z poprzedniej sesji)
-        setFileData(newFile.id, doc.currentData, { initialLoad: true });
-        setPageCount(newFile.id, doc.pageCount);
-      }
-    }
+    // restoreFromPersisted używa istniejących ID z IDB (NIE generuje nowych).
+    // Bez tego addFiles tworzyłby nowe ID i zostawiał orphan docs w IDB
+    // → po każdym restore IDB rosło o nowy zestaw kopii.
+    useStudioStore.getState().restoreFromPersisted(persistedDocs);
     setPersistedDocs([]);
     setBootState('ready');
   }, [persistedDocs]);
