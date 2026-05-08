@@ -11,6 +11,7 @@
 import {
   getDocumentRepository,
   type PdfDocument,
+  type PageOperation,
 } from '@/lib/persistence/pdfDocumentRepository';
 import { useStudioSessionStore } from '@/lib/stores/studioSessionStore';
 import { useStudioStore } from '@/lib/stores/studioStore';
@@ -30,6 +31,68 @@ async function detectPageCount(data: Uint8Array): Promise<number> {
     ignoreEncryption: true,
   });
   return doc.getPageCount();
+}
+
+/**
+ * Reapply forward operation na buffer. Używane w replay-based undo.
+ * Dla replace-blob NIE wykonuje nic — replay-based dla replace nie ma sensu
+ * (current data po replace ≠ originalData + ops).
+ */
+async function applyOpForward(
+  data: Uint8Array,
+  op: PageOperation,
+): Promise<{ data: Uint8Array; pageCount: number } | null> {
+  const { loadPdfLib } = await import('@/lib/pdf/loader');
+  const pdfLib = await loadPdfLib();
+
+  if (op.type === 'remove-page') {
+    const doc = await pdfLib.PDFDocument.load(data.slice());
+    if (doc.getPageCount() <= 1) return null;
+    doc.removePage(op.pageIndex);
+    const newData = await doc.save();
+    return { data: newData, pageCount: doc.getPageCount() };
+  }
+
+  if (op.type === 'reorder-pages') {
+    if (!op.newOrder) return null;
+    const sourceDoc = await pdfLib.PDFDocument.load(data.slice());
+    const newDoc = await pdfLib.PDFDocument.create();
+    const copied = await newDoc.copyPages(sourceDoc, op.newOrder);
+    copied.forEach((p) => newDoc.addPage(p));
+    const newData = await newDoc.save();
+    return { data: newData, pageCount: newDoc.getPageCount() };
+  }
+
+  return null;
+}
+
+/**
+ * Synchronizuje studioStore.files (data, pageCount) z repo po operacji.
+ * Po documentActions.removePage/reorderPages/undo/redo konieczne żeby
+ * PdfViewer zobaczył nowy buffer (rendering czyta z studioStore.files.data).
+ */
+async function syncStudioFromRepo(tabId: string): Promise<void> {
+  const repo = getDocumentRepository();
+  const session = useStudioSessionStore.getState();
+  const tab = session.tabs.find((t) => t.id === tabId);
+  if (!tab) return;
+  const doc = await repo.load(tab.documentId);
+  if (!doc) return;
+  // initialLoad: false bo to LOAD po edycji, ale isDirty już ustawiony przez
+  // documentActions na repo. Zostawiamy isDirty=true (operacja wykonana).
+  useStudioStore.setState((state) => ({
+    files: state.files.map((f) =>
+      f.id === tabId
+        ? {
+            ...f,
+            data: doc.currentData,
+            pageCount: doc.pageCount,
+            version: doc.version,
+            size: doc.currentData.byteLength,
+          }
+        : f,
+    ),
+  }));
 }
 
 export interface ImportedFile {
@@ -171,12 +234,12 @@ export const documentActions = {
       return;
 
     const previousOrder = Array.from({ length: totalPages }, (_, i) => i);
-    const order = [...previousOrder];
-    const [moved] = order.splice(fromIndex, 1);
-    order.splice(toIndex, 0, moved);
+    const newOrder = [...previousOrder];
+    const [moved] = newOrder.splice(fromIndex, 1);
+    newOrder.splice(toIndex, 0, moved);
 
     const newDoc = await pdfLib.PDFDocument.create();
-    const copiedPages = await newDoc.copyPages(sourceDoc, order);
+    const copiedPages = await newDoc.copyPages(sourceDoc, newOrder);
     copiedPages.forEach((page) => newDoc.addPage(page));
     const newData = await newDoc.save();
 
@@ -187,7 +250,7 @@ export const documentActions = {
       lastEditedAt: Date.now(),
       undoStack: [
         ...doc.undoStack,
-        { type: 'reorder-pages', previousOrder } as const,
+        { type: 'reorder-pages', previousOrder, newOrder } as const,
       ].slice(-20),
       redoStack: [],
     };
@@ -221,6 +284,10 @@ export const documentActions = {
     }
 
     const finalName = newName ?? doc.name;
+    // Faza 1.5: snapshot poprzedniego data jako blob (dla undo)
+    const previousBlobId = generateId();
+    await repo.saveBlob(previousBlobId, doc.currentData);
+
     const updated: PdfDocument = {
       ...doc,
       name: finalName,
@@ -228,8 +295,10 @@ export const documentActions = {
       pageCount,
       version: doc.version + 1,
       lastEditedAt: Date.now(),
-      // 'replace-blob' op log dodamy w Fazie 1.5 (potrzebuje previousBlobId infra)
-      undoStack: doc.undoStack,
+      undoStack: [
+        ...doc.undoStack,
+        { type: 'replace-blob', previousBlobId } as const,
+      ].slice(-20),
       redoStack: [],
     };
     await repo.save(updated);
@@ -368,6 +437,211 @@ export const documentActions = {
     await repo.save(doc);
 
     return { tabId: newFile.id, documentId: newFile.id, name };
+  },
+
+  /**
+   * Faza 1.5: undo ostatniej operacji.
+   *
+   * - remove-page, reorder-pages → replay-based: reset do originalData,
+   *   reapply WSZYSTKIE forward ops PRZED ostatnią. Ostatnia op (popped)
+   *   trafia na redoStack.
+   * - replace-blob → backward: load previousBlobId, save current data jako
+   *   nowy blob (dla redo), restore previous. Op popped, redo op stworzona
+   *   z poprzednim previousBlobId zamienionym na "redoBlobId".
+   *
+   * Sync: studioStore.files.data, sessionStore.tabs.{pageCount,version,isDirty}.
+   */
+  async undo(tabId: string): Promise<boolean> {
+    const repo = getDocumentRepository();
+    const session = useStudioSessionStore.getState();
+    const tab = session.tabs.find((t) => t.id === tabId);
+    if (!tab) return false;
+    const doc = await repo.load(tab.documentId);
+    if (!doc || doc.undoStack.length === 0) return false;
+
+    const lastOp = doc.undoStack[doc.undoStack.length - 1];
+    const remainingOps = doc.undoStack.slice(0, -1);
+
+    if (lastOp.type === 'replace-blob') {
+      const previousData = await repo.loadBlob(lastOp.previousBlobId);
+      if (!previousData) {
+        console.warn('[documentActions] undo replace-blob: blob missing');
+        return false;
+      }
+      // Snapshot CURRENT data jako redo blob
+      const redoBlobId = generateId();
+      await repo.saveBlob(redoBlobId, doc.currentData);
+      // Stary previousBlobId teraz nieaktualny (po undo current to previousData)
+      await repo.deleteBlob(lastOp.previousBlobId);
+
+      let pageCount = doc.pageCount;
+      try {
+        pageCount = await detectPageCount(previousData);
+      } catch (err) {
+        console.warn('[documentActions] undo replace-blob detectPageCount', err);
+      }
+
+      const updated: PdfDocument = {
+        ...doc,
+        currentData: previousData,
+        pageCount,
+        version: doc.version + 1,
+        lastEditedAt: Date.now(),
+        undoStack: remainingOps,
+        redoStack: [
+          ...doc.redoStack,
+          { type: 'replace-blob', previousBlobId: redoBlobId } as const,
+        ].slice(-20),
+      };
+      await repo.save(updated);
+      session.updateTabMeta(tabId, {
+        pageCount,
+        version: updated.version,
+        isDirty: true,
+        lastEditedAt: updated.lastEditedAt,
+      });
+      await syncStudioFromRepo(tabId);
+      return true;
+    }
+
+    // remove-page / reorder-pages → replay-based
+    let currentData = doc.originalData;
+    let pageCount: number;
+    try {
+      pageCount = await detectPageCount(currentData);
+    } catch {
+      pageCount = doc.pageCount;
+    }
+    for (const replayOp of remainingOps) {
+      const result = await applyOpForward(currentData, replayOp);
+      if (!result) {
+        console.warn('[documentActions] undo replay: op skipped', replayOp.type);
+        continue;
+      }
+      currentData = result.data;
+      pageCount = result.pageCount;
+    }
+
+    const updated: PdfDocument = {
+      ...doc,
+      currentData,
+      pageCount,
+      version: doc.version + 1,
+      lastEditedAt: Date.now(),
+      undoStack: remainingOps,
+      redoStack: [...doc.redoStack, lastOp].slice(-20),
+    };
+    await repo.save(updated);
+    session.updateTabMeta(tabId, {
+      pageCount,
+      version: updated.version,
+      isDirty: true,
+      lastEditedAt: updated.lastEditedAt,
+    });
+    await syncStudioFromRepo(tabId);
+    return true;
+  },
+
+  /**
+   * Faza 1.5: redo ostatnio cofniętej operacji.
+   *
+   * Pop z redoStack, apply forward (lub dla replace-blob: restore z redo blob).
+   */
+  async redo(tabId: string): Promise<boolean> {
+    const repo = getDocumentRepository();
+    const session = useStudioSessionStore.getState();
+    const tab = session.tabs.find((t) => t.id === tabId);
+    if (!tab) return false;
+    const doc = await repo.load(tab.documentId);
+    if (!doc || doc.redoStack.length === 0) return false;
+
+    const lastRedo = doc.redoStack[doc.redoStack.length - 1];
+    const remainingRedo = doc.redoStack.slice(0, -1);
+
+    if (lastRedo.type === 'replace-blob') {
+      const redoData = await repo.loadBlob(lastRedo.previousBlobId);
+      if (!redoData) {
+        console.warn('[documentActions] redo replace-blob: blob missing');
+        return false;
+      }
+      // Snapshot CURRENT jako new previousBlob (dla potem undo)
+      const newPreviousBlobId = generateId();
+      await repo.saveBlob(newPreviousBlobId, doc.currentData);
+      await repo.deleteBlob(lastRedo.previousBlobId);
+
+      let pageCount = doc.pageCount;
+      try {
+        pageCount = await detectPageCount(redoData);
+      } catch (err) {
+        console.warn('[documentActions] redo replace-blob detectPageCount', err);
+      }
+
+      const updated: PdfDocument = {
+        ...doc,
+        currentData: redoData,
+        pageCount,
+        version: doc.version + 1,
+        lastEditedAt: Date.now(),
+        undoStack: [
+          ...doc.undoStack,
+          { type: 'replace-blob', previousBlobId: newPreviousBlobId } as const,
+        ].slice(-20),
+        redoStack: remainingRedo,
+      };
+      await repo.save(updated);
+      session.updateTabMeta(tabId, {
+        pageCount,
+        version: updated.version,
+        isDirty: true,
+        lastEditedAt: updated.lastEditedAt,
+      });
+      await syncStudioFromRepo(tabId);
+      return true;
+    }
+
+    // remove-page / reorder-pages → apply forward
+    const result = await applyOpForward(doc.currentData, lastRedo);
+    if (!result) {
+      console.warn('[documentActions] redo: op cannot replay forward', lastRedo.type);
+      return false;
+    }
+
+    const updated: PdfDocument = {
+      ...doc,
+      currentData: result.data,
+      pageCount: result.pageCount,
+      version: doc.version + 1,
+      lastEditedAt: Date.now(),
+      undoStack: [...doc.undoStack, lastRedo].slice(-20),
+      redoStack: remainingRedo,
+    };
+    await repo.save(updated);
+    session.updateTabMeta(tabId, {
+      pageCount: result.pageCount,
+      version: updated.version,
+      isDirty: true,
+      lastEditedAt: updated.lastEditedAt,
+    });
+    await syncStudioFromRepo(tabId);
+    return true;
+  },
+
+  /**
+   * Stan undo/redo dla aktywnego taba — używane przez UI (disable buttons).
+   */
+  async getUndoRedoState(
+    tabId: string,
+  ): Promise<{ canUndo: boolean; canRedo: boolean }> {
+    const repo = getDocumentRepository();
+    const session = useStudioSessionStore.getState();
+    const tab = session.tabs.find((t) => t.id === tabId);
+    if (!tab) return { canUndo: false, canRedo: false };
+    const doc = await repo.load(tab.documentId);
+    if (!doc) return { canUndo: false, canRedo: false };
+    return {
+      canUndo: doc.undoStack.length > 0,
+      canRedo: doc.redoStack.length > 0,
+    };
   },
 };
 

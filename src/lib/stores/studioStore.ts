@@ -376,6 +376,23 @@ export const useStudioStore = create<StudioState>((set, get) => ({
       ),
       currentPage: Math.min(state.currentPage, doc.getPageCount()),
     }));
+    // Faza 1.5: push op do undoStack w repo (po persistDocument z setFileData)
+    try {
+      const repo = getDocumentRepository();
+      const persisted = await repo.load(fileId);
+      if (persisted) {
+        await repo.save({
+          ...persisted,
+          undoStack: [
+            ...persisted.undoStack,
+            { type: 'remove-page', pageIndex } as const,
+          ].slice(-20),
+          redoStack: [],
+        });
+      }
+    } catch (err) {
+      console.warn('[studioStore] removePage push undo op error', err);
+    }
   },
 
   replaceFileData: async (fileId, blob, newName) => {
@@ -406,15 +423,33 @@ export const useStudioStore = create<StudioState>((set, get) => ({
     const totalPages = sourceDoc.getPageCount();
     if (fromIndex < 0 || fromIndex >= totalPages || toIndex < 0 || toIndex >= totalPages) return;
 
-    const order = Array.from({ length: totalPages }, (_, i) => i);
-    const [moved] = order.splice(fromIndex, 1);
-    order.splice(toIndex, 0, moved);
+    const previousOrder = Array.from({ length: totalPages }, (_, i) => i);
+    const newOrder = [...previousOrder];
+    const [moved] = newOrder.splice(fromIndex, 1);
+    newOrder.splice(toIndex, 0, moved);
 
     const newDoc = await pdfLib.PDFDocument.create();
-    const copiedPages = await newDoc.copyPages(sourceDoc, order);
+    const copiedPages = await newDoc.copyPages(sourceDoc, newOrder);
     copiedPages.forEach((page) => newDoc.addPage(page));
     const newData = await newDoc.save();
     get().setFileData(fileId, newData);
+    // Faza 1.5: push reorder op z newOrder dla replay forward
+    try {
+      const repo = getDocumentRepository();
+      const persisted = await repo.load(fileId);
+      if (persisted) {
+        await repo.save({
+          ...persisted,
+          undoStack: [
+            ...persisted.undoStack,
+            { type: 'reorder-pages', previousOrder, newOrder } as const,
+          ].slice(-20),
+          redoStack: [],
+        });
+      }
+    } catch (err) {
+      console.warn('[studioStore] reorderPages push undo op error', err);
+    }
   },
 }));
 

@@ -7,6 +7,7 @@ import * as DropdownMenu from '@radix-ui/react-dropdown-menu';
 import { Check, ChevronRight, Loader2 } from 'lucide-react';
 import { useStudioStore, selectCurrentFile, type StudioToolId } from '@/lib/stores/studioStore';
 import { useStudioSessionStore } from '@/lib/stores/studioSessionStore';
+import { documentActions } from '@/lib/services/documentActions';
 import { type Locale } from '@/lib/i18n/config';
 import { downloadBlob, printBlob, suggestSaveAsName } from '@/lib/studio/file-actions';
 import { useRecentDocuments } from '@/lib/hooks/useRecentDocuments';
@@ -256,6 +257,27 @@ export function StudioMenuBar({ locale, onFilesAdded }: StudioMenuBarProps) {
           <Link href={`/${locale}`} className="block w-full">
             {t('menubar.file.exit')}
           </Link>
+        </MenuItem>
+      </MenuRoot>
+
+      <MenuRoot label={t('menubar.edit.label')}>
+        <MenuItem
+          onSelect={() => {
+            const id = useStudioSessionStore.getState().activeTabId;
+            if (id) void documentActions.undo(id);
+          }}
+          shortcut="⌘Z"
+        >
+          {t('menubar.edit.undo')}
+        </MenuItem>
+        <MenuItem
+          onSelect={() => {
+            const id = useStudioSessionStore.getState().activeTabId;
+            if (id) void documentActions.redo(id);
+          }}
+          shortcut="⌘⇧Z"
+        >
+          {t('menubar.edit.redo')}
         </MenuItem>
       </MenuRoot>
 

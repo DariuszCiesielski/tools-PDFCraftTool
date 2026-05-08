@@ -27,6 +27,7 @@ import { CombineFilesWizard } from './CombineFilesWizard';
 import { RestoreSessionPrompt } from './RestoreSessionPrompt';
 import { SettingsModal } from './SettingsModal';
 import { useTabStateSync } from '@/lib/hooks/useTabStateSync';
+import { useStudioKeyboard } from '@/lib/hooks/useStudioKeyboard';
 
 interface StudioLayoutProps {
   locale: Locale;
@@ -158,6 +159,8 @@ export function StudioLayout({ locale }: StudioLayoutProps) {
   const { setLeftSidebarWidth, setRightPanelWidth } = usePreferences();
   // Faza 3: cross-device sync metadata (gate na sync_metadata_enabled w usePreferences)
   useTabStateSync();
+  // Faza 1.5: globalne shortcuts Cmd+Z / Cmd+Shift+Z / Cmd+Y
+  useStudioKeyboard();
 
   useEffect(() => {
     setLeftSidebarWidth(leftSidebar.width);

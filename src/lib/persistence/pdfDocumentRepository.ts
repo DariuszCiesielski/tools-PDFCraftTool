@@ -26,7 +26,7 @@ import {
 
 export type PageOperation =
   | { type: 'remove-page'; pageIndex: number }
-  | { type: 'reorder-pages'; previousOrder: number[] }
+  | { type: 'reorder-pages'; previousOrder: number[]; newOrder?: number[] }
   | { type: 'replace-blob'; previousBlobId: string };
 
 export interface PdfDocument {
@@ -58,6 +58,10 @@ export interface PdfDocumentRepositoryAPI {
   requestPersistent(): Promise<boolean>;
   evictLRU(targetFreeMB: number): Promise<string[]>;
   clear(): Promise<void>;
+  // Faza 1.5: blob storage dla replace-blob undo (snapshots poprzednich wersji)
+  saveBlob(blobId: string, data: Uint8Array): Promise<void>;
+  loadBlob(blobId: string): Promise<Uint8Array | null>;
+  deleteBlob(blobId: string): Promise<void>;
 }
 
 const isBrowser = (): boolean =>
@@ -65,6 +69,7 @@ const isBrowser = (): boolean =>
 
 class IndexedDbRepository implements PdfDocumentRepositoryAPI {
   private store = createStore('pdfcraft-studio-docs', 'documents');
+  private blobStore = createStore('pdfcraft-studio-blobs', 'blobs');
 
   async save(doc: PdfDocument): Promise<void> {
     try {
@@ -161,11 +166,30 @@ class IndexedDbRepository implements PdfDocumentRepositoryAPI {
     for (const id of ids) {
       await this.delete(id);
     }
+    // Wyczyść też blob snapshots
+    const blobIds = await idbKeys(this.blobStore);
+    for (const id of blobIds) {
+      if (typeof id === 'string') await idbDel(id, this.blobStore);
+    }
+  }
+
+  async saveBlob(blobId: string, data: Uint8Array): Promise<void> {
+    await idbSet(blobId, data, this.blobStore);
+  }
+
+  async loadBlob(blobId: string): Promise<Uint8Array | null> {
+    const result = await idbGet<Uint8Array>(blobId, this.blobStore);
+    return result ?? null;
+  }
+
+  async deleteBlob(blobId: string): Promise<void> {
+    await idbDel(blobId, this.blobStore);
   }
 }
 
 class InMemoryRepository implements PdfDocumentRepositoryAPI {
   private store = new Map<string, PdfDocument>();
+  private blobs = new Map<string, Uint8Array>();
 
   async save(doc: PdfDocument): Promise<void> {
     this.store.set(doc.id, doc);
@@ -218,6 +242,19 @@ class InMemoryRepository implements PdfDocumentRepositoryAPI {
 
   async clear(): Promise<void> {
     this.store.clear();
+    this.blobs.clear();
+  }
+
+  async saveBlob(blobId: string, data: Uint8Array): Promise<void> {
+    this.blobs.set(blobId, data);
+  }
+
+  async loadBlob(blobId: string): Promise<Uint8Array | null> {
+    return this.blobs.get(blobId) ?? null;
+  }
+
+  async deleteBlob(blobId: string): Promise<void> {
+    this.blobs.delete(blobId);
   }
 }
 

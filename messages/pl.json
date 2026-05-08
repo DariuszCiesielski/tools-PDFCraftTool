@@ -2671,7 +2671,12 @@
         "home": "Powrót do strony głównej",
         "settings": "Ustawienia…"
       },
-      "processing": "Przetwarzam…"
+      "processing": "Przetwarzam…",
+      "edit": {
+        "label": "Edycja",
+        "undo": "Cofnij",
+        "redo": "Ponów"
+      }
     },
     "pagesPanel": {
       "activeFile": "Aktywny plik",

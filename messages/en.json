@@ -2671,7 +2671,12 @@
         "home": "Back to home",
         "settings": "Settings…"
       },
-      "processing": "Processing…"
+      "processing": "Processing…",
+      "edit": {
+        "label": "Edit",
+        "undo": "Undo",
+        "redo": "Redo"
+      }
     },
     "pagesPanel": {
       "activeFile": "Active file",
