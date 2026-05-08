@@ -2736,7 +2736,26 @@
       "cancel": "Anuluj",
       "combine": "Połącz pliki PDF",
       "processing": "Łączenie…",
-      "outputNamePattern": "Połączony {n}.pdf"
+      "outputNamePattern": "Połączony {n}.pdf",
+      "alternateMerge": {
+        "title": "Naprzemienne łączenie PDF",
+        "hint": "Wybierz dokładnie 2 pliki — strony zostaną przeplecione: 1 z A, 1 z B, 2 z A, 2 z B... Idealne do połączenia oddzielnie zeskanowanych awersów i rewersów.",
+        "submit": "Połącz naprzemiennie",
+        "outputName": "Naprzemienny {n}.pdf"
+      },
+      "gridCombine": {
+        "title": "Siatka stron z wielu PDF",
+        "hint": "Wybierz 2+ plików — wszystkie strony zostaną ułożone w siatce N×M na nowych stronach. Format A4 docelowy.",
+        "layoutLabel": "Układ siatki (kolumny × wiersze)",
+        "submit": "Stwórz siatkę",
+        "outputName": "Siatka {n}.pdf"
+      },
+      "repair": {
+        "title": "Napraw uszkodzone PDF",
+        "hint": "Wybierz pliki do naprawy — każdy zostanie zrekonstruowany (cross-reference, obiekty, szyfrowanie). Naprawione pliki pojawią się jako nowe zakładki.",
+        "submit": "Napraw zaznaczone",
+        "outputName": "Plik {n} (naprawiony).pdf"
+      }
     },
     "restorePrompt": {
       "title": "Przywrócić poprzednią sesję?",

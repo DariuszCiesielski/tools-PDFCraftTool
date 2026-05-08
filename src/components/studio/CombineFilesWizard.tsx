@@ -40,6 +40,7 @@ import {
   useStudioSessionStore,
   selectTabs,
   type TabState,
+  type CombineWizardMode,
 } from '@/lib/stores/studioSessionStore';
 import { useStudioStore } from '@/lib/stores/studioStore';
 import { documentActions } from '@/lib/services/documentActions';
@@ -55,15 +56,63 @@ interface SelectionItem {
   selected: boolean;
 }
 
+// Faza 4: konfiguracja per-mode (min selected, opcje, etykiety i18n keys)
+const MODE_CONFIG: Record<
+  CombineWizardMode,
+  {
+    titleKey: string;
+    hintKey: string;
+    submitKey: string;
+    minSelected: number;
+    outputPatternKey: string;
+  }
+> = {
+  merge: {
+    titleKey: 'combineWizard.title',
+    hintKey: 'combineWizard.hint',
+    submitKey: 'combineWizard.combine',
+    minSelected: 2,
+    outputPatternKey: 'combineWizard.outputNamePattern',
+  },
+  'alternate-merge': {
+    titleKey: 'combineWizard.alternateMerge.title',
+    hintKey: 'combineWizard.alternateMerge.hint',
+    submitKey: 'combineWizard.alternateMerge.submit',
+    minSelected: 2,
+    outputPatternKey: 'combineWizard.alternateMerge.outputName',
+  },
+  'grid-combine': {
+    titleKey: 'combineWizard.gridCombine.title',
+    hintKey: 'combineWizard.gridCombine.hint',
+    submitKey: 'combineWizard.gridCombine.submit',
+    minSelected: 2,
+    outputPatternKey: 'combineWizard.gridCombine.outputName',
+  },
+  repair: {
+    titleKey: 'combineWizard.repair.title',
+    hintKey: 'combineWizard.repair.hint',
+    submitKey: 'combineWizard.repair.submit',
+    minSelected: 1,
+    outputPatternKey: 'combineWizard.repair.outputName',
+  },
+};
+
 export function CombineFilesWizard({ isOpen, onClose }: CombineFilesWizardProps) {
   const t = useTranslations('studio');
   const tabs = useStudioSessionStore(selectTabs);
+  const mode = useStudioSessionStore((s) => s.combineWizardMode);
+  const config = MODE_CONFIG[mode];
   const addFiles = useStudioStore((state) => state.addFiles);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const [order, setOrder] = useState<SelectionItem[]>([]);
   const [isProcessing, setIsProcessing] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  // grid-combine: rows × cols (default 2×2 = 4 stron na arkuszu)
+  const [gridLayout, setGridLayout] = useState<{ rows: number; cols: number }>({
+    rows: 2,
+    cols: 2,
+  });
 
   // Sync state z tabs przy otwarciu (default: wszystkie checked, kolejność jak w tabs)
   useEffect(() => {
@@ -105,7 +154,7 @@ export function CombineFilesWizard({ isOpen, onClose }: CombineFilesWizardProps)
   }, [tabs]);
 
   const selectedCount = order.filter((o) => o.selected).length;
-  const canCombine = selectedCount >= 2 && !isProcessing;
+  const canCombine = selectedCount >= config.minSelected && !isProcessing;
 
   const handleDragEnd = (event: DragEndEvent) => {
     const { active, over } = event;
@@ -146,22 +195,40 @@ export function CombineFilesWizard({ isOpen, onClose }: CombineFilesWizardProps)
 
   const handleCombine = async () => {
     const selected = order.filter((o) => o.selected).map((o) => o.tabId);
-    if (selected.length < 2) return;
+    if (selected.length < config.minSelected) return;
 
     setIsProcessing(true);
     setError(null);
     try {
-      // Generuj nazwę "Połączony N.pdf" gdzie N = kolejny numer
+      // Generuj nazwę "{Prefix} N.pdf" gdzie N = kolejny numer per-mode
       const allTabs = useStudioSessionStore.getState().tabs;
-      const existingPolaczony = allTabs.filter((t) =>
-        /^Połączony \d+\.pdf$/i.test(t.name),
-      );
-      const nextNumber = existingPolaczony.length + 1;
-      const outputName =
-        t('combineWizard.outputNamePattern', { n: nextNumber }) ||
-        `Połączony ${nextNumber}.pdf`;
+      // Wyciągnij prefix z translation pattern (np. "Połączony {n}.pdf" → "Połączony")
+      const samplePattern = t(config.outputPatternKey, { n: 0 });
+      const prefixMatch = samplePattern.match(/^(.+?)\s*0/);
+      const prefix = prefixMatch ? prefixMatch[1].trim() : 'Wynik';
+      const re = new RegExp(`^${prefix.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')} \\d+\\.pdf$`, 'i');
+      const existingCount = allTabs.filter((t) => re.test(t.name)).length;
+      const nextNumber = existingCount + 1;
+      const outputName = t(config.outputPatternKey, { n: nextNumber });
 
-      await documentActions.combineDocuments(selected, outputName);
+      switch (mode) {
+        case 'merge':
+          await documentActions.combineDocuments(selected, outputName);
+          break;
+        case 'alternate-merge':
+          await documentActions.alternateMergeDocuments(selected, outputName);
+          break;
+        case 'grid-combine':
+          await documentActions.gridCombineDocuments(
+            selected,
+            gridLayout,
+            outputName,
+          );
+          break;
+        case 'repair':
+          await documentActions.repairDocuments(selected);
+          break;
+      }
       onClose();
     } catch (err) {
       setError(err instanceof Error ? err.message : String(err));
@@ -195,7 +262,7 @@ export function CombineFilesWizard({ isOpen, onClose }: CombineFilesWizardProps)
         {/* Header */}
         <div className="flex items-center justify-between px-6 py-4 border-b border-[hsl(var(--color-border))]">
           <h2 id="combine-wizard-title" className="text-lg font-semibold">
-            {t('combineWizard.title') || 'Połącz pliki PDF'}
+            {t(config.titleKey)}
           </h2>
           <button
             type="button"
@@ -211,9 +278,41 @@ export function CombineFilesWizard({ isOpen, onClose }: CombineFilesWizardProps)
         {/* Body */}
         <div className="flex-1 overflow-y-auto px-6 py-4">
           <p className="text-sm text-[hsl(var(--color-muted-foreground))] mb-4">
-            {t('combineWizard.hint') ||
-              'Wybierz pliki do połączenia. Kolejność można zmienić przez przeciąganie. Wynik powstanie jako nowa zakładka — oryginały pozostaną otwarte.'}
+            {t(config.hintKey)}
           </p>
+
+          {mode === 'grid-combine' && (
+            <div className="mb-4 p-3 rounded-md border border-[hsl(var(--color-border))] bg-[hsl(var(--color-muted))]/30">
+              <div className="text-sm font-medium mb-2">
+                {t('combineWizard.gridCombine.layoutLabel')}
+              </div>
+              <div className="flex gap-2" role="radiogroup" aria-label={t('combineWizard.gridCombine.layoutLabel')}>
+                {([
+                  [2, 1],
+                  [2, 2],
+                  [3, 3],
+                ] as const).map(([cols, rows]) => {
+                  const active = gridLayout.cols === cols && gridLayout.rows === rows;
+                  return (
+                    <button
+                      key={`${cols}x${rows}`}
+                      type="button"
+                      role="radio"
+                      aria-checked={active}
+                      onClick={() => setGridLayout({ cols, rows })}
+                      className={`px-3 py-1.5 rounded-md text-sm border transition-colors ${
+                        active
+                          ? 'bg-[hsl(var(--color-primary))] text-[hsl(var(--color-primary-foreground))] border-[hsl(var(--color-primary))]'
+                          : 'border-[hsl(var(--color-border))] hover:bg-[hsl(var(--color-muted))]/40'
+                      }`}
+                    >
+                      {cols}×{rows}
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+          )}
 
           {order.length === 0 ? (
             <div className="text-center py-8 text-[hsl(var(--color-muted-foreground))]">
@@ -300,7 +399,7 @@ export function CombineFilesWizard({ isOpen, onClose }: CombineFilesWizardProps)
                   {t('combineWizard.processing') || 'Łączenie…'}
                 </>
               ) : (
-                t('combineWizard.combine') || 'Połącz pliki PDF'
+                t(config.submitKey)
               )}
             </Button>
           </div>

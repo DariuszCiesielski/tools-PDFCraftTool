@@ -31,6 +31,12 @@ export interface TabState {
   viewState: TabViewState;
 }
 
+export type CombineWizardMode =
+  | 'merge'
+  | 'alternate-merge'
+  | 'grid-combine'
+  | 'repair';
+
 interface StudioSessionState {
   tabs: TabState[];
   activeTabId: string | null;
@@ -38,6 +44,7 @@ interface StudioSessionState {
   showLeftSidebar: boolean;
   showRightPanel: boolean;
   showCombineWizard: boolean;
+  combineWizardMode: CombineWizardMode;
   showSettingsModal: boolean;
   syncMetadataEnabled: boolean;
   isProcessing: boolean;
@@ -67,7 +74,7 @@ interface StudioSessionState {
   setProcessing: (processing: boolean) => void;
   toggleLeftSidebar: () => void;
   toggleRightPanel: () => void;
-  openCombineWizard: () => void;
+  openCombineWizard: (mode?: CombineWizardMode) => void;
   closeCombineWizard: () => void;
   openSettingsModal: () => void;
   closeSettingsModal: () => void;
@@ -89,6 +96,7 @@ export const useStudioSessionStore = create<StudioSessionState>((set, get) => ({
   showLeftSidebar: true,
   showRightPanel: true,
   showCombineWizard: false,
+  combineWizardMode: 'merge',
   showSettingsModal: false,
   syncMetadataEnabled: false,
   isProcessing: false,
@@ -195,8 +203,10 @@ export const useStudioSessionStore = create<StudioSessionState>((set, get) => ({
     set((state) => ({ showLeftSidebar: !state.showLeftSidebar })),
   toggleRightPanel: () =>
     set((state) => ({ showRightPanel: !state.showRightPanel })),
-  openCombineWizard: () => set({ showCombineWizard: true }),
-  closeCombineWizard: () => set({ showCombineWizard: false }),
+  openCombineWizard: (mode = 'merge') =>
+    set({ showCombineWizard: true, combineWizardMode: mode }),
+  closeCombineWizard: () =>
+    set({ showCombineWizard: false, combineWizardMode: 'merge' }),
   openSettingsModal: () => set({ showSettingsModal: true }),
   closeSettingsModal: () => set({ showSettingsModal: false }),
   setSyncMetadataEnabled: (enabled) => set({ syncMetadataEnabled: enabled }),

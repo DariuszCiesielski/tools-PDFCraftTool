@@ -440,6 +440,101 @@ export const documentActions = {
   },
 
   /**
+   * Faza 4: alternate merge — naprzemienne łączenie dwóch PDF.
+   * Strona 0 z A, strona 0 z B, strona 1 z A, strona 1 z B...
+   * Wymaga >= 2 selected. Output 1 nowy plik.
+   */
+  async alternateMergeDocuments(
+    tabIds: string[],
+    outputName: string,
+  ): Promise<ImportedFile> {
+    if (tabIds.length < 2) {
+      throw new Error('alternateMergeDocuments wymaga co najmniej 2 dokumentów');
+    }
+    const files = await this.tabsToFiles(tabIds);
+    const { alternateMergePDFs } = await import(
+      '@/lib/pdf/processors/alternate-merge'
+    );
+    const result = await alternateMergePDFs(files, {});
+    if (!result.success || !result.result) {
+      throw new Error(result.error?.message ?? 'alternate-merge failed');
+    }
+    const blob = Array.isArray(result.result) ? result.result[0] : result.result;
+    return this.createDocumentFromBlob(blob, outputName);
+  },
+
+  /**
+   * Faza 4: grid combine — N PDF do siatki na jednej (lub kilku) stron(ach).
+   * Output 1 nowy plik z układem siatki.
+   */
+  async gridCombineDocuments(
+    tabIds: string[],
+    options: { rows: number; cols: number },
+    outputName: string,
+  ): Promise<ImportedFile> {
+    if (tabIds.length < 2) {
+      throw new Error('gridCombineDocuments wymaga co najmniej 2 dokumentów');
+    }
+    const files = await this.tabsToFiles(tabIds);
+    const { createGridCombinePDF } = await import(
+      '@/lib/pdf/processors/grid-combine'
+    );
+    const result = await createGridCombinePDF(files, {
+      gridLayout: `${options.cols}x${options.rows}`,
+    } as Record<string, unknown>);
+    if (!result.success || !result.result) {
+      throw new Error(result.error?.message ?? 'grid-combine failed');
+    }
+    const blob = Array.isArray(result.result) ? result.result[0] : result.result;
+    return this.createDocumentFromBlob(blob, outputName);
+  },
+
+  /**
+   * Faza 4: repair — naprawa kilku PDF (re-save przez qpdf-wasm).
+   * Każdy plik osobno → osobna nowa zakładka. Auto-switch na pierwszy nowy.
+   */
+  async repairDocuments(tabIds: string[]): Promise<ImportedFile[]> {
+    if (tabIds.length < 1) {
+      throw new Error('repairDocuments wymaga co najmniej 1 dokumentu');
+    }
+    const { repairPDF } = await import('@/lib/pdf/processors/repair');
+    const files = await this.tabsToFiles(tabIds);
+    const created: ImportedFile[] = [];
+    for (const file of files) {
+      const result = await repairPDF(file, {});
+      if (!result.success || !result.result) {
+        console.warn(`[documentActions] repair failed for ${file.name}`);
+        continue;
+      }
+      const blob = Array.isArray(result.result) ? result.result[0] : result.result;
+      const baseName = file.name.replace(/\.pdf$/i, '');
+      const newName = `${baseName} (naprawiony).pdf`;
+      const imported = await this.createDocumentFromBlob(blob, newName);
+      created.push(imported);
+    }
+    return created;
+  },
+
+  /**
+   * Helper: konwertuje tabIds na File[] (z currentData buffers).
+   * Dla processor-ów które oczekują standardowego File API.
+   */
+  async tabsToFiles(tabIds: string[]): Promise<File[]> {
+    const files: File[] = [];
+    for (const tabId of tabIds) {
+      const buffer = await this.getCurrentBuffer(tabId);
+      const session = useStudioSessionStore.getState();
+      const tab = session.tabs.find((t) => t.id === tabId);
+      const name = tab?.name ?? `${tabId}.pdf`;
+      const blob = new Blob([buffer.slice() as BlobPart], {
+        type: 'application/pdf',
+      });
+      files.push(new File([blob], name, { type: 'application/pdf' }));
+    }
+    return files;
+  },
+
+  /**
    * Faza 1.5: undo ostatniej operacji.
    *
    * - remove-page, reorder-pages → replay-based: reset do originalData,

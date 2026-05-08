@@ -2736,7 +2736,26 @@
       "cancel": "Cancel",
       "combine": "Combine PDFs",
       "processing": "Combining…",
-      "outputNamePattern": "Combined {n}.pdf"
+      "outputNamePattern": "Combined {n}.pdf",
+      "alternateMerge": {
+        "title": "Alternate Merge PDFs",
+        "hint": "Select exactly 2 files — pages will be interleaved: 1 from A, 1 from B, 2 from A, 2 from B... Perfect for combining separately scanned fronts and backs.",
+        "submit": "Alternate merge",
+        "outputName": "Alternate {n}.pdf"
+      },
+      "gridCombine": {
+        "title": "Grid combine PDFs",
+        "hint": "Select 2+ files — all pages will be arranged in an N×M grid on new pages. Target format A4.",
+        "layoutLabel": "Grid layout (cols × rows)",
+        "submit": "Create grid",
+        "outputName": "Grid {n}.pdf"
+      },
+      "repair": {
+        "title": "Repair PDFs",
+        "hint": "Select files to repair — each will be reconstructed (cross-reference, objects, encryption). Repaired files appear as new tabs.",
+        "submit": "Repair selected",
+        "outputName": "File {n} (repaired).pdf"
+      }
     },
     "restorePrompt": {
       "title": "Restore previous session?",

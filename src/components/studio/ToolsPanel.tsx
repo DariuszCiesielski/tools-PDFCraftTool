@@ -125,10 +125,16 @@ const CATEGORY_ORDER: StudioTool['category'][] = ['pages', 'enhance', 'convert',
 
 // Multi-input tools obsługiwane przez CombineFilesWizard (Acrobat-style).
 // Zamiast otwierać self-uploader w drawer, klik na nie otwiera modal pełnoekranowy.
-const COMBINE_WIZARD_TOOLS = new Set<string>([
-  'merge',
-  // Faza 4: 'alternate-merge', 'grid-combine'
-]);
+// Mode (klucz mapy) → CombineWizardMode w sessionStore.
+const COMBINE_WIZARD_TOOLS_MAP = {
+  merge: 'merge',
+  'alternate-merge': 'alternate-merge',
+  'grid-combine': 'grid-combine',
+  repair: 'repair',
+} as const;
+const COMBINE_WIZARD_TOOLS = new Set<string>(
+  Object.keys(COMBINE_WIZARD_TOOLS_MAP),
+);
 
 export function ToolsPanel() {
   const t = useTranslations('studio');
@@ -201,8 +207,12 @@ export function ToolsPanel() {
                       <button
                         type="button"
                         onClick={() => {
-                          if (COMBINE_WIZARD_TOOLS.has(tool.id)) {
-                            openCombineWizard();
+                          const mode =
+                            COMBINE_WIZARD_TOOLS_MAP[
+                              tool.id as keyof typeof COMBINE_WIZARD_TOOLS_MAP
+                            ];
+                          if (mode) {
+                            openCombineWizard(mode);
                           } else {
                             selectTool(tool.id);
                           }
