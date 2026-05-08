@@ -4,7 +4,14 @@ import { useCallback, useEffect, useState } from 'react';
 import { useTranslations } from 'next-intl';
 import { type Locale } from '@/lib/i18n/config';
 import { useStudioStore } from '@/lib/stores/studioStore';
-import { useStudioSessionStore } from '@/lib/stores/studioSessionStore';
+import {
+  useStudioSessionStore,
+  selectAnyDirty,
+} from '@/lib/stores/studioSessionStore';
+import {
+  getDocumentRepository,
+  type PdfDocument,
+} from '@/lib/persistence/pdfDocumentRepository';
 import { useResizable } from '@/lib/hooks/useResizable';
 import { useRecentDocuments } from '@/lib/hooks/useRecentDocuments';
 import { usePreferences } from '@/lib/hooks/usePreferences';
@@ -17,6 +24,7 @@ import { ToolsPanel } from './ToolsPanel';
 import { StudioDropZone } from './StudioDropZone';
 import { FileTabs } from './FileTabs';
 import { CombineFilesWizard } from './CombineFilesWizard';
+import { RestoreSessionPrompt } from './RestoreSessionPrompt';
 
 interface StudioLayoutProps {
   locale: Locale;
@@ -66,6 +74,82 @@ export function StudioLayout({ locale }: StudioLayoutProps) {
   const showRightPanel = useStudioStore((state) => state.showRightPanel);
   const showCombineWizard = useStudioSessionStore((s) => s.showCombineWizard);
   const closeCombineWizard = useStudioSessionStore((s) => s.closeCombineWizard);
+  const anyDirty = useStudioSessionStore(selectAnyDirty);
+
+  // Faza 2: boot gate + recovery prompt
+  const [bootState, setBootState] = useState<'pending' | 'restore-prompt' | 'ready'>(
+    'pending',
+  );
+  const [persistedDocs, setPersistedDocs] = useState<PdfDocument[]>([]);
+
+  useEffect(() => {
+    let cancelled = false;
+    (async () => {
+      try {
+        const repo = getDocumentRepository();
+        const docs = await repo.listAll();
+        if (cancelled) return;
+        if (docs.length === 0) {
+          setBootState('ready');
+          return;
+        }
+        setPersistedDocs(docs);
+        setBootState('restore-prompt');
+      } catch (err) {
+        console.error('[StudioLayout] boot error', err);
+        setBootState('ready');
+      }
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  const handleRestoreSession = useCallback(async () => {
+    const setFileData = useStudioStore.getState().setFileData;
+    const addFiles = useStudioStore.getState().addFiles;
+    const setPageCount = useStudioStore.getState().setPageCount;
+    // Każdy doc → File → addFiles → setFileData/setPageCount
+    for (const doc of persistedDocs) {
+      const blob = new Blob([doc.currentData.slice() as BlobPart], {
+        type: 'application/pdf',
+      });
+      const file = new File([blob], doc.name, { type: 'application/pdf' });
+      const beforeIds = new Set(useStudioStore.getState().files.map((f) => f.id));
+      addFiles([file]);
+      const newFile = useStudioStore.getState().files.find((f) => !beforeIds.has(f.id));
+      if (newFile) {
+        // setFileData zaktualizuje tab.version → trafi z powrotem do persistDocument,
+        // ale to OK (idempotentne). Plus setPageCount.
+        setFileData(newFile.id, doc.currentData);
+        setPageCount(newFile.id, doc.pageCount);
+      }
+    }
+    setPersistedDocs([]);
+    setBootState('ready');
+  }, [persistedDocs]);
+
+  const handleSkipRestore = useCallback(async () => {
+    try {
+      await getDocumentRepository().clear();
+    } catch (err) {
+      console.warn('[StudioLayout] clear repo error', err);
+    }
+    setPersistedDocs([]);
+    setBootState('ready');
+  }, []);
+
+  // beforeunload prompt gdy są niezapisane zmiany lub otwarte zakładki
+  useEffect(() => {
+    const handler = (e: BeforeUnloadEvent) => {
+      if (anyDirty) {
+        e.preventDefault();
+        e.returnValue = '';
+      }
+    };
+    window.addEventListener('beforeunload', handler);
+    return () => window.removeEventListener('beforeunload', handler);
+  }, [anyDirty]);
 
   const leftSidebar = useResizable({
     initialWidth: 288,
@@ -226,6 +310,14 @@ export function StudioLayout({ locale }: StudioLayoutProps) {
         isOpen={showCombineWizard}
         onClose={closeCombineWizard}
       />
+
+      {bootState === 'restore-prompt' && (
+        <RestoreSessionPrompt
+          docs={persistedDocs}
+          onRestore={handleRestoreSession}
+          onSkip={handleSkipRestore}
+        />
+      )}
     </div>
   );
 }

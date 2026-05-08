@@ -1,10 +1,68 @@
 import { create } from 'zustand';
 import { useStudioSessionStore } from './studioSessionStore';
+import {
+  getDocumentRepository,
+  type PdfDocument,
+} from '@/lib/persistence/pdfDocumentRepository';
 
 // Bridge studioStore -> studioSessionStore (one-way, dopóki istnieją oba w Fazie 0).
 // Zapewnia per-tab viewState (currentPage, zoom) PRZEZ sessionStore — komponenty
 // jak PdfViewer/PagesPanel/ViewerToolbar czytają z sessionStore, nie z legacy currentPage.
 const sessionStore = () => useStudioSessionStore.getState();
+
+/**
+ * Faza 2: persist document do IndexedDB (fire-and-forget, nie blokuje UI).
+ * Wywoływany z setFileData/replaceFileData. Pierwsza zapisuje,
+ * kolejne aktualizują currentData/version/lastEditedAt.
+ */
+interface PersistArgs {
+  id: string;
+  name: string;
+  data: Uint8Array;
+  pageCount: number;
+  version: number;
+}
+
+async function persistDocument(args: PersistArgs): Promise<void> {
+  try {
+    if (typeof window === 'undefined' || typeof indexedDB === 'undefined') return;
+    const repo = getDocumentRepository();
+    const existing = await repo.load(args.id);
+    const doc: PdfDocument = existing
+      ? {
+          ...existing,
+          name: args.name,
+          currentData: args.data,
+          pageCount: args.pageCount,
+          version: args.version,
+          lastEditedAt: Date.now(),
+        }
+      : {
+          id: args.id,
+          name: args.name,
+          originalData: args.data,
+          currentData: args.data,
+          pageCount: args.pageCount,
+          version: args.version,
+          createdAt: Date.now(),
+          lastEditedAt: args.version > 0 ? Date.now() : null,
+          undoStack: [],
+          redoStack: [],
+        };
+    await repo.save(doc);
+  } catch (err) {
+    console.warn('[studioStore] persistDocument error', err);
+  }
+}
+
+async function deleteDocument(fileId: string): Promise<void> {
+  try {
+    if (typeof window === 'undefined' || typeof indexedDB === 'undefined') return;
+    await getDocumentRepository().delete(fileId);
+  } catch (err) {
+    console.warn('[studioStore] deleteDocument error', err);
+  }
+}
 
 export type StudioToolId =
   | 'split'
@@ -154,6 +212,7 @@ export const useStudioStore = create<StudioState>((set, get) => ({
       };
     });
     sessionStore().closeTab(id);
+    void deleteDocument(id);
   },
 
   selectFile: (id) => {
@@ -166,6 +225,16 @@ export const useStudioStore = create<StudioState>((set, get) => ({
       files: state.files.map((f) => (f.id === id ? { ...f, pageCount } : f)),
     }));
     sessionStore().updateTabMeta(id, { pageCount });
+    const file = get().files.find((f) => f.id === id);
+    if (file && file.data) {
+      void persistDocument({
+        id: file.id,
+        name: file.name,
+        data: file.data,
+        pageCount,
+        version: file.version,
+      });
+    }
   },
 
   setFileData: (id, data) => {
@@ -187,6 +256,14 @@ export const useStudioStore = create<StudioState>((set, get) => ({
         version: file.version,
         isDirty: true,
         lastEditedAt: Date.now(),
+      });
+      // Faza 2: auto-save do IndexedDB (fire-and-forget)
+      void persistDocument({
+        id: file.id,
+        name: file.name,
+        data,
+        pageCount: file.pageCount ?? 0,
+        version: file.version,
       });
     }
   },
@@ -223,6 +300,8 @@ export const useStudioStore = create<StudioState>((set, get) => ({
       isProcessing: false,
     });
     sessionStore().reset();
+    // Faza 2: clear IndexedDB
+    void getDocumentRepository().clear();
   },
 
   getCurrentBuffer: async (id) => {

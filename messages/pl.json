@@ -2731,6 +2731,12 @@
       "combine": "Połącz pliki PDF",
       "processing": "Łączenie…",
       "outputNamePattern": "Połączony {n}.pdf"
+    },
+    "restorePrompt": {
+      "title": "Przywrócić poprzednią sesję?",
+      "body": "Znaleziono {count} {count, plural, one {plik} other {plików}} z poprzedniej sesji. Otworzyć je ponownie?",
+      "restore": "Przywróć sesję",
+      "skip": "Zacznij od nowa"
     }
   }
 }

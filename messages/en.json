@@ -2731,6 +2731,12 @@
       "combine": "Combine PDFs",
       "processing": "Combining…",
       "outputNamePattern": "Combined {n}.pdf"
+    },
+    "restorePrompt": {
+      "title": "Restore previous session?",
+      "body": "Found {count} {count, plural, one {file} other {files}} from previous session. Reopen?",
+      "restore": "Restore session",
+      "skip": "Start fresh"
     }
   }
 }
