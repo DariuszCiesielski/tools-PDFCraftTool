@@ -41,6 +41,7 @@ import {
   type LucideIcon,
 } from 'lucide-react';
 import { useStudioStore, type StudioToolId } from '@/lib/stores/studioStore';
+import { useStudioSessionStore } from '@/lib/stores/studioSessionStore';
 import { Button } from '@/components/ui/Button';
 import { ToolDrawer, isToolSupportedInDrawer } from './ToolDrawer';
 
@@ -122,11 +123,19 @@ const STUDIO_TOOLS: StudioTool[] = [
 
 const CATEGORY_ORDER: StudioTool['category'][] = ['pages', 'enhance', 'convert', 'compress', 'security'];
 
+// Multi-input tools obsługiwane przez CombineFilesWizard (Acrobat-style).
+// Zamiast otwierać self-uploader w drawer, klik na nie otwiera modal pełnoekranowy.
+const COMBINE_WIZARD_TOOLS = new Set<string>([
+  'merge',
+  // Faza 4: 'alternate-merge', 'grid-combine'
+]);
+
 export function ToolsPanel() {
   const t = useTranslations('studio');
   const currentTool = useStudioStore((state) => state.currentTool);
   const selectTool = useStudioStore((state) => state.selectTool);
   const filesCount = useStudioStore((state) => state.files.length);
+  const openCombineWizard = useStudioSessionStore((s) => s.openCombineWizard);
 
   const [search, setSearch] = useState('');
 
@@ -191,7 +200,13 @@ export function ToolsPanel() {
                     <li key={tool.id}>
                       <button
                         type="button"
-                        onClick={() => selectTool(tool.id)}
+                        onClick={() => {
+                          if (COMBINE_WIZARD_TOOLS.has(tool.id)) {
+                            openCombineWizard();
+                          } else {
+                            selectTool(tool.id);
+                          }
+                        }}
                         className={`w-full flex items-center gap-3 px-3 py-2 rounded-md text-left transition-colors ${
                           isActive
                             ? 'bg-[hsl(var(--color-primary))]/10 text-[hsl(var(--color-primary))]'

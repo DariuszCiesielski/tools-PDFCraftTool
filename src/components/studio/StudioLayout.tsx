@@ -4,6 +4,7 @@ import { useCallback, useEffect, useState } from 'react';
 import { useTranslations } from 'next-intl';
 import { type Locale } from '@/lib/i18n/config';
 import { useStudioStore } from '@/lib/stores/studioStore';
+import { useStudioSessionStore } from '@/lib/stores/studioSessionStore';
 import { useResizable } from '@/lib/hooks/useResizable';
 import { useRecentDocuments } from '@/lib/hooks/useRecentDocuments';
 import { usePreferences } from '@/lib/hooks/usePreferences';
@@ -14,6 +15,8 @@ import { PagesPanel } from './PagesPanel';
 import { PdfViewer } from './PdfViewer';
 import { ToolsPanel } from './ToolsPanel';
 import { StudioDropZone } from './StudioDropZone';
+import { FileTabs } from './FileTabs';
+import { CombineFilesWizard } from './CombineFilesWizard';
 
 interface StudioLayoutProps {
   locale: Locale;
@@ -61,6 +64,8 @@ export function StudioLayout({ locale }: StudioLayoutProps) {
   const addFiles = useStudioStore((state) => state.addFiles);
   const showLeftSidebar = useStudioStore((state) => state.showLeftSidebar);
   const showRightPanel = useStudioStore((state) => state.showRightPanel);
+  const showCombineWizard = useStudioSessionStore((s) => s.showCombineWizard);
+  const closeCombineWizard = useStudioSessionStore((s) => s.closeCombineWizard);
 
   const leftSidebar = useResizable({
     initialWidth: 288,
@@ -138,6 +143,7 @@ export function StudioLayout({ locale }: StudioLayoutProps) {
     >
       <StudioHeader locale={locale} onFilesAdded={handleFilesAdded} />
       <StudioMenuBar locale={locale} onFilesAdded={handleFilesAdded} />
+      <FileTabs />
 
       {confirmationToast && (
         <div
@@ -215,6 +221,11 @@ export function StudioLayout({ locale }: StudioLayoutProps) {
       )}
 
       <StudioFooter />
+
+      <CombineFilesWizard
+        isOpen={showCombineWizard}
+        onClose={closeCombineWizard}
+      />
     </div>
   );
 }

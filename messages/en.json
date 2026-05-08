@@ -2713,6 +2713,24 @@
       "confirmedToast": "Account confirmed — welcome to PDF Studio!",
       "recoveryToast": "You can now set a new password.",
       "dismissToast": "Dismiss notification"
+    },
+    "tabs": {
+      "aria": "Open files",
+      "close": "Close {name}",
+      "closeDirtyConfirm": "File \"{name}\" has unsaved changes. Close tab?",
+      "modified": "Modified"
+    },
+    "combineWizard": {
+      "title": "Combine PDF files",
+      "close": "Close",
+      "hint": "Select files to combine. Drag to reorder. Output will appear as a new tab — originals stay open.",
+      "noFiles": "No open files",
+      "addFiles": "Add more PDF files",
+      "selectedCount": "Selected: {count}",
+      "cancel": "Cancel",
+      "combine": "Combine PDFs",
+      "processing": "Combining…",
+      "outputNamePattern": "Combined {n}.pdf"
     }
   }
 }

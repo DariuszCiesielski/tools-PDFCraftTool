@@ -13,6 +13,7 @@ import {
   type PdfDocument,
 } from '@/lib/persistence/pdfDocumentRepository';
 import { useStudioSessionStore } from '@/lib/stores/studioSessionStore';
+import { useStudioStore } from '@/lib/stores/studioStore';
 
 const generateId = () =>
   `${Date.now()}-${Math.random().toString(36).slice(2, 9)}`;
@@ -241,12 +242,63 @@ export const documentActions = {
     });
   },
 
+  /**
+   * Combine wielu otwartych zakładek w nowy dokument C.
+   *
+   * Acrobat-style: A i B zostają otwarte, C powstaje jako nowa zakładka,
+   * auto-switch na C.
+   *
+   * @param tabIds — kolejność ma znaczenie (zachowana w merged output)
+   * @param outputName — nazwa pliku C, np. "Połączony 1.pdf"
+   * @returns ImportedFile — tabId/documentId/name nowej zakładki
+   */
+  async combineDocuments(
+    tabIds: string[],
+    outputName: string,
+  ): Promise<ImportedFile> {
+    if (tabIds.length < 2) {
+      throw new Error('combineDocuments wymaga co najmniej 2 dokumentów');
+    }
+    const repo = getDocumentRepository();
+    const docs: PdfDocument[] = [];
+    for (const tabId of tabIds) {
+      const session = useStudioSessionStore.getState();
+      const tab = session.tabs.find((t) => t.id === tabId);
+      if (!tab) throw new Error(`Tab not found: ${tabId}`);
+      const doc = await repo.load(tab.documentId);
+      if (!doc) throw new Error(`Document not found for tab: ${tabId}`);
+      docs.push(doc);
+    }
+
+    const { loadPdfLib } = await import('@/lib/pdf/loader');
+    const pdfLib = await loadPdfLib();
+    const merged = await pdfLib.PDFDocument.create();
+    for (const doc of docs) {
+      const source = await pdfLib.PDFDocument.load(doc.currentData.slice(), {
+        ignoreEncryption: true,
+      });
+      const indices = source.getPageIndices();
+      const pages = await merged.copyPages(source, indices);
+      pages.forEach((p) => merged.addPage(p));
+    }
+    const mergedBytes = await merged.save();
+    const blob = new Blob([mergedBytes as BlobPart], {
+      type: 'application/pdf',
+    });
+    return this.createDocumentFromBlob(blob, outputName);
+  },
+
+  /**
+   * Tworzy nowy dokument z Blob + dodaje go jako nową zakładkę.
+   *
+   * Idzie przez studioStore.addFiles() (bridge propaguje do sessionStore),
+   * potem setFileData wgrywa data od razu (zamiast lazy). Plus zapisuje
+   * snapshot do PdfDocumentRepository pod TYM SAMYM ID (synchronizacja).
+   */
   async createDocumentFromBlob(
     blob: Blob,
     name: string,
   ): Promise<ImportedFile> {
-    const repo = getDocumentRepository();
-    const session = useStudioSessionStore.getState();
     const buffer = await blob.arrayBuffer();
     const data = new Uint8Array(buffer);
     let pageCount = 0;
@@ -259,9 +311,26 @@ export const documentActions = {
       );
     }
 
-    const id = generateId();
+    const file = new File([blob], name, { type: 'application/pdf' });
+    const studio = useStudioStore.getState();
+    const beforeIds = new Set(studio.files.map((f) => f.id));
+    studio.addFiles([file]);
+    // Bridge dodaje do sessionStore. Znajdź nowo dodany plik:
+    const afterFiles = useStudioStore.getState().files;
+    const newFile = afterFiles.find((f) => !beforeIds.has(f.id));
+    if (!newFile) {
+      throw new Error('Failed to add file to studio store');
+    }
+    // Ustaw data od razu (bridging do sessionStore.updateTabMeta)
+    useStudioStore.getState().setFileData(newFile.id, data);
+    useStudioStore.getState().setPageCount(newFile.id, pageCount);
+    // Auto-switch
+    useStudioStore.getState().selectFile(newFile.id);
+
+    // Snapshot do PdfDocumentRepository (Faza 2 IDB)
+    const repo = getDocumentRepository();
     const doc: PdfDocument = {
-      id,
+      id: newFile.id,
       name,
       originalData: data,
       currentData: data,
@@ -273,8 +342,8 @@ export const documentActions = {
       redoStack: [],
     };
     await repo.save(doc);
-    const tabId = session.openTab(id, name, pageCount);
-    return { tabId, documentId: id, name };
+
+    return { tabId: newFile.id, documentId: newFile.id, name };
   },
 };
 

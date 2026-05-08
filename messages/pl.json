@@ -2713,6 +2713,24 @@
       "confirmedToast": "Konto potwierdzone — witamy w PDF Studio!",
       "recoveryToast": "Możesz teraz ustawić nowe hasło.",
       "dismissToast": "Zamknij powiadomienie"
+    },
+    "tabs": {
+      "aria": "Otwarte pliki",
+      "close": "Zamknij {name}",
+      "closeDirtyConfirm": "Plik \"{name}\" ma niezapisane zmiany. Zamknąć zakładkę?",
+      "modified": "Zmodyfikowany"
+    },
+    "combineWizard": {
+      "title": "Połącz pliki PDF",
+      "close": "Zamknij",
+      "hint": "Wybierz pliki do połączenia. Kolejność można zmienić przez przeciąganie. Wynik powstanie jako nowa zakładka — oryginały pozostaną otwarte.",
+      "noFiles": "Brak otwartych plików",
+      "addFiles": "Dodaj kolejne pliki PDF",
+      "selectedCount": "Zaznaczonych: {count}",
+      "cancel": "Anuluj",
+      "combine": "Połącz pliki PDF",
+      "processing": "Łączenie…",
+      "outputNamePattern": "Połączony {n}.pdf"
     }
   }
 }
