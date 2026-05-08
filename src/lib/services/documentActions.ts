@@ -265,8 +265,31 @@ export const documentActions = {
       const session = useStudioSessionStore.getState();
       const tab = session.tabs.find((t) => t.id === tabId);
       if (!tab) throw new Error(`Tab not found: ${tabId}`);
-      const doc = await repo.load(tab.documentId);
-      if (!doc) throw new Error(`Document not found for tab: ${tabId}`);
+      let doc = await repo.load(tab.documentId);
+      if (!doc) {
+        // Faza 0/1 fallback: zwykły upload przez studioStore.addFiles tworzy tab,
+        // ale NIE tworzy dokumentu w repo. Wzbogacamy z bufferów studioStore.
+        // Faza 2 (IndexedDB) zmieni to gdy wszystkie uploady pójdą przez documentActions.importFiles.
+        const studio = useStudioStore.getState();
+        const studioFile = studio.files.find((f) => f.id === tab.id);
+        if (!studioFile) {
+          throw new Error(`No file in studio for tab ${tabId}`);
+        }
+        const data = await studio.getCurrentBuffer(studioFile.id);
+        doc = {
+          id: tab.id,
+          name: studioFile.name,
+          originalData: data,
+          currentData: data,
+          pageCount: studioFile.pageCount ?? 0,
+          version: studioFile.version,
+          createdAt: Date.now(),
+          lastEditedAt: null,
+          undoStack: [],
+          redoStack: [],
+        };
+        await repo.save(doc);
+      }
       docs.push(doc);
     }
 
