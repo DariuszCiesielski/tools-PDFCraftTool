@@ -3,9 +3,27 @@
  * Dynamically loads PyMuPDF WASM module using ES module import
  */
 
+import type {
+    AddOCGLayerOptions,
+    CompressOptions,
+    DeleteOCGLayerOptions,
+    DeskewPdfOptions,
+    DeskewResult,
+    FontToOutlineOptions,
+    HtmlToPdfAttachment,
+    HtmlToPdfOptions,
+    OCGLayer,
+    PdfToPdfaOptions,
+    PhotonCompressOptions,
+    PyMuPDFInstance,
+    PyodideAPI,
+    RenameOCGLayerOptions,
+    ToggleOCGLayerOptions,
+} from './pymupdf-types';
+
 // Singleton instance
-let pymupdfInstance: any = null;
-let loadingPromise: Promise<any> | null = null;
+let pymupdfInstance: PyMuPDFInstance | null = null;
+let loadingPromise: Promise<PyMuPDFInstance> | null = null;
 
 function resolvePublicAssetPath(assetPath: string): string {
   if (typeof window === 'undefined') return assetPath;
@@ -31,7 +49,7 @@ function resolvePublicAssetPath(assetPath: string): string {
 /**
  * Load PyMuPDF using Pyodide directly
  */
-export async function loadPyMuPDF(): Promise<any> {
+export async function loadPyMuPDF(): Promise<PyMuPDFInstance> {
   if (pymupdfInstance) {
     return pymupdfInstance;
   }
@@ -52,7 +70,7 @@ export async function loadPyMuPDF(): Promise<any> {
       const loadPyodide = pyodideModule.loadPyodide;
 
       // Initialize Pyodide
-      const pyodide = await loadPyodide({
+      const pyodide: PyodideAPI = await loadPyodide({
         indexURL: basePath,
         fullStdLib: false
       });
@@ -140,7 +158,7 @@ base64.b64encode(docx_data).decode('ascii')
           });
         },
 
-        async pdfToPdfa(file: File, options: any): Promise<{ pdf: Blob }> {
+        async pdfToPdfa(file: File, options: PdfToPdfaOptions): Promise<{ pdf: Blob }> {
           const arrayBuffer = await file.arrayBuffer();
           const pdfData = new Uint8Array(arrayBuffer);
           // Options are available for future use (level, embedFonts, flattenTransparency)
@@ -196,7 +214,7 @@ base64.b64encode(pdf_data).decode('ascii')
           };
         },
 
-        async htmlToPdf(html: string, options: any): Promise<Blob> {
+        async htmlToPdf(html: string, options: HtmlToPdfOptions): Promise<Blob> {
           const { pageSize = 'a4', margins = { top: 50, right: 50, bottom: 50, left: 50 }, attachments = [] } = options || {};
 
           // Page dimensions in points (72 points per inch)
@@ -222,7 +240,7 @@ base64.b64encode(pdf_data).decode('ascii')
           }
 
           // Build attachments info for Python
-          const attachmentsJson = JSON.stringify(attachments.map((att: any, idx: number) => ({
+          const attachmentsJson = JSON.stringify(attachments.map((att: HtmlToPdfAttachment, idx: number) => ({
             filename: att.filename,
             contentType: att.contentType,
             path: `/attachment_${idx}`,
@@ -340,7 +358,7 @@ base64.b64encode(pdf_bytes).decode('ascii')
           return new Blob([bytes], { type: 'application/pdf' });
         },
 
-        async deskewPdf(file: File, options: any): Promise<{ pdf: Blob; result: any }> {
+        async deskewPdf(file: File, options: DeskewPdfOptions): Promise<{ pdf: Blob; result: DeskewResult }> {
           const arrayBuffer = await file.arrayBuffer();
           const pdfData = new Uint8Array(arrayBuffer);
           const { threshold = 0.5, dpi = 150 } = options || {};
@@ -595,7 +613,7 @@ json.dumps(result_data) + "|||" + base64.b64encode(pdf_bytes).decode('ascii')
           };
         },
 
-        async fontToOutline(file: File, options: any): Promise<{ pdf: Blob; fontsConverted: number; pagesProcessed: number; totalPages: number }> {
+        async fontToOutline(file: File, options: FontToOutlineOptions): Promise<{ pdf: Blob; fontsConverted: number; pagesProcessed: number; totalPages: number }> {
           const arrayBuffer = await file.arrayBuffer();
           const pdfData = new Uint8Array(arrayBuffer);
           const { dpi = 300, preserveSelectableText = false, pageRange = '' } = options || {};
@@ -778,7 +796,7 @@ json.dumps(result_data) + "|||" + base64.b64encode(pdf_bytes).decode('ascii')
           };
         },
 
-        async getOCGLayers(file: File): Promise<any[]> {
+        async getOCGLayers(file: File): Promise<OCGLayer[]> {
           const arrayBuffer = await file.arrayBuffer();
           const pdfData = new Uint8Array(arrayBuffer);
 
@@ -820,7 +838,7 @@ json.dumps(layers)
           return JSON.parse(result);
         },
 
-        async toggleOCGLayer(file: File, options: any): Promise<{ pdf: Blob }> {
+        async toggleOCGLayer(file: File, options: ToggleOCGLayerOptions): Promise<{ pdf: Blob }> {
           const arrayBuffer = await file.arrayBuffer();
           const pdfData = new Uint8Array(arrayBuffer);
           const { layerId, visible } = options;
@@ -861,7 +879,7 @@ base64.b64encode(pdf_bytes).decode('ascii')
           return { pdf: new Blob([bytes], { type: 'application/pdf' }) };
         },
 
-        async addOCGLayer(file: File, options: any): Promise<{ pdf: Blob; layerId: string }> {
+        async addOCGLayer(file: File, options: AddOCGLayerOptions): Promise<{ pdf: Blob; layerId: string }> {
           const arrayBuffer = await file.arrayBuffer();
           const pdfData = new Uint8Array(arrayBuffer);
           const { name } = options;
@@ -907,7 +925,7 @@ str(xref) + "|||" + base64.b64encode(pdf_bytes).decode('ascii')
           };
         },
 
-        async deleteOCGLayer(file: File, options: any): Promise<{ pdf: Blob }> {
+        async deleteOCGLayer(file: File, options: DeleteOCGLayerOptions): Promise<{ pdf: Blob }> {
           const arrayBuffer = await file.arrayBuffer();
           const pdfData = new Uint8Array(arrayBuffer);
 
@@ -947,7 +965,7 @@ base64.b64encode(pdf_bytes).decode('ascii')
           return { pdf: new Blob([bytes], { type: 'application/pdf' }) };
         },
 
-        async renameOCGLayer(file: File, options: any): Promise<{ pdf: Blob }> {
+        async renameOCGLayer(file: File, options: RenameOCGLayerOptions): Promise<{ pdf: Blob }> {
           const arrayBuffer = await file.arrayBuffer();
           const pdfData = new Uint8Array(arrayBuffer);
 
@@ -987,7 +1005,7 @@ base64.b64encode(pdf_bytes).decode('ascii')
           return { pdf: new Blob([bytes], { type: 'application/pdf' }) };
         },
 
-        async compress(file: File, options: any): Promise<Blob> {
+        async compress(file: File, options: CompressOptions): Promise<Blob> {
           const arrayBuffer = await file.arrayBuffer();
           const pdfData = new Uint8Array(arrayBuffer);
           const { quality = 'medium', removeMetadata = false } = options || {};
@@ -1123,7 +1141,7 @@ base64.b64encode(pdf_bytes).decode('ascii')
           return new Blob([bytes], { type: 'application/pdf' });
         },
 
-        async photonCompress(file: File, options: any): Promise<Blob> {
+        async photonCompress(file: File, options: PhotonCompressOptions): Promise<Blob> {
           const arrayBuffer = await file.arrayBuffer();
           const pdfData = new Uint8Array(arrayBuffer);
           const { dpi = 150, format = 'jpeg', quality = 85 } = options || {};

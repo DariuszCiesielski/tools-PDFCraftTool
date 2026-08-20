@@ -5,14 +5,30 @@
  * Uses script injection to avoid Next.js SSR bundling issues.
  */
 
+/** Emscripten module factory options used by qpdf.js. */
+interface QpdfFactoryOptions {
+  locateFile: (path: string) => string;
+}
+
+/** QPDF WASM instance — shape unused so far (no consumers), kept opaque. */
+export type QpdfModule = Record<string, unknown>;
+
+type QpdfModuleFactory = (options: QpdfFactoryOptions) => Promise<QpdfModule>;
+
+/** Window globals exposed by the injected qpdf.js script. */
+type QpdfWindow = Window & {
+  createQpdfModule?: QpdfModuleFactory;
+  Module?: QpdfModuleFactory;
+};
+
 // QPDF instance singleton
-let qpdfInstance: any = null;
-let loadingPromise: Promise<any> | null = null;
+let qpdfInstance: QpdfModule | null = null;
+let loadingPromise: Promise<QpdfModule> | null = null;
 
 /**
  * Load the QPDF WASM module dynamically
  */
-export async function loadQpdf(): Promise<any> {
+export async function loadQpdf(): Promise<QpdfModule> {
   // Return cached instance if available
   if (qpdfInstance) {
     return qpdfInstance;
@@ -31,8 +47,9 @@ export async function loadQpdf(): Promise<any> {
   loadingPromise = new Promise(async (resolve, reject) => {
     try {
       // Check if createModule is already available (script already loaded)
-      if ((window as any).createQpdfModule) {
-        qpdfInstance = await (window as any).createQpdfModule({
+      const qpdfWindow = window as QpdfWindow;
+      if (qpdfWindow.createQpdfModule) {
+        qpdfInstance = await qpdfWindow.createQpdfModule({
           locateFile: (path: string) => {
             if (path.endsWith('.wasm')) {
               return '/qpdf.wasm';
@@ -52,7 +69,7 @@ export async function loadQpdf(): Promise<any> {
       script.onload = async () => {
         try {
           // The script should expose createModule or similar
-          const createModule = (window as any).createQpdfModule || (window as any).Module;
+          const createModule = qpdfWindow.createQpdfModule || qpdfWindow.Module;
           
           if (!createModule) {
             throw new Error('QPDF module not found after script load');
