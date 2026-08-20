@@ -94,10 +94,9 @@ const nextConfig = {
 
   // ESLint configuration
   eslint: {
-    // Workshop AIwBiznesie: 260 lint errors odziedziczone z upstream PDFCraft (4★, niedbały kod).
-    // Strategia: selektywny tracking upstream + osobna sesja "lint baseline" (~4-6h jednorazowo).
-    // Tracking w BACKLOG PM: "Workshop PDFCraftTool: lint baseline" (P2, public repo = brand).
-    ignoreDuringBuilds: true,
+    // Dług lintu spłacony 2026-08-20 (0 błędów; warningi śledzone w zwrotach sesji).
+    // Lint jest bramką builda — nie przywracać ignoreDuringBuilds bez decyzji Dariusza.
+    ignoreDuringBuilds: false,
   },
 
   // Compiler options for performance
