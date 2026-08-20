@@ -7,6 +7,14 @@ import { Button } from '@/components/ui/Button';
 import { Card } from '@/components/ui/Card';
 import { PDFDocument } from 'pdf-lib';
 
+/** PDF.js viewer globals inside the iframe (subset used). */
+interface PdfJsViewerApplication {
+  eventBus?: { _on(event: string, cb: () => void): void; dispatch(event: string, data: unknown): void };
+  pdfDocument: { annotationStorage: unknown; saveDocument(storage?: unknown): Promise<Uint8Array<ArrayBuffer>> };
+}
+type PdfJsViewerWindow = Window & { PDFViewerApplication?: PdfJsViewerApplication };
+
+
 export interface SignPDFToolProps {
   className?: string;
   /** Optional initial file to use (skips upload step when prefilled from Studio) */
@@ -116,7 +124,7 @@ export function SignPDFTool({ className = '', initialFile, hideUploader, onCompl
       const iframe = iframeRef.current;
       if (!iframe?.contentWindow) return;
 
-      const viewerWindow = iframe.contentWindow as any;
+      const viewerWindow = iframe.contentWindow as PdfJsViewerWindow;
       if (viewerWindow?.PDFViewerApplication) {
         const app = viewerWindow.PDFViewerApplication;
         const doc = viewerWindow.document;
@@ -160,7 +168,7 @@ export function SignPDFTool({ className = '', initialFile, hideUploader, onCompl
 
     try {
       setIsProcessing(true);
-      const viewerWindow = iframeRef.current.contentWindow as any;
+      const viewerWindow = iframeRef.current.contentWindow as unknown as PdfJsViewerWindow;
 
       if (!viewerWindow?.PDFViewerApplication) {
         setError('PDF viewer not initialized.');

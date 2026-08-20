@@ -159,7 +159,7 @@ export function PSDToPDFTool({ className = '' }: PSDToPDFToolProps) {
             skipThumbnail: true,
         });
 
-        const canvas = (psd as any).canvas as HTMLCanvasElement | undefined;
+        const canvas = psd.canvas as HTMLCanvasElement | undefined;
 
         if (!canvas) {
             // If ag-psd didn't automatically create a canvas, we might need to construct it.

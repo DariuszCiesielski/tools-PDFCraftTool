@@ -9,6 +9,7 @@ import { Button } from '@/components/ui/Button';
 import { Card } from '@/components/ui/Card';
 import { addPageNumbers, PageNumberOptions } from '@/lib/pdf/processors/page-numbers';
 import type { ProcessOutput } from '@/types/pdf';
+import type { PDFDocumentProxy } from 'pdfjs-dist';
 
 // Store pdfjs module reference
 let pdfjsModule: typeof import('pdfjs-dist') | null = null;
@@ -93,7 +94,7 @@ export function PageNumbersTool({
   }, []);
 
   // Render page with page number overlay
-  const renderPagePreview = async (pdf: any, pageNum: number) => {
+  const renderPagePreview = async (pdf: PDFDocumentProxy, pageNum: number) => {
     if (!previewCanvasRef.current) return;
 
     // Cancel any ongoing render task

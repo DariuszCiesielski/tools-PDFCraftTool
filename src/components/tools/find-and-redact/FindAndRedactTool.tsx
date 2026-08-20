@@ -14,6 +14,7 @@ import {
     parseSearchTerms,
 } from '@/lib/pdf/processors/find-and-redact';
 import { loadPdfjs } from '@/lib/pdf/loader';
+import type { PDFDocumentProxy } from 'pdfjs-dist';
 
 export interface FindAndRedactToolProps {
     className?: string;
@@ -67,7 +68,7 @@ export function FindAndRedactTool({ className = '', initialFile, hideUploader, o
     const [totalPages, setTotalPages] = useState(0);
     const [previewScale, setPreviewScale] = useState(1.0);
     const canvasRef = useRef<HTMLCanvasElement>(null);
-    const pdfDocRef = useRef<any>(null);
+    const pdfDocRef = useRef<PDFDocumentProxy | null>(null);
 
     const cancelledRef = useRef(false);
   useEffect(() => {

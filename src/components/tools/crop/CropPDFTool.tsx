@@ -12,6 +12,7 @@ import { Button } from '@/components/ui/Button';
 import { Card } from '@/components/ui/Card';
 import { cropPDF, CropData } from '@/lib/pdf/processors/crop';
 import type { ProcessOutput } from '@/types/pdf';
+import type { PDFDocumentProxy } from 'pdfjs-dist';
 
 export interface CropPDFToolProps {
   className?: string;
@@ -27,7 +28,7 @@ interface CropState {
   file: File | null;
   numPages: number;
   currentPage: number;
-  pdfDoc: any | null; // PDFDocumentProxy
+  pdfDoc: PDFDocumentProxy | null;
   pageImage: string | null; // Data URL
   crops: Record<number, CropData>; // Store crops for each page
 }
@@ -64,21 +65,29 @@ export function CropPDFTool({ className = '', initialFile, hideUploader, onCompl
 
     if (!isFullscreen) {
       // Enter fullscreen
-      if (cropperContainerRef.current.requestFullscreen) {
-        cropperContainerRef.current.requestFullscreen();
-      } else if ((cropperContainerRef.current as any).webkitRequestFullscreen) {
-        (cropperContainerRef.current as any).webkitRequestFullscreen();
-      } else if ((cropperContainerRef.current as any).msRequestFullscreen) {
-        (cropperContainerRef.current as any).msRequestFullscreen();
+      const container = cropperContainerRef.current as HTMLElement & {
+        webkitRequestFullscreen?: () => void;
+        msRequestFullscreen?: () => void;
+      };
+      if (container.requestFullscreen) {
+        container.requestFullscreen();
+      } else if (container.webkitRequestFullscreen) {
+        container.webkitRequestFullscreen();
+      } else if (container.msRequestFullscreen) {
+        container.msRequestFullscreen();
       }
     } else {
       // Exit fullscreen
-      if (document.exitFullscreen) {
-        document.exitFullscreen();
-      } else if ((document as any).webkitExitFullscreen) {
-        (document as any).webkitExitFullscreen();
-      } else if ((document as any).msExitFullscreen) {
-        (document as any).msExitFullscreen();
+      const doc = document as Document & {
+        webkitExitFullscreen?: () => void;
+        msExitFullscreen?: () => void;
+      };
+      if (doc.exitFullscreen) {
+        doc.exitFullscreen();
+      } else if (doc.webkitExitFullscreen) {
+        doc.webkitExitFullscreen();
+      } else if (doc.msExitFullscreen) {
+        doc.msExitFullscreen();
       }
     }
   }, [isFullscreen]);
@@ -193,7 +202,7 @@ export function CropPDFTool({ className = '', initialFile, hideUploader, onCompl
   }, [initialFile]); // eslint-disable-line react-hooks/exhaustive-deps
 
   // Render PDF page to image
-  const renderPage = async (pdfDoc: any, pageNum: number) => {
+  const renderPage = async (pdfDoc: PDFDocumentProxy, pageNum: number) => {
     try {
       const page = await pdfDoc.getPage(pageNum);
       const viewport = page.getViewport({ scale: 1.5 }); // Good quality for cropping

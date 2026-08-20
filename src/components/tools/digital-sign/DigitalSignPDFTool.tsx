@@ -8,6 +8,7 @@ import { DownloadButton } from '../DownloadButton';
 import { Button } from '@/components/ui/Button';
 import { Card } from '@/components/ui/Card';
 import type { CertificateData } from '@/types/digital-signature';
+import type { VisibleSignatureOptions } from '@/types/digital-signature';
 
 function EyeIcon({ open }: { open: boolean }) {
   if (open) {
@@ -199,7 +200,7 @@ export function DigitalSignPDFTool({ className = '' }: { className?: string }) {
 
       const { signPdf, getCertificateInfo } = await import('@/lib/pdf/processors/digital-sign');
 
-      let visibleSignature;
+      let visibleSignature: VisibleSignatureOptions | undefined;
       if (enableVisible) {
         let text = sigText;
         if (!text && !sigImageData) {
@@ -234,7 +235,7 @@ export function DigitalSignPDFTool({ className = '' }: { className?: string }) {
 
       const signedBytes = await signPdf(pdfBytes, certData, {
         signatureInfo: { reason: reason || undefined, location: location || undefined, contactInfo: contactInfo || undefined },
-        visibleSignature: visibleSignature as any,
+        visibleSignature,
       });
 
       if (cancelledRef.current) { setStatus('idle'); return; }

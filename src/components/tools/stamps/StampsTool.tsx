@@ -6,6 +6,14 @@ import { FileUploader } from '../FileUploader';
 import { Button } from '@/components/ui/Button';
 import { Card } from '@/components/ui/Card';
 
+/** PDF.js viewer globals inside the iframe (subset used). */
+interface PdfJsViewerApplication {
+  eventBus?: { _on(event: string, cb: () => void): void; dispatch(event: string, data: unknown): void };
+  pdfDocument: { annotationStorage: unknown; saveDocument(storage?: unknown): Promise<Uint8Array<ArrayBuffer>> };
+}
+type PdfJsViewerWindow = Window & { PDFViewerApplication?: PdfJsViewerApplication };
+
+
 export interface StampsToolProps {
   className?: string;
 }
@@ -58,7 +66,7 @@ export function StampsTool({ className = '' }: StampsToolProps) {
     }
     try {
       setIsProcessing(true);
-      const win = iframeRef.current.contentWindow as any;
+      const win = iframeRef.current.contentWindow as unknown as PdfJsViewerWindow;
       const app = win?.PDFViewerApplication;
       
       if (app?.pdfDocument) {

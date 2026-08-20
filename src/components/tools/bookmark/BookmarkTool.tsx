@@ -9,6 +9,15 @@ import { Button } from '@/components/ui/Button';
 import { Card } from '@/components/ui/Card';
 import { processBookmarks, BookmarkItem, BookmarkOptions } from '@/lib/pdf/processors/bookmark';
 import type { ProcessOutput } from '@/types/pdf';
+import type { PDFDocumentProxy } from 'pdfjs-dist';
+import type { RefProxy } from 'pdfjs-dist/types/src/display/api';
+/** PDF.js outline node (subset used). */
+interface PdfJsOutlineNode {
+  title?: string;
+  dest?: string | unknown[] | null;
+  items?: PdfJsOutlineNode[];
+}
+
 
 // Store pdfjs module reference
 let pdfjsModule: typeof import('pdfjs-dist') | null = null;
@@ -58,7 +67,7 @@ export function BookmarkTool({ className = '', initialFile, hideUploader, onComp
 
   // File state
   const [file, setFile] = useState<File | null>(initialFile ?? null);
-  const [pdfDoc, setPdfDoc] = useState<any>(null);
+  const [pdfDoc, setPdfDoc] = useState<PDFDocumentProxy | null>(null);
   const [totalPages, setTotalPages] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
 
@@ -118,8 +127,8 @@ export function BookmarkTool({ className = '', initialFile, hideUploader, onComp
 
   // Parse PDF outline to bookmark nodes
   const parseOutline = async (
-    outline: any[], // PDF.js outline structure
-    doc: any
+    outline: PdfJsOutlineNode[], // PDF.js outline structure
+    doc: PDFDocumentProxy
   ): Promise<BookmarkNode[]> => {
     const result: BookmarkNode[] = [];
 
@@ -133,7 +142,7 @@ export function BookmarkTool({ className = '', initialFile, hideUploader, onComp
             ? await doc.getDestination(item.dest)
             : item.dest;
           if (dest && dest[0]) {
-            const pageRef = dest[0];
+            const pageRef = dest[0] as RefProxy;
             const pageIndex = await doc.getPageIndex(pageRef);
             pageNumber = pageIndex + 1;
           }

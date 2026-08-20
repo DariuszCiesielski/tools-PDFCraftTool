@@ -8,6 +8,7 @@ import { DownloadButton } from '../DownloadButton';
 import { Button } from '@/components/ui/Button';
 import { Card } from '@/components/ui/Card';
 import { configurePdfjsWorker } from '@/lib/pdf/loader';
+import type { PDFDocument } from 'pdf-lib';
 
 export interface PDFMultiToolProps {
   className?: string;
@@ -331,7 +332,7 @@ export function PDFMultiTool({ className = '' }: PDFMultiToolProps) {
       const newPdf = await pdfLib.PDFDocument.create();
 
       // Load all source files
-      const loadedPdfs: any[] = [];
+      const loadedPdfs: PDFDocument[] = [];
       for (const sf of sourceFiles) {
         const arrayBuffer = await sf.file.arrayBuffer();
         const pdf = await pdfLib.PDFDocument.load(arrayBuffer);
@@ -397,7 +398,7 @@ export function PDFMultiTool({ className = '' }: PDFMultiToolProps) {
       setProgressMessage('Loading source files...');
 
       // Load all source PDFs
-      const loadedPdfs: any[] = [];
+      const loadedPdfs: PDFDocument[] = [];
       for (const sf of sourceFiles) {
         const arrayBuffer = await sf.file.arrayBuffer();
         const pdf = await pdfLib.PDFDocument.load(arrayBuffer);

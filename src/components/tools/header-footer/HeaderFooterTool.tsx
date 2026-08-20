@@ -9,6 +9,7 @@ import { Button } from '@/components/ui/Button';
 import { Card } from '@/components/ui/Card';
 import { addHeaderFooter, HeaderFooterOptions } from '@/lib/pdf/processors/header-footer';
 import type { ProcessOutput } from '@/types/pdf';
+import type { PDFDocumentProxy } from 'pdfjs-dist';
 
 // Store pdfjs module reference
 let pdfjsModule: typeof import('pdfjs-dist') | null = null;
@@ -86,7 +87,7 @@ export function HeaderFooterTool({ className = '', initialFile, hideUploader, on
   }, []);
 
   // Render page preview with header/footer overlay
-  const renderPagePreview = async (pdf: any, pageNum: number) => {
+  const renderPagePreview = async (pdf: PDFDocumentProxy, pageNum: number) => {
     if (!previewCanvasRef.current) return;
 
     try {

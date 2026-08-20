@@ -4,6 +4,7 @@ import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useTranslations } from 'next-intl';
 import { Button } from '../ui/Button';
 import { configurePdfjsWorker } from '@/lib/pdf/loader';
+import type { PDFDocumentProxy } from 'pdfjs-dist';
 
 export interface FilePreviewProps {
   /** File to preview */
@@ -62,7 +63,7 @@ export const FilePreview: React.FC<FilePreviewProps> = ({
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [pdfDoc, setPdfDoc] = useState<any>(null);
+  const [pdfDoc, setPdfDoc] = useState<PDFDocumentProxy | null>(null);
   
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);

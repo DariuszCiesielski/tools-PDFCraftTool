@@ -2358,11 +2358,11 @@ export function NodeSettingsPanel({ node, onClose, onUpdateSettings }: NodeSetti
                 const toolsMessages = messages?.tools as Record<string, unknown> | undefined;
                 let exists = false;
                 if (toolsMessages && typeof toolsMessages === 'object') {
-                    let current: any = toolsMessages;
+                    let current: unknown = toolsMessages;
                     const parts = key.split('.');
                     for (const part of parts) {
                         if (current && typeof current === 'object' && part in current) {
-                            current = current[part];
+                            current = (current as Record<string, unknown>)[part];
                             exists = true;
                         } else {
                             exists = false;
@@ -2389,11 +2389,11 @@ export function NodeSettingsPanel({ node, onClose, onUpdateSettings }: NodeSetti
             // Existence check for rootResult
             let exists = false;
             if (messages && typeof messages === 'object') {
-                let current: any = messages;
+                let current: unknown = messages;
                 const parts = key.split('.');
                 for (const part of parts) {
                     if (current && typeof current === 'object' && part in current) {
-                        current = current[part];
+                        current = (current as Record<string, unknown>)[part];
                         exists = true;
                     } else {
                         exists = false;

@@ -20,6 +20,15 @@ import {
 import { createZip } from '@/lib/zip';
 import { configurePdfjsWorker } from '@/lib/pdf/loader';
 import type { SplitOptions, PageRange, ProcessOutput } from '@/types/pdf';
+import type { PDFDocumentProxy } from 'pdfjs-dist';
+import type { RefProxy } from 'pdfjs-dist/types/src/display/api';
+/** PDF.js outline node (subset used). */
+interface PdfJsOutlineNode {
+  title?: string;
+  dest?: string | unknown[] | null;
+  items?: PdfJsOutlineNode[];
+}
+
 
 export interface SplitPDFToolProps {
   /** Custom class name */
@@ -73,7 +82,7 @@ export function SplitPDFTool({ className = '', initialFile, hideUploader }: Spli
 
   // Ref for cancellation
   const cancelledRef = useRef(false);
-  const pdfDocRef = useRef<any>(null);
+  const pdfDocRef = useRef<PDFDocumentProxy | null>(null);
 
   useEffect(() => {
     if (initialFile) {
@@ -158,8 +167,8 @@ export function SplitPDFTool({ className = '', initialFile, hideUploader }: Spli
    * Parse PDF.js outline to BookmarkInfo format
    */
   const parseOutlineToBookmarks = async (
-    outline: any[],
-    pdf: any
+    outline: PdfJsOutlineNode[],
+    pdf: PDFDocumentProxy
   ): Promise<BookmarkInfo[]> => {
     const result: BookmarkInfo[] = [];
 
@@ -173,7 +182,7 @@ export function SplitPDFTool({ className = '', initialFile, hideUploader }: Spli
             ? await pdf.getDestination(item.dest)
             : item.dest;
           if (dest && dest[0]) {
-            const pageRef = dest[0];
+            const pageRef = dest[0] as RefProxy;
             const pageIndex = await pdf.getPageIndex(pageRef);
             pageNumber = pageIndex + 1;
           }

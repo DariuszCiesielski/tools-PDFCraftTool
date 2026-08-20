@@ -11,6 +11,7 @@ import { Button } from '@/components/ui/Button';
 import { Card } from '@/components/ui/Card';
 import { createForm, FormField } from '@/lib/pdf/processors/form-creator';
 import type { ProcessOutput } from '@/types/pdf';
+import type { PDFDocumentProxy } from 'pdfjs-dist';
 
 // Store pdfjs module reference
 let pdfjsModule: typeof import('pdfjs-dist') | null = null;
@@ -238,7 +239,7 @@ export function FormCreatorTool({ className = '' }: FormCreatorToolProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const cancelledRef = useRef(false);
-  const pdfDocRef = useRef<any>(null);
+  const pdfDocRef = useRef<PDFDocumentProxy | null>(null);
 
   // Generate unique ID
   const generateId = () => `field_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
@@ -415,7 +416,7 @@ export function FormCreatorTool({ className = '' }: FormCreatorToolProps) {
   }, [file, currentPage, fields, isAddingPage]);
 
   // Render page
-  const renderPage = async (pdf: any, pageNum: number) => {
+  const renderPage = async (pdf: PDFDocumentProxy, pageNum: number) => {
     if (!canvasRef.current) return;
 
     try {
