@@ -5,30 +5,16 @@
  * Uses script injection to avoid Next.js SSR bundling issues.
  */
 
-/** Emscripten module factory options used by qpdf.js. */
-interface QpdfFactoryOptions {
-  locateFile: (path: string) => string;
-}
-
-/** QPDF WASM instance — shape unused so far (no consumers), kept opaque. */
-export type QpdfModule = Record<string, unknown>;
-
-type QpdfModuleFactory = (options: QpdfFactoryOptions) => Promise<QpdfModule>;
-
-/** Window globals exposed by the injected qpdf.js script. */
-type QpdfWindow = Window & {
-  createQpdfModule?: QpdfModuleFactory;
-  Module?: QpdfModuleFactory;
-};
+import type { QpdfEmscriptenModule, QpdfWindow } from './qpdf-types';
 
 // QPDF instance singleton
-let qpdfInstance: QpdfModule | null = null;
-let loadingPromise: Promise<QpdfModule> | null = null;
+let qpdfInstance: QpdfEmscriptenModule | null = null;
+let loadingPromise: Promise<QpdfEmscriptenModule> | null = null;
 
 /**
  * Load the QPDF WASM module dynamically
  */
-export async function loadQpdf(): Promise<QpdfModule> {
+export async function loadQpdf(): Promise<QpdfEmscriptenModule> {
   // Return cached instance if available
   if (qpdfInstance) {
     return qpdfInstance;

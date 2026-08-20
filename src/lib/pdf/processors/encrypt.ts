@@ -14,6 +14,7 @@ import type {
 } from '@/types/pdf';
 import { PDFErrorCode } from '@/types/pdf';
 import { BasePDFProcessor } from '../processor';
+import type { QpdfEmscriptenModule, QpdfWindow } from '../qpdf-types';
 
 /**
  * PDF Permission flags
@@ -70,14 +71,14 @@ const DEFAULT_ENCRYPT_OPTIONS: EncryptPDFOptions = {
 };
 
 // QPDF instance singleton
-let qpdfInstance: any = null;
-let qpdfLoadPromise: Promise<any> | null = null;
+let qpdfInstance: QpdfEmscriptenModule | null = null;
+let qpdfLoadPromise: Promise<QpdfEmscriptenModule> | null = null;
 
 /**
  * Initialize qpdf-wasm singleton
  * Uses script tag loading to avoid Next.js SSR bundling issues
  */
-async function initializeQpdf(): Promise<any> {
+async function initializeQpdf(): Promise<QpdfEmscriptenModule> {
   // Return cached instance if available
   if (qpdfInstance) {
     return qpdfInstance;
@@ -95,7 +96,7 @@ async function initializeQpdf(): Promise<any> {
 
   qpdfLoadPromise = new Promise((resolve, reject) => {
     // Check if Module is already available
-    if ((window as any).Module && typeof (window as any).Module === 'function') {
+    if ((window as QpdfWindow).Module && typeof (window as QpdfWindow).Module === 'function') {
       initQpdfModule(resolve, reject);
       return;
     }
@@ -123,9 +124,9 @@ async function initializeQpdf(): Promise<any> {
 /**
  * Initialize the QPDF module after script is loaded
  */
-function initQpdfModule(resolve: (value: any) => void, reject: (reason: any) => void) {
+function initQpdfModule(resolve: (value: QpdfEmscriptenModule) => void, reject: (reason?: unknown) => void) {
   try {
-    const createModule = (window as any).Module;
+    const createModule = (window as QpdfWindow).Module;
     
     if (!createModule || typeof createModule !== 'function') {
       reject(new Error('QPDF module not found after script load'));
@@ -139,10 +140,10 @@ function initQpdfModule(resolve: (value: any) => void, reject: (reason: any) => 
         }
         return path;
       },
-    }).then((instance: any) => {
+    }).then((instance: QpdfEmscriptenModule) => {
       qpdfInstance = instance;
       resolve(instance);
-    }).catch((err: any) => {
+    }).catch((err: unknown) => {
       qpdfLoadPromise = null;
       reject(err);
     });
@@ -198,7 +199,7 @@ export class EncryptPDFProcessor extends BasePDFProcessor {
     const file = files[0];
     const inputPath = '/input.pdf';
     const outputPath = '/output.pdf';
-    let qpdf: any;
+    let qpdf: QpdfEmscriptenModule | undefined;
 
     try {
       this.updateProgress(5, 'Initializing encryption engine...');
@@ -286,10 +287,10 @@ export class EncryptPDFProcessor extends BasePDFProcessor {
       // Execute qpdf encryption
       try {
         qpdf.callMain(args);
-      } catch (qpdfError: any) {
+      } catch (qpdfError) {
         console.error('qpdf execution error:', qpdfError);
         throw new Error(
-          'Encryption failed: ' + (qpdfError.message || 'Unknown error')
+          'Encryption failed: ' + ((qpdfError as Error).message || 'Unknown error')
         );
       }
 
