@@ -95,7 +95,7 @@ export function validateSignature(
   try {
     const binaryString = uint8ArrayToBinaryString(signature.contents);
     const asn1 = forge.asn1.fromDer(binaryString);
-    const p7 = forge.pkcs7.messageFromAsn1(asn1) as any;
+    const p7 = forge.pkcs7.messageFromAsn1(asn1) as unknown as { certificates?: forge.pki.Certificate[] };
 
     if (!p7.certificates || p7.certificates.length === 0) {
       result.errorMessage = 'No certificates found in signature';

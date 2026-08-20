@@ -20,6 +20,11 @@ import type {
 import { PDFErrorCode } from '@/types/pdf';
 import { BasePDFProcessor } from '../processor';
 import { loadPdfLib } from '../loader';
+import type { PDFArray, PDFDict, PDFName as PDFNameObj, PDFObject } from 'pdf-lib';
+
+/** pdf-lib's internal dict map (accessed past `private` for low-level cleanup). */
+type PDFDictMap = Map<PDFNameObj, PDFObject>;
+type HasDict = { dict: PDFDictMap };
 
 /**
  * Sanitize PDF options
@@ -155,10 +160,10 @@ export class SanitizePDFProcessor extends BasePDFProcessor {
             form.flatten();
             removedItems.push('form fields (flattened)');
           }
-        } catch (e: any) {
+        } catch {
           // Try to remove AcroForm if flatten fails
           try {
-            const catalogDict = (pdfDoc.catalog as any).dict;
+            const catalogDict = (pdfDoc.catalog as unknown as HasDict).dict;
             if (catalogDict.has(PDFName.of('AcroForm'))) {
               catalogDict.delete(PDFName.of('AcroForm'));
               removedItems.push('form fields');
@@ -175,9 +180,9 @@ export class SanitizePDFProcessor extends BasePDFProcessor {
       if (sanitizeOptions.removeMetadata) {
         try {
           // Clear info dict
-          const infoDict = (pdfDoc as any).getInfoDict();
+          const infoDict = (pdfDoc as unknown as { getInfoDict(): PDFDict }).getInfoDict();
           const allKeys = infoDict.keys();
-          allKeys.forEach((key: any) => {
+          allKeys.forEach((key) => {
             infoDict.delete(key);
           });
 
@@ -190,7 +195,7 @@ export class SanitizePDFProcessor extends BasePDFProcessor {
 
           // Remove XMP metadata
           try {
-            const catalogDict = (pdfDoc.catalog as any).dict;
+            const catalogDict = (pdfDoc.catalog as unknown as HasDict).dict;
             if (catalogDict.has(PDFName.of('Metadata'))) {
               catalogDict.delete(PDFName.of('Metadata'));
             }
@@ -224,13 +229,13 @@ export class SanitizePDFProcessor extends BasePDFProcessor {
       // Remove JavaScript
       if (sanitizeOptions.removeJavaScript) {
         try {
-          const catalogDict = (pdfDoc.catalog as any).dict;
+          const catalogDict = (pdfDoc.catalog as unknown as HasDict).dict;
 
           // Remove from Names/JavaScript
           const namesRef = catalogDict.get(PDFName.of('Names'));
           if (namesRef) {
             try {
-              const namesDict = pdfDoc.context.lookup(namesRef) as any;
+              const namesDict = pdfDoc.context.lookup(namesRef) as PDFDict;
               if (namesDict.has(PDFName.of('JavaScript'))) {
                 namesDict.delete(PDFName.of('JavaScript'));
               }
@@ -273,13 +278,13 @@ export class SanitizePDFProcessor extends BasePDFProcessor {
       // Remove embedded files/attachments
       if (sanitizeOptions.removeAttachments) {
         try {
-          const catalogDict = (pdfDoc.catalog as any).dict;
+          const catalogDict = (pdfDoc.catalog as unknown as HasDict).dict;
 
           // Remove from Names/EmbeddedFiles
           const namesRef = catalogDict.get(PDFName.of('Names'));
           if (namesRef) {
             try {
-              const namesDict = pdfDoc.context.lookup(namesRef) as any;
+              const namesDict = pdfDoc.context.lookup(namesRef) as PDFDict;
               if (namesDict.has(PDFName.of('EmbeddedFiles'))) {
                 namesDict.delete(PDFName.of('EmbeddedFiles'));
               }
@@ -309,13 +314,13 @@ export class SanitizePDFProcessor extends BasePDFProcessor {
               const annotsRef = pageDict.get(PDFName.of('Annots'));
               if (!annotsRef) continue;
 
-              const annotsArray = pdfDoc.context.lookup(annotsRef) as any;
+              const annotsArray = pdfDoc.context.lookup(annotsRef) as PDFArray;
               const annotRefs = annotsArray.asArray();
               const annotsToKeep = [];
 
               for (const ref of annotRefs) {
                 try {
-                  const annot = pdfDoc.context.lookup(ref) as any;
+                  const annot = pdfDoc.context.lookup(ref) as PDFDict;
                   const subtype = annot.get(PDFName.of('Subtype'))?.toString().substring(1);
 
                   // Keep non-link annotations

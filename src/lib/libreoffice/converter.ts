@@ -27,6 +27,7 @@
  */
 
 import { WorkerBrowserConverter } from '@matbee/libreoffice-converter/browser';
+import type { InputFormat, OutputFormat } from '@matbee/libreoffice-converter/browser';
 import { fetchAssembledBlob } from '../utils/asset-loader';
 
 const LIBREOFFICE_PATH = '/libreoffice-wasm/';
@@ -290,8 +291,8 @@ export class LibreOfficeConverter {
 
             const startTime = Date.now();
             const result = await this.converter.convert(uint8Array, {
-                outputFormat: outputFormat as any,
-                inputFormat: ext as any,
+                outputFormat: outputFormat as OutputFormat,
+                inputFormat: ext as InputFormat,
             }, file.name);
 
             const duration = Date.now() - startTime;

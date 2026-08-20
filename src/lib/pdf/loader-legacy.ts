@@ -65,11 +65,11 @@ export async function loadPdfjsLegacy(): Promise<PDFJSLegacyModule> {
  */
 export interface SVGGraphicsInstance {
     embedFonts: boolean;
-    getSVG(operatorList: any, viewport: any): Promise<SVGElement>;
+    getSVG(operatorList: unknown, viewport: unknown): Promise<SVGElement>;
 }
 
 export interface SVGGraphicsConstructor {
-    new(commonObjs: any, objs: any): SVGGraphicsInstance;
+    new(commonObjs: unknown, objs: unknown): SVGGraphicsInstance;
 }
 
 /**

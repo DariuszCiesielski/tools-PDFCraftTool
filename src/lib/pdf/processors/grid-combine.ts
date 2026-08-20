@@ -19,6 +19,8 @@ import type {
 import { PDFErrorCode } from '@/types/pdf';
 import { BasePDFProcessor } from '../processor';
 import { loadPdfLib, loadPdfjs } from '../loader';
+import type { PDFImage } from 'pdf-lib';
+import type { PDFDocumentProxy } from 'pdfjs-dist';
 import { PDFJS_CONFIG } from '../config';
 
 /**
@@ -89,7 +91,7 @@ function parseGridLayout(layout: string): [number, number] {
  */
 interface RenderedCell {
     /** Embedded PNG image in the output PDF */
-    image: any;
+    image: PDFImage;
     /** Image width in pixels */
     width: number;
     /** Image height in pixels */
@@ -206,7 +208,7 @@ export class GridCombineProcessor extends BasePDFProcessor {
                 }
 
                 // Load PDF with pdfjs for rendering
-                let pdf: any;
+                let pdf: PDFDocumentProxy;
                 try {
                     pdf = await pdfjsLib.getDocument({
                         data: arrayBuffer,

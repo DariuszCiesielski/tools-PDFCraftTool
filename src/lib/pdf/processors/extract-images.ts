@@ -18,6 +18,17 @@ import { BasePDFProcessor } from '../processor';
 /**
  * Extracted image info
  */
+/** Raw image entry returned by the extraction worker. */
+export interface WorkerExtractedImage {
+    data: ArrayBuffer | Uint8Array<ArrayBuffer>;
+    ext: string;
+    width: number;
+    height: number;
+    pageNumber: number;
+    size: number;
+    [key: string]: unknown;
+}
+
 export interface ExtractedImage {
     /** Unique index */
     index: number;
@@ -180,7 +191,7 @@ export class ExtractImagesPDFProcessor extends BasePDFProcessor {
 
                 try {
                     // Extract images using Worker
-                    const fileImages = await new Promise<any[]>((resolve, reject) => {
+                    const fileImages = await new Promise<WorkerExtractedImage[]>((resolve, reject) => {
                         if (!this.worker) {
                             reject(new Error('Worker not initialized'));
                             return;

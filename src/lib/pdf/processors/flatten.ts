@@ -142,10 +142,11 @@ export class FlattenPDFProcessor extends BasePDFProcessor {
             form.flatten();
             flattenedItems.push(`${fields.length} form field(s)`);
           }
-        } catch (e: any) {
+        } catch (e) {
           // PDF might not have a form or form might be malformed
-          if (!e.message?.includes('getForm')) {
-            console.warn('Could not flatten forms:', e.message);
+          const err = e as Error;
+          if (!err.message?.includes('getForm')) {
+            console.warn('Could not flatten forms:', err.message);
           }
         }
       }

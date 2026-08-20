@@ -13,6 +13,8 @@ import type {
 import { PDFErrorCode } from '@/types/pdf';
 import { BasePDFProcessor } from '../processor';
 import type { SVGGraphicsConstructor } from '../loader-legacy';
+import type { PDFDocumentProxy, PDFPageProxy, PageViewport } from 'pdfjs-dist';
+import type { TextItem as PdfjsTextItem } from 'pdfjs-dist/types/src/display/api';
 
 // Dynamic imports to avoid SSR issues with pdfjs-dist-legacy (which requires 'canvas' module)
 async function loadPdfjsLegacy() {
@@ -216,7 +218,7 @@ export class PDFToSVGProcessor extends BasePDFProcessor {
      * Render a single PDF page to SVG using true vector rendering
      */
     private async renderPageToSVG(
-        pdf: any, // PDF document from legacy pdfjs-dist
+        pdf: PDFDocumentProxy, // PDF document from legacy pdfjs-dist
         pageNum: number,
         options: PDFToSVGOptions
     ): Promise<SVGResult> {
@@ -247,8 +249,8 @@ export class PDFToSVGProcessor extends BasePDFProcessor {
      * Uses pdfjs-dist v2.16.105 which includes the SVGGraphics module
      */
     private async renderPageToVectorSVG(
-        page: any,
-        viewport: any,
+        page: PDFPageProxy,
+        viewport: PageViewport,
         options: PDFToSVGOptions
     ): Promise<string> {
         // Load SVGGraphics from legacy pdfjs-dist
@@ -293,8 +295,8 @@ export class PDFToSVGProcessor extends BasePDFProcessor {
      * Fallback: Render page to SVG with embedded raster image and vector text layer
      */
     private async renderPageToRasterSVG(
-        page: any,
-        viewport: any,
+        page: PDFPageProxy,
+        viewport: PageViewport,
         options: PDFToSVGOptions,
         pageNum: number
     ): Promise<SVGResult> {
@@ -324,7 +326,8 @@ export class PDFToSVGProcessor extends BasePDFProcessor {
         // Build text layer SVG elements
         let textLayerSVG = '';
         if (textContent && textContent.items && textContent.items.length > 0) {
-            for (const item of textContent.items) {
+            for (const rawItem of textContent.items) {
+                const item = rawItem as PdfjsTextItem;
                 if (!item.str || item.str.trim() === '') continue;
 
                 const tx = viewport.transform;

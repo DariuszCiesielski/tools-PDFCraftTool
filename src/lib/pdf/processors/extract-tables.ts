@@ -13,6 +13,7 @@ import type {
 import { PDFErrorCode } from '@/types/pdf';
 import { BasePDFProcessor } from '../processor';
 import { loadPdfjs } from '../loader';
+import type { TextItem as PdfjsTextItem } from 'pdfjs-dist/types/src/display/api';
 
 /**
  * Output format for extracted tables
@@ -204,7 +205,7 @@ function tablesToJson(tables: DetectedTable[], includePageNumbers: boolean): str
         const headers = table.rows[0];
         const dataRows = table.rows.slice(1);
 
-        const result: any = {
+        const result: { tableIndex: number; headers: string[]; rows: Record<string, string>[]; pageNumber?: number } = {
             tableIndex: index + 1,
             headers,
             rows: dataRows.map(row => {
@@ -365,8 +366,8 @@ export class ExtractTablesProcessor extends BasePDFProcessor {
                     const textContent = await page.getTextContent();
 
                     const textItems: TextItem[] = textContent.items
-                        .filter((item: any) => 'str' in item)
-                        .map((item: any) => ({
+                        .filter((item): item is PdfjsTextItem => 'str' in item)
+                        .map((item) => ({
                             str: item.str,
                             transform: item.transform,
                             width: item.width,

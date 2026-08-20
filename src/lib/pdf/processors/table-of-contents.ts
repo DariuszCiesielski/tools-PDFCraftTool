@@ -45,11 +45,12 @@ export class TableOfContentsProcessor extends BasePDFProcessor {
         tocOptions.addBookmark ?? true
       );
 
+      const payload = result as Partial<{ pdfBlob: Blob; pdfBytes: ArrayBuffer }>;
       console.log('[TOC Processor] Worker returned result:', {
         status: result.status,
         hasPdfBytes: 'pdfBytes' in result,
-        pdfBytesType: (result as any).pdfBytes ? (result as any).pdfBytes.constructor.name : 'N/A',
-        byteLength: (result as any).pdfBytes ? (result as any).pdfBytes.byteLength : 0
+        pdfBytesType: payload.pdfBytes ? payload.pdfBytes.constructor.name : 'N/A',
+        byteLength: payload.pdfBytes ? payload.pdfBytes.byteLength : 0
       });
 
       if (result.status === 'error') {
@@ -59,8 +60,8 @@ export class TableOfContentsProcessor extends BasePDFProcessor {
         );
       }
 
-      const blobResult = (result as any).pdfBlob;
-      const bytesResult = (result as any).pdfBytes;
+      const blobResult = payload.pdfBlob;
+      const bytesResult = payload.pdfBytes;
 
       let finalBlob: Blob;
 

@@ -67,7 +67,7 @@ export class CropProcessor extends BasePDFProcessor {
     }
   }
 
-  private async performMetadataCrop(pdfLib: any, arrayBuffer: ArrayBuffer, cropData: Record<number, CropData>): Promise<Uint8Array> {
+  private async performMetadataCrop(pdfLib: typeof import('pdf-lib'), arrayBuffer: ArrayBuffer, cropData: Record<number, CropData>): Promise<Uint8Array> {
     const pdf = await pdfLib.PDFDocument.load(arrayBuffer, { ignoreEncryption: true });
 
     // Process pages
@@ -113,7 +113,7 @@ export class CropProcessor extends BasePDFProcessor {
     return await pdf.save({ useObjectStreams: true });
   }
 
-  private async performDestructiveCrop(pdfLib: any, arrayBuffer: ArrayBuffer, cropData: Record<number, CropData>): Promise<Uint8Array> {
+  private async performDestructiveCrop(pdfLib: typeof import('pdf-lib'), arrayBuffer: ArrayBuffer, cropData: Record<number, CropData>): Promise<Uint8Array> {
     // This requires embedding the cropped area as an image or creating a new page with specific dimensions.
     // For simplicity and robustness given common libraries, we will use the metadata crop logic 
     // but save it and then reload/flatten if needed, or stick to metadata crop as default.

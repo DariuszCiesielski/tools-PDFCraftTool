@@ -14,6 +14,20 @@ import type {
 import { PDFErrorCode } from '@/types/pdf';
 import { BasePDFProcessor } from '../processor';
 
+// Minimal typing for the DjVu.js library (loaded from CDN, ships no TS types)
+interface DjVuPage {
+    getImageData(): ImageData | null;
+}
+interface DjVuDocumentInstance {
+    getPagesQuantity(): number;
+    getPage(pageNum: number): Promise<DjVuPage>;
+}
+interface DjVuLibrary {
+    Document: new (buffer: ArrayBuffer) => DjVuDocumentInstance;
+}
+type DjVuWindow = Window & { DjVu?: DjVuLibrary };
+
+
 /**
  * DJVU to PDF options
  */
@@ -227,12 +241,13 @@ export class DJVUToPDFProcessor extends BasePDFProcessor {
     /**
      * Load djvu.js library dynamically
      */
-    private async loadDjVuLibrary(): Promise<any> {
+    private async loadDjVuLibrary(): Promise<DjVuLibrary> {
         // Try to load from CDN or local bundle
         return new Promise((resolve, reject) => {
             // Check if already loaded
-            if ((window as any).DjVu) {
-                resolve((window as any).DjVu);
+            const djvuWindow = window as DjVuWindow;
+            if (djvuWindow.DjVu) {
+                resolve(djvuWindow.DjVu);
                 return;
             }
 
@@ -243,8 +258,8 @@ export class DJVUToPDFProcessor extends BasePDFProcessor {
             script.async = true;
 
             script.onload = () => {
-                if ((window as any).DjVu) {
-                    resolve((window as any).DjVu);
+                if (djvuWindow.DjVu) {
+                    resolve(djvuWindow.DjVu);
                 } else {
                     reject(new Error('DjVu library loaded but not available'));
                 }

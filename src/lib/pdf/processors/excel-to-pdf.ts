@@ -12,33 +12,34 @@ import type {
 } from '@/types/pdf';
 import { PDFErrorCode } from '@/types/pdf';
 import { BasePDFProcessor } from '../processor';
+import type { LibreOfficeConverter, LoadProgress } from '@/lib/libreoffice/converter';
 
 /** Maximum file size: 50 MB */
 const MAX_FILE_SIZE = 50 * 1024 * 1024;
 /** Conversion timeout: 5 minutes */
 const CONVERT_TIMEOUT_MS = 5 * 60 * 1000;
 
-let converterPromise: Promise<any> | null = null;
-let converterInstance: any = null;
+let converterPromise: Promise<void> | null = null;
+let converterInstance: LibreOfficeConverter | null = null;
 
-async function getConverter(onProgress?: (percent: number, message: string) => void): Promise<any> {
+async function getConverter(onProgress?: (percent: number, message: string) => void): Promise<LibreOfficeConverter> {
     if (converterInstance?.isReady()) return converterInstance;
 
     if (converterPromise) {
         await converterPromise;
-        return converterInstance;
+        return converterInstance!;
     }
 
     converterPromise = (async () => {
         const { getLibreOfficeConverter } = await import('@/lib/libreoffice');
         converterInstance = getLibreOfficeConverter();
-        await converterInstance.initialize((progress: any) => {
+        await converterInstance.initialize((progress: LoadProgress) => {
             onProgress?.(progress.percent, progress.message);
         });
     })();
 
     await converterPromise;
-    return converterInstance;
+    return converterInstance!;
 }
 export type ExcelToPDFOptions = Record<string, unknown>; // Reserved for future options
 
