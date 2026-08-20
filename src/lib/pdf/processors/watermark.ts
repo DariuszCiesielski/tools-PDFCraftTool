@@ -118,7 +118,7 @@ async function loadCJKFont(): Promise<ArrayBuffer> {
  * Check if text contains non-ASCII characters (CJK, etc.)
  */
 function containsNonAscii(text: string): boolean {
-  // eslint-disable-next-line no-control-regex
+   
   return /[^\x00-\x7F]/.test(text);
 }
 
@@ -336,8 +336,8 @@ function computeTextWatermarkPosition(
   // Get rotation direction sign: 1=counterclockwise, -1=clockwise, 0=no rotation
   const rotationSign = Math.sign(rotation);
   // Calculate final rotated origin coordinates for text
-  let rotatedOriginX = baseX + textWidthHalf * (1 - cosRad) + rotationSign * baselineOffset;
-  let rotatedOriginY = baseY - rotationSign * (textWidthHalf * sinRad) + baselineOffset * Math.abs(rotationSign);
+  const rotatedOriginX = baseX + textWidthHalf * (1 - cosRad) + rotationSign * baselineOffset;
+  const rotatedOriginY = baseY - rotationSign * (textWidthHalf * sinRad) + baselineOffset * Math.abs(rotationSign);
 
   return {
     x: rotatedOriginX,

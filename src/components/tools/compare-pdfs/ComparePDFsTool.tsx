@@ -505,7 +505,7 @@ export function ComparePDFsTool({ className = '' }: ComparePDFsToolProps) {
         img.src = currentDiffData.diffImageUrl;
       }
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+   
   }, [file1, file2, differencesLength, currentPage, viewMode]);
 
   /**

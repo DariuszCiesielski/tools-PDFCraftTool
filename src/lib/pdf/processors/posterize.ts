@@ -192,7 +192,7 @@ export class PosterizePDFProcessor extends BasePDFProcessor {
       }
 
       // Get output page size
-      let [targetWidth, targetHeight] = PAGE_SIZES[posterizeOptions.pageSize];
+      const [targetWidth, targetHeight] = PAGE_SIZES[posterizeOptions.pageSize];
 
       this.updateProgress(20, 'Creating posterized PDF...');
 

@@ -225,7 +225,7 @@ export async function executeNode(
                 const count = Number(settings.count) || 1;
                 
                 // Convert position string to options
-                let options: Record<string, unknown> = { count };
+                const options: Record<string, unknown> = { count };
                 if (positionStr === 'end') {
                     options.position = 'end';
                 } else if (positionStr === 'beginning') {
@@ -512,7 +512,7 @@ export async function executeNode(
                 const format = toolId.replace('pdf-to-', '') as 'jpg' | 'png' | 'webp' | 'bmp' | 'tiff';
 
                 // Parse page range if provided (e.g., "1-5, 8, 10-12")
-                let pages: number[] = [];
+                const pages: number[] = [];
                 if (settings.pageRange && typeof settings.pageRange === 'string') {
                     const pageRangeStr = String(settings.pageRange).trim();
                     if (pageRangeStr) {

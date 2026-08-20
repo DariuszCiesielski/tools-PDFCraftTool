@@ -16,9 +16,7 @@ import { BasePDFProcessor } from '../processor';
 /**
  * XPS to PDF options
  */
-export interface XPSToPDFOptions {
-    /** Reserved for future options */
-}
+export type XPSToPDFOptions = Record<string, unknown>; // Reserved for future options
 
 /**
  * XPS to PDF Processor

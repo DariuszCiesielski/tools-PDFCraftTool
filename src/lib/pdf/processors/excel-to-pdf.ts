@@ -40,9 +40,7 @@ async function getConverter(onProgress?: (percent: number, message: string) => v
     await converterPromise;
     return converterInstance;
 }
-export interface ExcelToPDFOptions {
-    /** Reserved for future options */
-}
+export type ExcelToPDFOptions = Record<string, unknown>; // Reserved for future options
 
 export class ExcelToPDFProcessor extends BasePDFProcessor {
     private conversionProgressTimer: ReturnType<typeof setInterval> | null = null;

@@ -113,7 +113,7 @@ async function parseEmlFile(file: File): Promise<ParsedEmail> {
     i++;
 
     // Get body
-    let body = lines.slice(i).join('\n');
+    const body = lines.slice(i).join('\n');
     const contentType = headers['content-type'] || 'text/plain';
 
     // Handle multipart content

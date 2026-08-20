@@ -17,9 +17,7 @@ const MAX_FILE_SIZE = 50 * 1024 * 1024;
 /** Conversion timeout: 5 minutes */
 const CONVERT_TIMEOUT_MS = 5 * 60 * 1000;
 
-export interface WordToPDFOptions {
-    /** Reserved for future options */
-}
+export type WordToPDFOptions = Record<string, unknown>; // Reserved for future options
 
 let converterPromise: Promise<any> | null = null;
 let converterInstance: any = null;

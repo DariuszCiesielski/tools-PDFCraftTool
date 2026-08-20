@@ -119,7 +119,7 @@ export class PDFToMarkdownProcessor extends BasePDFProcessor {
             const isBold = fontName.includes('bold') || fontName.includes('heavy') || fontName.includes('black');
             const isItalic = fontName.includes('italic') || fontName.includes('oblique');
 
-            let foundLine = lines.find((line) => Math.abs(line.y - y) < tolerance);
+            const foundLine = lines.find((line) => Math.abs(line.y - y) < tolerance);
 
             if (foundLine) {
                 foundLine.items.push(item);
@@ -294,7 +294,7 @@ export class PDFToMarkdownProcessor extends BasePDFProcessor {
             }
 
             const line = lines[i];
-            let text = line.items.map((item) => item.str).join(' ').replace(/\s+/g, ' ');
+            const text = line.items.map((item) => item.str).join(' ').replace(/\s+/g, ' ');
             const trimmedText = text.trim();
 
             if (!trimmedText) {

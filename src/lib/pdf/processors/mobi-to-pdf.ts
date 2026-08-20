@@ -21,9 +21,7 @@ import { BasePDFProcessor } from '../processor';
 /**
  * MOBI to PDF options
  */
-export interface MOBIToPDFOptions {
-    // Reserved for future options
-}
+export type MOBIToPDFOptions = Record<string, unknown>; // Reserved for future options
 
 /**
  * MOBI to PDF Processor

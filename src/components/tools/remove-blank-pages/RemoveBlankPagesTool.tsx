@@ -32,7 +32,7 @@ export function RemoveBlankPagesTool({ className = '', initialFile, hideUploader
     if (initialFile) {
       setFile(initialFile);
     }
-  }, [initialFile]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [initialFile]);  
 
 
   const handleProcess = useCallback(async () => {

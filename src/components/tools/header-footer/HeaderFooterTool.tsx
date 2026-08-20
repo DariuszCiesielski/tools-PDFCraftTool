@@ -68,7 +68,7 @@ export function HeaderFooterTool({ className = '', initialFile, hideUploader, on
     if (initialFile) {
       setFile(initialFile);
     }
-  }, [initialFile]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [initialFile]);  
 
   const previewCanvasRef = useRef<HTMLCanvasElement>(null);
 
@@ -471,7 +471,7 @@ export function HeaderFooterTool({ className = '', initialFile, hideUploader, on
                   disabled={isProcessing}
                 />
                 <p className="text-xs text-gray-500 mt-1">
-                  Use "all" for all pages, or specify ranges like "1-5, 8, 10-12"
+                  Use &quot;all&quot; for all pages, or specify ranges like &quot;1-5, 8, 10-12&quot;
                 </p>
               </div>
 

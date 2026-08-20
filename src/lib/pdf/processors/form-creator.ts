@@ -98,8 +98,8 @@ export class FormCreatorProcessor extends BasePDFProcessor {
 
         // Ensure coordinates are within page bounds
         const pageWidth = page.getWidth();
-        let adjustedX = Math.max(0, Math.min(fieldDef.x, pageWidth - fieldDef.width));
-        let adjustedY = Math.max(0, Math.min(fieldDef.y, pageHeight - fieldDef.height));
+        const adjustedX = Math.max(0, Math.min(fieldDef.x, pageWidth - fieldDef.width));
+        const adjustedY = Math.max(0, Math.min(fieldDef.y, pageHeight - fieldDef.height));
 
         try {
           switch (fieldDef.type) {
