@@ -6,6 +6,17 @@ import { tools } from '@/config/tools';
 import { locales } from '@/lib/i18n/config';
 import { ToolCard } from '@/components/tools/ToolCard';
 
+// Mock next-intl (components call useTranslations outside a provider)
+vi.mock('next-intl', () => ({
+  useTranslations: () => (key: string) => key,
+}));
+
+// Mock next/navigation (ToolPage renders Header which uses the app router)
+vi.mock('next/navigation', () => ({
+  useRouter: () => ({ push: vi.fn(), replace: vi.fn() }),
+  usePathname: () => '/en/tools',
+}));
+
 // Mock next/link
 vi.mock('next/link', () => ({
   default: ({ children, href, ...props }: { children: React.ReactNode; href: string }) => 

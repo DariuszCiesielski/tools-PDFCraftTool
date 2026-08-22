@@ -408,6 +408,7 @@
     "fileTooLarge": "File is too large. Maximum size is {maxSize}MB.",
     "fileTypeInvalid": "Invalid file type. Please upload a {acceptedTypes} file.",
     "fileCorrupted": "The file appears to be corrupted or unreadable.",
+    "invalidPassword": "The password you entered is incorrect. Please check and try again.",
     "fileEmpty": "The file is empty.",
     "fileNotPdf": "The file is not a valid PDF.",
     "processingFailed": "Processing failed. Please try again.",

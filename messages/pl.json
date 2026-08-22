@@ -408,6 +408,7 @@
     "fileTooLarge": "Plik jest za duży. Maksymalny rozmiar to {maxSize} MB.",
     "fileTypeInvalid": "Nieprawidłowy typ pliku. Prześlij plik w formacie {acceptedTypes}.",
     "fileCorrupted": "Plik wydaje się uszkodzony lub nieczytelny.",
+    "invalidPassword": "Wprowadzone hasło jest nieprawidłowe. Sprawdź je i spróbuj ponownie.",
     "fileEmpty": "Plik jest pusty.",
     "fileNotPdf": "Przesłany plik nie jest poprawnym dokumentem PDF.",
     "processingFailed": "Przetwarzanie nie powiodło się. Spróbuj ponownie.",

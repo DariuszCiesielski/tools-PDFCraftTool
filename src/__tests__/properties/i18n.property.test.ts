@@ -53,12 +53,12 @@ describe('i18n Property Tests', () => {
   /**
    * Property: All non-Arabic locales have LTR direction
    */
-  it('all locales have LTR direction', () => {
+  it('all non-Arabic locales have LTR direction (Arabic is RTL)', () => {
     fc.assert(
       fc.property(
         fc.constantFrom(...SUPPORTED_LOCALES),
         (locale) => {
-          return LOCALE_CONFIG[locale].direction === 'ltr';
+          return LOCALE_CONFIG[locale].direction === (locale === 'ar' ? 'rtl' : 'ltr');
         }
       ),
       { numRuns: 100 }

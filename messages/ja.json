@@ -385,6 +385,7 @@
     "fileTooLarge": "ファイルが大きすぎます。最大サイズは{maxSize}MBです。",
     "fileTypeInvalid": "無効なファイル形式です。{acceptedTypes}ファイルをアップロードしてください。",
     "fileCorrupted": "ファイルが破損しているか、読み取れません。",
+    "invalidPassword": "入力されたパスワードが正しくありません。確認してもう一度お試しください。",
     "fileEmpty": "ファイルが空です。",
     "fileNotPdf": "ファイルは有効なPDFではありません。",
     "processingFailed": "処理に失敗しました。もう一度お試しください。",

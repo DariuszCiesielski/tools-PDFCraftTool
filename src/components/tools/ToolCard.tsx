@@ -79,7 +79,7 @@ export function ToolCard({ tool, locale, className = '', localizedContent }: Too
               data-testid="tool-card-icon"
               aria-hidden="true"
             >
-              <IconComponent className="w-7 h-7 text-[hsl(var(--color-primary))]" />
+              <IconComponent className="w-7 h-7 text-[hsl(var(--color-primary))]" data-icon={tool.icon} />
             </div>
           </div>
 

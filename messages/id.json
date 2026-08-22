@@ -408,6 +408,7 @@
     "fileTooLarge": "Ukuran file terlalu besar. Ukuran maksimum adalah {maxSize}MB.",
     "fileTypeInvalid": "Jenis file tidak valid. Silakan unggah file {acceptedTypes}.",
     "fileCorrupted": "File tampak rusak atau tidak terbaca.",
+    "invalidPassword": "Kata sandi yang Anda masukkan salah. Periksa dan coba lagi.",
     "fileEmpty": "File kosong.",
     "fileNotPdf": "File bukan merupakan PDF yang valid.",
     "processingFailed": "Pemrosesan gagal. Silakan coba lagi.",

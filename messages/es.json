@@ -385,6 +385,7 @@
     "fileTooLarge": "El archivo es demasiado grande. El tamaño máximo es {maxSize}MB.",
     "fileTypeInvalid": "Tipo de archivo inválido. Por favor sube un archivo {acceptedTypes}.",
     "fileCorrupted": "El archivo parece estar corrupto o ilegible.",
+    "invalidPassword": "La contraseña introducida es incorrecta. Compruébala e inténtalo de nuevo.",
     "fileEmpty": "El archivo está vacío.",
     "fileNotPdf": "El archivo no es un PDF válido.",
     "processingFailed": "El procesamiento falló. Por favor intenta de nuevo.",

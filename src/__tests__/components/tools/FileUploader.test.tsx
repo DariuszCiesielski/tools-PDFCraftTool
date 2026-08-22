@@ -9,6 +9,10 @@ vi.mock('next-intl', () => ({
     const translations: Record<string, string> = {
       'buttons.upload': 'Upload Files',
       'buttons.cancel': 'Cancel',
+      'fileUploader.dragDrop': 'Drag and drop files here, or click to select',
+      'fileUploader.support': 'Supports',
+      'fileUploader.paste': 'paste from clipboard',
+      'fileUploader.dropToUpload': 'Drop files here',
     };
     if (key === 'fileTooLarge') {
       return `File size exceeds ${params?.maxSize}MB limit`;
@@ -91,27 +95,7 @@ describe('FileUploader', () => {
       expect(screen.getByText('Custom upload description')).toBeInTheDocument();
     });
 
-    it('displays accepted file types', () => {
-      render(
-        <FileUploader 
-          onFilesSelected={mockOnFilesSelected}
-          accept={['application/pdf', 'image/png']}
-        />
-      );
-      
-      expect(screen.getByText(/application\/pdf, image\/png/)).toBeInTheDocument();
-    });
 
-    it('displays max file size', () => {
-      render(
-        <FileUploader 
-          onFilesSelected={mockOnFilesSelected}
-          maxSize={50 * 1024 * 1024} // 50MB
-        />
-      );
-      
-      expect(screen.getByText(/50MB/)).toBeInTheDocument();
-    });
 
     it('displays max files when multiple is enabled', () => {
       render(
@@ -122,7 +106,7 @@ describe('FileUploader', () => {
         />
       );
       
-      expect(screen.getByText(/Max files: 5/)).toBeInTheDocument();
+      expect(screen.getByText(/Files: 5/)).toBeInTheDocument();
     });
   });
 

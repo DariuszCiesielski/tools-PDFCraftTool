@@ -398,6 +398,7 @@
     "fileTooLarge": "文件太大。最大大小为{maxSize}MB。",
     "fileTypeInvalid": "无效的文件类型。请上传{acceptedTypes}文件。",
     "fileCorrupted": "文件似乎已损坏或无法读取。",
+    "invalidPassword": "输入的密码不正确，请检查后重试。",
     "fileEmpty": "文件为空。",
     "fileNotPdf": "文件不是有效的PDF。",
     "processingFailed": "处理失败。请重试。",

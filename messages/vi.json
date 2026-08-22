@@ -398,6 +398,7 @@
     "fileTooLarge": "Tệp quá lớn. Kích thước tối đa là {maxSize}MB.",
     "fileTypeInvalid": "Loại tệp không hợp lệ. Vui lòng tải lên tệp {acceptedTypes}.",
     "fileCorrupted": "Tệp có vẻ bị hỏng hoặc không đọc được.",
+    "invalidPassword": "Mật khẩu bạn nhập không đúng. Vui lòng kiểm tra và thử lại.",
     "fileEmpty": "Tệp rỗng.",
     "fileNotPdf": "Tệp không phải là PDF hợp lệ.",
     "processingFailed": "Xử lý thất bại. Vui lòng thử lại.",

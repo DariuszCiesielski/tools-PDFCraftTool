@@ -385,6 +385,7 @@
     "fileTooLarge": "파일이 너무 큽니다. 최대 크기는 {maxSize}MB입니다.",
     "fileTypeInvalid": "잘못된 파일 형식입니다. {acceptedTypes} 파일을 업로드해 주세요.",
     "fileCorrupted": "파일이 손상되었거나 읽을 수 없습니다.",
+    "invalidPassword": "입력한 비밀번호가 올바르지 않습니다. 확인 후 다시 시도해 주세요.",
     "fileEmpty": "파일이 비어 있습니다.",
     "fileNotPdf": "파일이 유효한 PDF가 아닙니다.",
     "processingFailed": "처리에 실패했습니다. 다시 시도해 주세요.",
