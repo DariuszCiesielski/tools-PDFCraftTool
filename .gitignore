@@ -70,3 +70,6 @@ public/libreoffice-wasm/soffice.wasm
 public/libreoffice-wasm/soffice.data
 
 
+
+# Komunikacja Claude Code <-> Codex
+.codex/
