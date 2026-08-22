@@ -121,8 +121,10 @@ Tools logic w `src/lib/pdf/processors/<tool>.ts` jako pure functions, UI w `src/
 **Sprzątanie jakości kodu 20-22.08 — DOMKNIĘTE:** ESLint flat (etap 1), 0× `any` (etap 2), lint w bramce builda (etap 3), **vitest 348/348, tsc 0 błędów (etap 4)**. Zostało 12 warningów lintu (kosmetyka).
 
 Kandydaci na następną sesję (decyzja Dariusza):
-1. P0 z handoffu 08.05: avatar dropdown w headerze Studio (1h), banner confirmation flow (45 min)
-2. 12 warningów ESLint → 0
-3. Smoke test prod po zmianach w `tools.ts` (relatedTools) — `next build` 1589 stron przed pushem
+1. **Faza 5 (P2.3)** — read-side UI „Kontynuuj z innego urządzenia" (lista plików z `recent_documents`, matching po `content_hash`), ~2-3h — szczegóły w handoffie 08.05 19:25
+2. 12 warningów ESLint → 0 (kosmetyka, ~20 min)
+3. Biznes (PM BACKLOG P1): PRD „PDFCraft Pro Tier" — decyzja Dariusza, nie kod
+
+UWAGA: P0 z maja (avatar dropdown, banner confirmation) **zrobione 08.05** (commit `26b2f5f`) — nie wracać.
 
 Historia: `.ai/handoffs/` (najnowszy handoff = stan prawdy).
