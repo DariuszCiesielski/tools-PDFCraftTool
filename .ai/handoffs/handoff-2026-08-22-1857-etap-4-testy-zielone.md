@@ -16,3 +16,9 @@
 
 ## Na kim piłka
 Dariusz — wybór 1/2/3. Push wymaga jego OK (skan sekretów origin/main..HEAD przed pushem: diff czysty, sprawdzone 22.08).
+
+
+## Dopisek 22.08 wieczór — warningi lintu (commit 0b45c46, pushed)
+- 202 → 28 (zostały wyłącznie `react-hooks/exhaustive-deps`, celowo). Config ESLint: `no-img-element` off (blob/data URL w eksporcie statycznym), `no-unused-vars` ignoruje prefiks `_`.
+- Usunięty martwy kod (87 plików, -265/+116 linii), tsc 0, vitest 348/348, build 1589 stron OK.
+- **FAKT dla Dariusza:** OpenRouter (klucz PROMO i stały) zwraca 402 — brak kredytów; `claude-ox`/`claude-glm` niedostępne do doładowania.

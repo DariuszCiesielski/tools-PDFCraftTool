@@ -99,6 +99,9 @@ Tools logic w `src/lib/pdf/processors/<tool>.ts` jako pure functions, UI w `src/
 - [2026-08-22] KONTEKST: 8 testów layoutu padało na `localStorage.clear is not a function` — Node >=22 (tu 25.6) wystawia własny eksperymentalny globalny `localStorage` (Web Storage bez pliku = atrapa bez clear/getItem), który wygrywa z implementacją jsdom w vitest. Fix: `setup.ts` podmienia `globalThis.localStorage` i `window.localStorage` na in-memory `Storage`. Reguła: po podbiciu Node sprawdź, czy globalne API przeglądarkowe (localStorage, fetch, WebSocket) nie są dostarczane przez Node zamiast jsdom.
 - [2026-08-22] KONTEKST: property-based testy (fast-check) losują próbkę — przebieg „zielony" nie dowodzi braku błędu (test `>=2 relatedTools` przeszedł raz, padł w drugim przebiegu na `pdf-reader`). Reguła: po naprawie property-testów uruchamiaj suite min. 2× albo sprawdź własność deterministycznie skryptem po WSZYSTKICH danych (Python po `tools.ts`).
 
+- [2026-08-22] KONTEKST: delegacja 148 mechanicznych poprawek lintu do `claude-ox` i `claude-glm` (OpenRouter) padła z HTTP 402 (konto OpenRouter bez kredytów; „darmowy" model i tak rezerwuje kredyty pod `max_tokens`). Skrypt Python (klasy deterministyczne: catch bez zmiennej, prefiks `_`, usuwanie importów) zrobił 106/148 w 1 przebieg, reszta ręcznie. Reguła: przed delegacją na OpenRouter sprawdź saldo (`curl https://openrouter.ai/api/v1/credits`); mechaniczne klasy lintu szybciej skryptem niż agentem.
+- [2026-08-22] KONTEKST: heredoc Python z polskim cudzysłowem „…" w zwykłym stringu `"..."` kończy string przedwcześnie (SyntaxError) — 2× w jednej sesji. Reguła: treść po polsku w Pythonie zawsze w potrójnych cudzysłowach.
+
 ## Skróty klawiszowe Studio Mode
 
 - **⌘O / Ctrl+O** — Otwórz pliki
@@ -118,11 +121,11 @@ Tools logic w `src/lib/pdf/processors/<tool>.ts` jako pure functions, UI w `src/
 
 ## Otwarte zadania (stan 2026-08-22 18:57)
 
-**Sprzątanie jakości kodu 20-22.08 — DOMKNIĘTE:** ESLint flat (etap 1), 0× `any` (etap 2), lint w bramce builda (etap 3), **vitest 348/348, tsc 0 błędów (etap 4)**. Zostało 12 warningów lintu (kosmetyka).
+**Sprzątanie jakości kodu 20-22.08 — DOMKNIĘTE:** ESLint flat (etap 1), 0× `any` (etap 2), lint w bramce builda (etap 3), **vitest 348/348, tsc 0 błędów (etap 4)**. Lint: **0 błędów, 28 warningów `react-hooks/exhaustive-deps` zostawionych CELOWO** (dopisywanie zależności hooków = ryzyko pętli re-renderów, incydent 07.05 w PdfViewer; ruszać tylko z testem w przeglądarce, pojedynczo).
 
 Kandydaci na następną sesję (decyzja Dariusza):
 1. **Faza 5 (P2.3)** — read-side UI „Kontynuuj z innego urządzenia" (lista plików z `recent_documents`, matching po `content_hash`), ~2-3h — szczegóły w handoffie 08.05 19:25
-2. 12 warningów ESLint → 0 (kosmetyka, ~20 min)
+2. (opcjonalnie) 28 warningów hooków — każdy osobno, z testem UI; nie batchem
 3. Biznes (PM BACKLOG P1): PRD „PDFCraft Pro Tier" — decyzja Dariusza, nie kod
 
 UWAGA: P0 z maja (avatar dropdown, banner confirmation) **zrobione 08.05** (commit `26b2f5f`) — nie wracać.
