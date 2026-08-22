@@ -68,9 +68,6 @@ export interface PageDimensionsOptions {
 /**
  * Default options
  */
-const DEFAULT_OPTIONS: PageDimensionsOptions = {
-  displayUnit: 'pt',
-};
 
 /**
  * Standard page sizes in points (width x height for portrait)

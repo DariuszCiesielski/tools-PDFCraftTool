@@ -9,7 +9,6 @@ import { describe, it, expect, beforeEach } from 'vitest';
 import {
   SplitPDFProcessor,
   createSplitProcessor,
-  splitPDF,
   parsePageRanges,
   createSplitEveryNPages,
   createSplitEveryPage,

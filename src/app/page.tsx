@@ -20,7 +20,7 @@ export default function RootPage() {
       } else {
         router.replace(`/${defaultLocale}`);
       }
-    } catch (error) {
+    } catch {
       // Fallback to default locale if anything goes wrong
       router.replace(`/${defaultLocale}`);
     }

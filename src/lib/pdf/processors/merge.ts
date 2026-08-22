@@ -13,8 +13,8 @@ import type {
   MergeOptions,
 } from '@/types/pdf';
 import { PDFErrorCode } from '@/types/pdf';
-import { BasePDFProcessor, createPDFError } from '../processor';
-import { loadPdfLib, loadPdfDocument, createPdfDocument } from '../loader';
+import { BasePDFProcessor } from '../processor';
+import { loadPdfLib, createPdfDocument } from '../loader';
 
 /**
  * Default merge options

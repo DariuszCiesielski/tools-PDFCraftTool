@@ -213,7 +213,6 @@ export class JSONToPDFProcessor extends BasePDFProcessor {
     // Calculate available width and height
     const lineNumberWidth = showLineNumbers ? fontSize * 4 : 0;
     const availableWidth = pageSize.width - margin.left - margin.right - lineNumberWidth;
-    const availableHeight = pageSize.height - margin.top - margin.bottom;
     const lineSpacing = fontSize * lineHeight;
 
     // Split JSON into lines

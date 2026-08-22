@@ -103,7 +103,6 @@ export const Tabs = forwardRef<HTMLDivElement, TabsProps>(
       [tabs, orientation, handleTabChange]
     );
 
-    const activeTabContent = tabs.find((tab) => tab.id === activeTab)?.content;
 
     const isVertical = orientation === 'vertical';
 

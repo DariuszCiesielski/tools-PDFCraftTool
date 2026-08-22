@@ -99,7 +99,7 @@ export const Navigation: React.FC<NavigationProps> = ({ locale, currentPath }) =
     }
   }, [handleDropdownToggle, openDropdown]);
 
-  const handleMenuKeyDown = useCallback((event: React.KeyboardEvent, index: number) => {
+  const handleMenuKeyDown = useCallback((event: React.KeyboardEvent, _index: number) => {
     switch (event.key) {
       case 'ArrowDown':
         event.preventDefault();

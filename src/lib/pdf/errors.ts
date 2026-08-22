@@ -7,7 +7,6 @@
 
 import type { PDFError } from '@/types/pdf';
 import { PDFErrorCode, ErrorCategory, ERROR_CODE_CATEGORY } from '@/types/pdf';
-import type { Locale } from '@/types/i18n';
 
 /**
  * Error message keys for i18n

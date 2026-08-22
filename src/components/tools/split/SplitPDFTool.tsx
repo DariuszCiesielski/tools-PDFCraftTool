@@ -11,7 +11,6 @@ import {
   splitPDF,
   parsePageRanges,
   createSplitEveryPage,
-  createSplitEveryNPages,
   createSplitByEvenOdd,
   createSplitNTimes,
   createSplitByBookmarks,
@@ -186,7 +185,7 @@ export function SplitPDFTool({ className = '', initialFile, hideUploader }: Spli
             const pageIndex = await pdf.getPageIndex(pageRef);
             pageNumber = pageIndex + 1;
           }
-        } catch (e) {
+        } catch {
           console.warn('Failed to get destination for bookmark:', item.title);
         }
       }

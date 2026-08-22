@@ -30,7 +30,6 @@ export default function FAQPageClient({ locale }: FAQPageClientProps) {
 
   // Helper to get FAQs for a category
   const getCategoryFaqs = (categoryKey: string, categoryLabel: string): FAQItem[] => {
-    const items = ['whatIs', 'isFree', 'account', 'uploaded', 'safe', 'storage', 'operations', 'merge', 'images', 'edit', 'browsers', 'sizeLimit', 'slow', 'offline', 'supported', 'change'];
     const categoryMapping: Record<string, string[]> = {
       'general': ['whatIs', 'isFree', 'account'],
       'privacy': ['uploaded', 'safe', 'storage'],

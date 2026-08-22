@@ -838,10 +838,9 @@ json.dumps(layers)
           return JSON.parse(result);
         },
 
-        async toggleOCGLayer(file: File, options: ToggleOCGLayerOptions): Promise<{ pdf: Blob }> {
+        async toggleOCGLayer(file: File, _options: ToggleOCGLayerOptions): Promise<{ pdf: Blob }> {
           const arrayBuffer = await file.arrayBuffer();
           const pdfData = new Uint8Array(arrayBuffer);
-          const { layerId, visible } = options;
 
           // Use unique file names to avoid race conditions during concurrent processing
           const uid = `${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
@@ -925,7 +924,7 @@ str(xref) + "|||" + base64.b64encode(pdf_bytes).decode('ascii')
           };
         },
 
-        async deleteOCGLayer(file: File, options: DeleteOCGLayerOptions): Promise<{ pdf: Blob }> {
+        async deleteOCGLayer(file: File, _options: DeleteOCGLayerOptions): Promise<{ pdf: Blob }> {
           const arrayBuffer = await file.arrayBuffer();
           const pdfData = new Uint8Array(arrayBuffer);
 
@@ -965,7 +964,7 @@ base64.b64encode(pdf_bytes).decode('ascii')
           return { pdf: new Blob([bytes], { type: 'application/pdf' }) };
         },
 
-        async renameOCGLayer(file: File, options: RenameOCGLayerOptions): Promise<{ pdf: Blob }> {
+        async renameOCGLayer(file: File, _options: RenameOCGLayerOptions): Promise<{ pdf: Blob }> {
           const arrayBuffer = await file.arrayBuffer();
           const pdfData = new Uint8Array(arrayBuffer);
 
@@ -1144,7 +1143,7 @@ base64.b64encode(pdf_bytes).decode('ascii')
         async photonCompress(file: File, options: PhotonCompressOptions): Promise<Blob> {
           const arrayBuffer = await file.arrayBuffer();
           const pdfData = new Uint8Array(arrayBuffer);
-          const { dpi = 150, format = 'jpeg', quality = 85 } = options || {};
+          const { dpi = 150, quality = 85 } = options || {};
 
           // Use unique file names to avoid race conditions during concurrent processing
           const uid = `${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;

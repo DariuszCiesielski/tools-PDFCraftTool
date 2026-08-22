@@ -50,7 +50,7 @@ export class PDFToExcelProcessor extends BasePDFProcessor {
                 };
 
                 this.worker.addEventListener('message', handleMessage);
-                this.worker.addEventListener('error', (err) => {
+                this.worker.addEventListener('error', (_err) => {
                     reject(new Error('Worker connection failed'));
                 });
 
@@ -151,7 +151,7 @@ export class PDFToExcelProcessor extends BasePDFProcessor {
                 }
 
                 const handleMessage = (event: MessageEvent) => {
-                    const { type, data, error, message } = event.data;
+                    const { type, data, message } = event.data;
 
                     if (type === 'status') {
                         this.updateProgress(this.progress, message);

@@ -2,7 +2,7 @@
 
 import React, { useState, useCallback, useRef, useEffect } from 'react';
 import { useTranslations } from 'next-intl';
-import { Save, FolderOpen, Trash2, Copy, Undo2, Redo2, AlignLeft, AlignCenterHorizontal, AlignRight, AlignStartVertical, AlignCenterVertical, AlignEndVertical, FilePlus2 } from 'lucide-react';
+import { Save, FolderOpen, Trash2, Copy, Undo2, Redo2, FilePlus2 } from 'lucide-react';
 import { PDFDocument, PageSizes } from 'pdf-lib';
 import { FileUploader } from '../FileUploader';
 import { ProcessingProgress, ProcessingStatus } from '../ProcessingProgress';
@@ -171,7 +171,6 @@ const formTemplates: FormTemplate[] = [
 ];
 
 export function FormCreatorTool({ className = '' }: FormCreatorToolProps) {
-  const t = useTranslations('common');
   const tTools = useTranslations('tools');
 
   const [file, setFile] = useState<File | null>(null);
@@ -210,7 +209,7 @@ export function FormCreatorTool({ className = '' }: FormCreatorToolProps) {
   const maxHistoryLength = 50;
 
   // Multi-select state
-  const [selectedFieldIds, setSelectedFieldIds] = useState<Set<string>>(new Set());
+  const [_selectedFieldIds, setSelectedFieldIds] = useState<Set<string>>(new Set());
 
   // Right panel tab state
   const [activeTab, setActiveTab] = useState<'properties' | 'fields' | 'options'>('properties');
@@ -221,7 +220,7 @@ export function FormCreatorTool({ className = '' }: FormCreatorToolProps) {
   const [blankPdfPageCount, setBlankPdfPageCount] = useState(1);
 
   // Template dialog state
-  const [showTemplateDialog, setShowTemplateDialog] = useState(false);
+  const [_showTemplateDialog, setShowTemplateDialog] = useState(false);
 
   // Adding page loading state
   const [isAddingPage, setIsAddingPage] = useState(false);
@@ -648,23 +647,6 @@ export function FormCreatorTool({ className = '' }: FormCreatorToolProps) {
     setSelectedFieldId(newField.id);
   }, [selectedFieldId, fields, addToHistory]);
 
-  // Toggle field selection for multi-select (Ctrl+Click)
-  const toggleFieldSelection = useCallback((fieldId: string, ctrlKey: boolean) => {
-    if (ctrlKey) {
-      setSelectedFieldIds(prev => {
-        const newSet = new Set(prev);
-        if (newSet.has(fieldId)) {
-          newSet.delete(fieldId);
-        } else {
-          newSet.add(fieldId);
-        }
-        return newSet;
-      });
-    } else {
-      setSelectedFieldIds(new Set([fieldId]));
-      setSelectedFieldId(fieldId);
-    }
-  }, []);
 
   // Select all fields on current page
   const handleSelectAll = useCallback(() => {
@@ -672,65 +654,6 @@ export function FormCreatorTool({ className = '' }: FormCreatorToolProps) {
     setSelectedFieldIds(new Set(pageFieldIds));
   }, [fields, currentPage]);
 
-  // Align selected fields
-  const handleAlignFields = useCallback((alignment: 'left' | 'center' | 'right' | 'top' | 'middle' | 'bottom') => {
-    const selectedIds = selectedFieldIds.size > 1 ? selectedFieldIds : (selectedFieldId ? new Set([selectedFieldId]) : new Set());
-    if (selectedIds.size < 2) return;
-
-    const selectedFields = fields.filter(f => selectedIds.has(f.id));
-    if (selectedFields.length < 2) return;
-
-    let alignValue: number;
-
-    switch (alignment) {
-      case 'left':
-        alignValue = Math.min(...selectedFields.map(f => f.x));
-        break;
-      case 'center':
-        const minX = Math.min(...selectedFields.map(f => f.x));
-        const maxX = Math.max(...selectedFields.map(f => f.x + f.width));
-        alignValue = (minX + maxX) / 2;
-        break;
-      case 'right':
-        alignValue = Math.max(...selectedFields.map(f => f.x + f.width));
-        break;
-      case 'top':
-        alignValue = Math.max(...selectedFields.map(f => f.y));
-        break;
-      case 'middle':
-        const minY = Math.min(...selectedFields.map(f => f.y - f.height));
-        const maxY = Math.max(...selectedFields.map(f => f.y));
-        alignValue = (minY + maxY) / 2;
-        break;
-      case 'bottom':
-        alignValue = Math.min(...selectedFields.map(f => f.y - f.height));
-        break;
-    }
-
-    const newFields = fields.map(f => {
-      if (!selectedIds.has(f.id)) return f;
-
-      switch (alignment) {
-        case 'left':
-          return { ...f, x: alignValue };
-        case 'center':
-          return { ...f, x: alignValue - f.width / 2 };
-        case 'right':
-          return { ...f, x: alignValue - f.width };
-        case 'top':
-          return { ...f, y: alignValue };
-        case 'middle':
-          return { ...f, y: alignValue + f.height / 2 };
-        case 'bottom':
-          return { ...f, y: alignValue + f.height };
-        default:
-          return f;
-      }
-    });
-
-    setFields(newFields);
-    addToHistory(newFields);
-  }, [fields, selectedFieldId, selectedFieldIds, addToHistory]);
 
   // Keyboard shortcuts
   useEffect(() => {
@@ -850,10 +773,6 @@ export function FormCreatorTool({ className = '' }: FormCreatorToolProps) {
     }
   }, [savedProjects]);
 
-  // Format date for display
-  const formatDate = (timestamp: number): string => {
-    return new Date(timestamp).toLocaleString();
-  };
 
   // Process PDF
   const handleProcess = useCallback(async () => {
@@ -867,7 +786,7 @@ export function FormCreatorTool({ className = '' }: FormCreatorToolProps) {
 
     try {
       // Convert visual fields to form fields
-      const formFields: FormField[] = fields.map(({ id, selected, ...field }) => field);
+      const formFields: FormField[] = fields.map(({ id: _id, selected: _selected, ...field }) => field);
 
       const output: ProcessOutput = await createForm(file, { fields: formFields, flattenForm }, (prog, message) => {
         if (!cancelledRef.current) {
@@ -899,18 +818,6 @@ export function FormCreatorTool({ className = '' }: FormCreatorToolProps) {
   const selectedField = fields.find(f => f.id === selectedFieldId);
   const currentPageFields = fields.filter(f => f.pageNumber === currentPage);
 
-  // Tool buttons
-  const tools = [
-    { type: 'select' as const, icon: '↖', labelKey: 'selectTool' },
-    { type: 'text' as const, icon: '📝', labelKey: 'textFieldTool' },
-    { type: 'checkbox' as const, icon: '☑', labelKey: 'checkboxTool' },
-    { type: 'dropdown' as const, icon: '▼', labelKey: 'dropdownTool' },
-    { type: 'radio' as const, icon: '◉', labelKey: 'radioTool' },
-    { type: 'button' as const, icon: '🔘', labelKey: 'buttonTool' },
-    { type: 'signature' as const, icon: '✍', labelKey: 'signatureTool' },
-    { type: 'date' as const, icon: '📅', labelKey: 'dateTool' },
-    { type: 'listbox' as const, icon: '📋', labelKey: 'listboxTool' },
-  ];
 
   // Get field style for overlay
   const getFieldStyle = (field: VisualField): React.CSSProperties => {

@@ -146,7 +146,7 @@ export function BookmarkTool({ className = '', initialFile, hideUploader, onComp
             const pageIndex = await doc.getPageIndex(pageRef);
             pageNumber = pageIndex + 1;
           }
-        } catch (e) {
+        } catch {
           console.warn('Failed to get destination for bookmark:', item.title);
         }
       }

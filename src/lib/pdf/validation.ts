@@ -10,7 +10,6 @@ import {
   PDFErrorCode,
   ErrorCategory,
   ERROR_CODE_CATEGORY,
-  PDF_MAGIC_BYTES,
   FILE_SIZE_LIMITS,
   SUPPORTED_FILE_TYPES,
 } from '@/types/pdf';

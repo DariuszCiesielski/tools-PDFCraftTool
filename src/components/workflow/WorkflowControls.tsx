@@ -2,12 +2,11 @@
 
 import React, { useState, useCallback, useRef } from 'react';
 import { useTranslations } from 'next-intl';
-import { WorkflowExecutionState, WorkflowNode, WorkflowEdge, WorkflowValidation, WorkflowOutputFile } from '@/types/workflow';
+import { WorkflowExecutionState, WorkflowNode, WorkflowEdge, WorkflowValidation } from '@/types/workflow';
 import { Button } from '@/components/ui/Button';
 import { FileListPanel } from './FileListPanel';
 import {
     Play,
-    Pause,
     Square,
     Download,
     Save,
@@ -43,7 +42,7 @@ interface WorkflowControlsProps {
  */
 export function WorkflowControls({
     nodes,
-    edges,
+    edges: _edges,
     executionState,
     validation,
     onExecute,

@@ -8,7 +8,7 @@ import { DownloadButton } from '../DownloadButton';
 import { Button } from '@/components/ui/Button';
 import { Card } from '@/components/ui/Card';
 import { rasterizePDF, type RasterizePDFOptions, type RasterizeFormat, DPI_PRESETS } from '@/lib/pdf/processors/rasterize';
-import { Grid2X2, Image } from 'lucide-react';
+import { Grid2X2, Image as ImageIcon } from 'lucide-react';
 
 export interface RasterizePDFToolProps {
     /** Custom class name */
@@ -336,7 +336,7 @@ export function RasterizePDFTool({ className = '', initialFile, hideUploader }: 
                     role="status"
                 >
                     <div className="flex items-center gap-2">
-                        <Image className="w-5 h-5" />
+                        <ImageIcon className="w-5 h-5" />
                         <p className="text-sm font-medium">
                             {tTools('rasterizePdf.successMessage') || 'Images created successfully! Click download to save.'}
                         </p>

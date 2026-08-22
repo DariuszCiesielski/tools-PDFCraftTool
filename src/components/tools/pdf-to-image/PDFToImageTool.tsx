@@ -7,7 +7,7 @@ import { ProcessingProgress, ProcessingStatus } from '../ProcessingProgress';
 import { DownloadButton } from '../DownloadButton';
 import { Button } from '@/components/ui/Button';
 import { Card } from '@/components/ui/Card';
-import { pdfToImages, type ImageFormat, type PDFToImageOptions, type PageLayoutPreset, type PageLayoutOptions } from '@/lib/pdf/processors/pdf-to-image';
+import { pdfToImages, type ImageFormat, type PDFToImageOptions, type PageLayoutPreset } from '@/lib/pdf/processors/pdf-to-image';
 import type { UploadedFile, ProcessOutput } from '@/types/pdf';
 import JSZip from 'jszip';
 

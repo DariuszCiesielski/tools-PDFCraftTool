@@ -82,7 +82,6 @@ export const GuidedTour: React.FC<GuidedTourProps> = ({
       const rect = target.getBoundingClientRect();
       setTargetRect(rect);
 
-      const padding = currentStepData.highlightPadding || 8;
       const tooltipWidth = 320;
       const tooltipHeight = 200;
       const margin = 12;

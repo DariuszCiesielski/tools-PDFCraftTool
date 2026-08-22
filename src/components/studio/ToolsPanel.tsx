@@ -132,9 +132,6 @@ const COMBINE_WIZARD_TOOLS_MAP = {
   'grid-combine': 'grid-combine',
   repair: 'repair',
 } as const;
-const COMBINE_WIZARD_TOOLS = new Set<string>(
-  Object.keys(COMBINE_WIZARD_TOOLS_MAP),
-);
 
 export function ToolsPanel() {
   const t = useTranslations('studio');

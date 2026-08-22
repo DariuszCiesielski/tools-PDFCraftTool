@@ -345,12 +345,12 @@ export class EncryptPDFProcessor extends BasePDFProcessor {
       if (qpdf?.FS) {
         try {
           qpdf.FS.unlink(inputPath);
-        } catch (e) {
+        } catch {
           // Ignore cleanup errors
         }
         try {
           qpdf.FS.unlink(outputPath);
-        } catch (e) {
+        } catch {
           // Ignore cleanup errors
         }
       }

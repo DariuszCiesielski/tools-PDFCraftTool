@@ -7,7 +7,7 @@ import { ProcessingProgress, ProcessingStatus } from '../ProcessingProgress';
 import { DownloadButton } from '../DownloadButton';
 import { Button } from '@/components/ui/Button';
 import { Card } from '@/components/ui/Card';
-import { imagesToPDF, imagesToPDFBatch, PAGE_SIZES, type PageSizeType, type ImageToPDFOptions, type BatchExportResult } from '@/lib/pdf/processors/image-to-pdf';
+import { imagesToPDF, imagesToPDFBatch, type PageSizeType, type ImageToPDFOptions, type BatchExportResult } from '@/lib/pdf/processors/image-to-pdf';
 import type { UploadedFile, ProcessOutput } from '@/types/pdf';
 
 /**

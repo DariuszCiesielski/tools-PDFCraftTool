@@ -305,7 +305,7 @@ async function parseMsgFile(file: File): Promise<ParsedEmail> {
 /**
  * Decode base64 content
  */
-function decodeBase64(text: string, encoding?: string): string {
+function _decodeBase64(text: string, encoding?: string): string {
     if (!encoding || !encoding.toLowerCase().includes('base64')) {
         return text;
     }

@@ -2,7 +2,7 @@
 
 import React, { useCallback, useRef, useState, useEffect } from 'react';
 import { useTranslations } from 'next-intl';
-import { UploadCloud, File, Plus, X } from 'lucide-react';
+import { UploadCloud, File, Plus } from 'lucide-react';
 
 export interface FileUploaderProps {
   /** Accepted file types (MIME types or extensions) */
@@ -50,7 +50,7 @@ export const FileUploader: React.FC<FileUploaderProps> = ({
   const tErrors = useTranslations('errors');
 
   const [isDragging, setIsDragging] = useState(false);
-  const [dragCounter, setDragCounter] = useState(0);
+  const [_dragCounter, setDragCounter] = useState(0);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const dropZoneRef = useRef<HTMLDivElement>(null);
 

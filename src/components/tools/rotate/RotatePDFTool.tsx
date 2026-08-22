@@ -37,7 +37,7 @@ interface PagePreview {
 export function RotatePDFTool({
   className = '',
   initialFile,
-  hideUploader = false,
+  hideUploader: _hideUploader = false,
   onComplete,
 }: RotatePDFToolProps) {
   const t = useTranslations('common');

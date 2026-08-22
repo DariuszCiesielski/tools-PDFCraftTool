@@ -7,7 +7,7 @@ import { ProcessingProgress, ProcessingStatus } from '../ProcessingProgress';
 import { DownloadButton } from '../DownloadButton';
 import { Button } from '@/components/ui/Button';
 import { Card } from '@/components/ui/Card';
-import { jsonToPDF, JSON_PAGE_SIZES, type JSONPageSizeType, type JSONToPDFOptions } from '@/lib/pdf/processors/json-to-pdf';
+import { jsonToPDF, type JSONPageSizeType, type JSONToPDFOptions } from '@/lib/pdf/processors/json-to-pdf';
 import type { UploadedFile, ProcessOutput } from '@/types/pdf';
 
 /**

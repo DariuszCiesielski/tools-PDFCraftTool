@@ -5,7 +5,6 @@
 
 import { useState, useCallback, useRef } from 'react';
 import { WorkflowNode, WorkflowEdge } from '@/types/workflow';
-import { Edge } from 'reactflow';
 
 interface HistoryState {
     nodes: WorkflowNode[];

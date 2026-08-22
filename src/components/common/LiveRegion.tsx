@@ -132,7 +132,7 @@ export function useAnnouncement() {
   if (!context) {
     // Return a no-op function if not within provider
     return {
-      announce: (message: string, politeness?: LiveRegionPoliteness) => {
+      announce: (_message: string, _politeness?: LiveRegionPoliteness) => {
         console.warn('useAnnouncement: AnnouncementProvider not found');
       },
     };

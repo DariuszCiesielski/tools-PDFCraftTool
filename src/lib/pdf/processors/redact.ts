@@ -233,7 +233,9 @@ export function validateRedactionAreas(
   };
 }
 
-export default {
+const redact = {
   applyRedactions,
   validateRedactionAreas,
 };
+
+export default redact;

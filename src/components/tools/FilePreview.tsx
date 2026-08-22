@@ -31,7 +31,7 @@ export interface FilePreviewProps {
   onZoomChange?: (zoom: number) => void;
 }
 
-interface PDFPageInfo {
+interface _PDFPageInfo {
   pageNumber: number;
   totalPages: number;
 }

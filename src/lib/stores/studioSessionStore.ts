@@ -89,7 +89,7 @@ const DEFAULT_VIEW_STATE: TabViewState = {
   scrollTop: 0,
 };
 
-export const useStudioSessionStore = create<StudioSessionState>((set, get) => ({
+export const useStudioSessionStore = create<StudioSessionState>((set, _get) => ({
   tabs: [],
   activeTabId: null,
   currentTool: null,

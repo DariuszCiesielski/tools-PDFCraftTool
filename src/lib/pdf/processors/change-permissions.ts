@@ -313,7 +313,7 @@ export class ChangePermissionsProcessor extends BasePDFProcessor {
       try {
         outputFile = qpdf.FS.readFile(outputPath, { encoding: 'binary' });
         outputFileExists = !!(outputFile && outputFile.length > 0);
-      } catch (e) {
+      } catch {
         outputFileExists = false;
       }
 
@@ -408,12 +408,12 @@ export class ChangePermissionsProcessor extends BasePDFProcessor {
       if (qpdf?.FS) {
         try {
           qpdf.FS.unlink(inputPath);
-        } catch (e) {
+        } catch {
           // Ignore cleanup errors
         }
         try {
           qpdf.FS.unlink(outputPath);
-        } catch (e) {
+        } catch {
           // Ignore cleanup errors
         }
       }

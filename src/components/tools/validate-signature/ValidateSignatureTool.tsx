@@ -18,7 +18,7 @@ export function ValidateSignatureTool({ className = '' }: { className?: string }
   const [validated, setValidated] = useState(false);
 
   // Optional trusted cert
-  const [trustedCertFile, setTrustedCertFile] = useState<File | null>(null);
+  const [_trustedCertFile, setTrustedCertFile] = useState<File | null>(null);
   const [trustedCertName, setTrustedCertName] = useState<string | null>(null);
 
   const handlePdfSelected = useCallback(async (files: File[]) => {
@@ -196,20 +196,16 @@ export function ValidateSignatureTool({ className = '' }: { className?: string }
               {/* Signature Cards */}
               {results.map((result, index) => {
                 let statusColor = 'text-green-600 dark:text-green-400';
-                let statusBg = 'bg-green-50 border-green-200 dark:bg-green-950 dark:border-green-800';
                 let statusText = tTool('validSignature');
 
                 if (!result.isValid) {
                   statusColor = 'text-red-600 dark:text-red-400';
-                  statusBg = 'bg-red-50 border-red-200 dark:bg-red-950 dark:border-red-800';
                   statusText = tTool('invalidSignature');
                 } else if (result.isExpired) {
                   statusColor = 'text-yellow-600 dark:text-yellow-400';
-                  statusBg = 'bg-yellow-50 border-yellow-200 dark:bg-yellow-950 dark:border-yellow-800';
                   statusText = tTool('certificateExpired');
                 } else if (result.isSelfSigned) {
                   statusColor = 'text-yellow-600 dark:text-yellow-400';
-                  statusBg = 'bg-yellow-50 border-yellow-200 dark:bg-yellow-950 dark:border-yellow-800';
                   statusText = tTool('selfSigned');
                 }
 

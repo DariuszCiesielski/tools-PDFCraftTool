@@ -17,7 +17,6 @@ export interface PDFReaderToolProps {
  * A simple PDF reader that uses the browser's built-in PDF viewer.
  */
 export function PDFReaderTool({ className = '' }: PDFReaderToolProps) {
-    const t = useTranslations('common');
     const tTools = useTranslations('tools');
 
     const [file, setFile] = useState<File | null>(null);

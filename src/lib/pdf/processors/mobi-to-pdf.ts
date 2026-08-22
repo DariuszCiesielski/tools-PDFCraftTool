@@ -55,7 +55,7 @@ export class MOBIToPDFProcessor extends BasePDFProcessor {
                 };
 
                 this.worker.addEventListener('message', handleMessage);
-                this.worker.addEventListener('error', (err) => {
+                this.worker.addEventListener('error', (_err) => {
                     reject(new Error('Worker connection failed'));
                 });
 

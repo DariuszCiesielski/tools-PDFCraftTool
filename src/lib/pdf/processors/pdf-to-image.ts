@@ -255,7 +255,6 @@ export class PDFToImageProcessor extends BasePDFProcessor {
           const groupProgress = 15 + (i * progressPerGroup);
 
           // Check if this is a single page group (cover or last incomplete group)
-          const isFullGrid = group.length === pagesPerImage;
 
           if (group.length === 1) {
             // Single page - use standard rendering

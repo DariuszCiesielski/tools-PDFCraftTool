@@ -96,7 +96,7 @@ export function WorkflowLibrary({
                 if (translated && translated !== fullKey && !translated.includes('workflowTemplates.')) {
                     return translated;
                 }
-            } catch (e) {
+            } catch {
                 logger.warn(`Translation missing for template name: ${template.id}`);
             }
         }
@@ -113,7 +113,7 @@ export function WorkflowLibrary({
                 if (translated && translated !== fullKey && !translated.includes('workflowTemplates.')) {
                     return translated;
                 }
-            } catch (e) {
+            } catch {
                 logger.warn(`Translation missing for template description: ${template.id}`);
             }
         }

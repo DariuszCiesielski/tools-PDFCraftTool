@@ -469,7 +469,6 @@ export function ExtractImagesTool({ className = '', initialFile, hideUploader }:
                                     className="aspect-square flex items-center justify-center overflow-hidden bg-[hsl(var(--color-muted)/0.1)] cursor-pointer"
                                     onClick={() => setSelectedImage(image)}
                                 >
-                                    {/* eslint-disable-next-line @next/next/no-img-element */}
                                     <img
                                         src={imagePreviewUrls[image.index]}
                                         alt={image.name}

@@ -256,7 +256,7 @@ export class ImageToPDFProcessor extends BasePDFProcessor {
       } else {
         throw new Error('Format requires conversion');
       }
-    } catch (error) {
+    } catch {
       // Fallback: convert to PNG via canvas
       // This handles cases where extension doesn't match content (e.g. jpg renamed to png)
       // or formats not natively supported by pdf-lib

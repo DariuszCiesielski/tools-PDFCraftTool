@@ -28,7 +28,7 @@ export function FormFillerTool({ className = '' }: FormFillerToolProps) {
       try {
         const formFields = await getFormFields(selectedFile);
         setFields(formFields.map(f => ({ ...f, value: '' })));
-      } catch (err) { setError('Failed to read form fields. This PDF may not contain fillable forms.'); }
+      } catch { setError('Failed to read form fields. This PDF may not contain fillable forms.'); }
     }
   }, []);
 

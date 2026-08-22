@@ -33,7 +33,7 @@ export interface FindAndRedactToolProps {
  * and redact matching content. Useful for removing sensitive information
  * like account numbers, names, etc. from multi-page documents.
  */
-export function FindAndRedactTool({ className = '', initialFile, hideUploader, onComplete }: FindAndRedactToolProps) {
+export function FindAndRedactTool({ className = '', initialFile, hideUploader, onComplete: _onComplete }: FindAndRedactToolProps) {
     const t = useTranslations('common');
     const tTools = useTranslations('tools.findAndRedact');
 
@@ -289,14 +289,6 @@ export function FindAndRedactTool({ className = '', initialFile, hideUploader, o
         setMatches(prev => prev.map(match => ({ ...match, selected })));
     }, []);
 
-    // Select/deselect all matches on a specific page
-    const toggleSelectPage = useCallback((pageNum: number, selected: boolean) => {
-        setMatches(prev =>
-            prev.map(match =>
-                match.page === pageNum ? { ...match, selected } : match
-            )
-        );
-    }, []);
 
     // Apply redactions
     const handleRedact = useCallback(async () => {

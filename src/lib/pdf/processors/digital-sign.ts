@@ -6,8 +6,6 @@ import forge from 'node-forge';
 import type {
   CertificateData,
   SignPdfOptions,
-  SignatureInfo,
-  VisibleSignatureOptions,
 } from '@/types/digital-signature';
 
 /**

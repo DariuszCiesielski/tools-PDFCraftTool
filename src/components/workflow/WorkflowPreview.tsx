@@ -3,9 +3,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useTranslations } from 'next-intl';
 import { WorkflowNode, WorkflowEdge } from '@/types/workflow';
-import { findOutputNodes } from '@/lib/workflow/engine';
 import { Eye, EyeOff, X, Maximize2, Minimize2, RefreshCw } from 'lucide-react';
-import { Button } from '@/components/ui/Button';
 
 interface WorkflowPreviewProps {
     nodes: WorkflowNode[];

@@ -76,7 +76,7 @@ export function EditPDFTool({ className = '' }: EditPDFToolProps) {
             });
           }
         }
-      } catch (e) {
+      } catch {
         // Cross-origin restrictions may prevent access
         console.warn('Could not access iframe content to hide save button');
       }

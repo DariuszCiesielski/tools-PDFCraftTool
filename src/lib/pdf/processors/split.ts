@@ -14,7 +14,7 @@ import type {
   PageRange,
 } from '@/types/pdf';
 import { PDFErrorCode } from '@/types/pdf';
-import { BasePDFProcessor, createPDFError } from '../processor';
+import { BasePDFProcessor } from '../processor';
 import { loadPdfLib } from '../loader';
 
 /**
@@ -272,7 +272,7 @@ function generateSplitFilename(
  * Parse a page range string into PageRange objects
  * Supports formats like: "1-5", "1,3,5", "1-3,5,7-10"
  */
-export function parsePageRanges(rangeString: string, totalPages: number): PageRange[] {
+export function parsePageRanges(rangeString: string, _totalPages: number): PageRange[] {
   const ranges: PageRange[] = [];
   const parts = rangeString.split(',').map(s => s.trim()).filter(s => s.length > 0);
 

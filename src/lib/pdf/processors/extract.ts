@@ -10,7 +10,6 @@ import type {
   ProcessInput,
   ProcessOutput,
   ProgressCallback,
-  PageRange,
 } from '@/types/pdf';
 import { PDFErrorCode } from '@/types/pdf';
 import { BasePDFProcessor } from '../processor';

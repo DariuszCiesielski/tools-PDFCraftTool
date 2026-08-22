@@ -4,9 +4,11 @@ module.exports = {
   createCanvas: function() { return {}; },
   loadImage: function() { return Promise.resolve({}); }
 };
-export default {
+const canvasMock = {
   Canvas: function() {},
   Image: function() {},
   createCanvas: function() { return {}; },
   loadImage: function() { return Promise.resolve({}); }
 };
+
+export default canvasMock;

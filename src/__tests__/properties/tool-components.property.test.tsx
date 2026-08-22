@@ -327,7 +327,7 @@ describe('Tool Page Property Tests', () => {
             );
             
             // Check each step is numbered correctly
-            content.howToUse.forEach((step, index) => {
+            content.howToUse.forEach((step, _index) => {
               const stepElement = screen.getByTestId(`how-to-step-${step.step}`);
               expect(stepElement).toBeInTheDocument();
             });

@@ -199,7 +199,7 @@ export class SanitizePDFProcessor extends BasePDFProcessor {
             if (catalogDict.has(PDFName.of('Metadata'))) {
               catalogDict.delete(PDFName.of('Metadata'));
             }
-          } catch (e) {
+          } catch {
             console.warn('Could not remove XMP metadata');
           }
 
@@ -217,7 +217,7 @@ export class SanitizePDFProcessor extends BasePDFProcessor {
         for (const page of pages) {
           try {
             page.node.delete(PDFName.of('Annots'));
-          } catch (e) {
+          } catch {
             // Page might not have annotations
           }
         }
@@ -239,7 +239,7 @@ export class SanitizePDFProcessor extends BasePDFProcessor {
               if (namesDict.has(PDFName.of('JavaScript'))) {
                 namesDict.delete(PDFName.of('JavaScript'));
               }
-            } catch (e) {
+            } catch {
               // Ignore
             }
           }
@@ -262,7 +262,7 @@ export class SanitizePDFProcessor extends BasePDFProcessor {
               if (pageDict.has(PDFName.of('AA'))) {
                 pageDict.delete(PDFName.of('AA'));
               }
-            } catch (e) {
+            } catch {
               // Ignore
             }
           }
@@ -288,7 +288,7 @@ export class SanitizePDFProcessor extends BasePDFProcessor {
               if (namesDict.has(PDFName.of('EmbeddedFiles'))) {
                 namesDict.delete(PDFName.of('EmbeddedFiles'));
               }
-            } catch (e) {
+            } catch {
               // Ignore
             }
           }
@@ -327,7 +327,7 @@ export class SanitizePDFProcessor extends BasePDFProcessor {
                   if (subtype !== 'Link') {
                     annotsToKeep.push(ref);
                   }
-                } catch (e) {
+                } catch {
                   annotsToKeep.push(ref);
                 }
               }
@@ -340,7 +340,7 @@ export class SanitizePDFProcessor extends BasePDFProcessor {
                   pageDict.delete(PDFName.of('Annots'));
                 }
               }
-            } catch (e) {
+            } catch {
               // Ignore page errors
             }
           }

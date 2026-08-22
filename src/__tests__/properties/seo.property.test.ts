@@ -24,8 +24,8 @@ import {
   validateSoftwareApplicationSchema,
   validateFAQPageSchema,
 } from '@/lib/seo/structured-data';
-import { locales, type Locale } from '@/lib/i18n/config';
-import { tools, getAllTools } from '@/config/tools';
+import { locales } from '@/lib/i18n/config';
+import { tools } from '@/config/tools';
 import type { Tool, ToolContent, FAQ } from '@/types/tool';
 
 /**

@@ -9,7 +9,6 @@ import * as fc from 'fast-check';
 import 'fake-indexeddb/auto';
 import {
   type ProjectState,
-  type ProjectFileMetadata,
   saveProject,
   getProject,
   deleteProject,

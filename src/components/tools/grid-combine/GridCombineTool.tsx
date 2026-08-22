@@ -521,9 +521,6 @@ export function GridCombineTool({ className = '' }: GridCombineToolProps) {
                                         >
                                             {Array.from({ length: cellsPerPage }).map((_, idx) => {
                                                 const file = files[idx];
-                                                const hasContent = idx < files.length ||
-                                                    (fillMode === 'repeat' && files.length > 0) ||
-                                                    (fillMode === 'stretch-last' && files.length > 0 && idx >= files.length);
                                                 const repeatFile = fillMode === 'repeat' && files.length > 0
                                                     ? files[idx % files.length]
                                                     : fillMode === 'stretch-last' && files.length > 0 && idx >= files.length

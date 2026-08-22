@@ -186,7 +186,7 @@ export function SignPDFTool({ className = '', initialFile, hideUploader, onCompl
 
         try {
           pdfDoc.getForm().flatten();
-        } catch (e) {
+        } catch {
           // Form might not exist, continue
         }
 

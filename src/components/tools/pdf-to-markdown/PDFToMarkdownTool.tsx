@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useCallback, useRef, useMemo } from 'react';
+import React, { useState, useCallback, useRef } from 'react';
 import { useTranslations } from 'next-intl';
 import { FileText, Trash2, RefreshCw, CheckCircle2, AlertCircle, Settings2, Code, Eye } from 'lucide-react';
 import { marked } from 'marked';

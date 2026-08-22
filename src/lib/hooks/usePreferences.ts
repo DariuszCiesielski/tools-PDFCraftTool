@@ -45,7 +45,7 @@ function readCurrentTheme(): 'light' | 'dark' | 'system' {
   return document.documentElement.classList.contains('dark') ? 'dark' : 'light';
 }
 
-function readWidth(key: string, fallback: number): number {
+function _readWidth(key: string, fallback: number): number {
   if (typeof window === 'undefined') return fallback;
   const stored = window.localStorage.getItem(key);
   if (!stored) return fallback;

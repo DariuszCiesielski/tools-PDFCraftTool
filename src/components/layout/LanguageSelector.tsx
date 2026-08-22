@@ -116,7 +116,7 @@ export const LanguageSelector: React.FC<LanguageSelectorProps> = ({ currentLocal
     setFocusedIndex(-1);
   }, [pathname, router]);
 
-  const handleOptionKeyDown = useCallback((event: React.KeyboardEvent, locale: Locale, index: number) => {
+  const handleOptionKeyDown = useCallback((event: React.KeyboardEvent, locale: Locale, _index: number) => {
     switch (event.key) {
       case 'Enter':
       case ' ':

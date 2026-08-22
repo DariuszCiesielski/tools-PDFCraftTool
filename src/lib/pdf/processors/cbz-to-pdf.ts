@@ -235,7 +235,6 @@ export class CbzToPDFProcessor extends BasePDFProcessor {
                         const [targetWidth, targetHeight] = PAGE_SIZES[cbzOptions.pageSize] || PAGE_SIZES.a4;
 
                         if (cbzOptions.maintainAspectRatio) {
-                            const scale = Math.min(targetWidth / image.width, targetHeight / image.height);
                             pageWidth = targetWidth;
                             pageHeight = targetHeight;
                         } else {

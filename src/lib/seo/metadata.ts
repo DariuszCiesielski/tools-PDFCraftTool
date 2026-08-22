@@ -7,7 +7,7 @@
 
 import type { Metadata } from 'next';
 import { siteConfig } from '@/config/site';
-import { type Locale, localeConfig, locales } from '@/lib/i18n/config';
+import { type Locale, locales } from '@/lib/i18n/config';
 import type { Tool, ToolContent } from '@/types/tool';
 
 /**

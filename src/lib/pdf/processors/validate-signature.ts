@@ -150,7 +150,7 @@ export function validateSignature(
     }
 
     if (signature.byteRange && signature.byteRange.length === 4) {
-      const [, len1, start2, len2] = signature.byteRange;
+      const [, , start2, len2] = signature.byteRange;
       const totalEnd = start2 + len2;
       if (totalEnd === pdfBytes.length) {
         result.coverageStatus = 'full';

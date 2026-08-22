@@ -27,7 +27,7 @@ export function EmailToPDFTool({ className = '' }: EmailToPDFToolProps) {
     const [pageSize, setPageSize] = useState<EmailPageSize>('a4');
     const [includeCcBcc, setIncludeCcBcc] = useState(true);
     const [includeAttachments, setIncludeAttachments] = useState(true);
-    const [dateFormat, setDateFormat] = useState<'full' | 'short' | 'iso'>('full');
+    const [dateFormat] = useState<'full' | 'short' | 'iso'>('full');
     const [timezone, setTimezone] = useState(Intl.DateTimeFormat().resolvedOptions().timeZone);
 
     const handleFilesSelected = useCallback((files: File[]) => {

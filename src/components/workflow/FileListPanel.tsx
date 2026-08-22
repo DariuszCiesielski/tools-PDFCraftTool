@@ -5,7 +5,7 @@ import { useTranslations } from 'next-intl';
 import {
     X,
     FileText,
-    Image,
+    Image as ImageIcon,
     File,
     Eye,
     Trash2,
@@ -28,7 +28,7 @@ interface FileListPanelProps {
 function getFileIcon(file: File) {
     const type = file.type;
     if (type.startsWith('image/')) {
-        return <Image className="w-5 h-5 text-blue-500" />;
+        return <ImageIcon className="w-5 h-5 text-blue-500" />;
     }
     if (type === 'application/pdf') {
         return <FileText className="w-5 h-5 text-red-500" />;

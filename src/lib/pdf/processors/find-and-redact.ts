@@ -200,7 +200,6 @@ export async function searchTextInPDF(
 
             try {
                 const page = await pdf.getPage(pageNum);
-                const viewport = page.getViewport({ scale: 1 });
                 const textContent = await page.getTextContent();
 
                 // Process text items to find matches
@@ -356,7 +355,6 @@ export async function applyFindAndRedact(
             }
 
             const page = pages[match.page - 1];
-            const { height: pageHeight } = page.getSize();
 
             // The y-coordinate is already in PDF coordinates (from bottom)
             // We need to draw the rectangle at this position
@@ -474,9 +472,11 @@ export async function findAndRedact(
     );
 }
 
-export default {
+const findAndRedactProcessor = {
     searchTextInPDF,
     applyFindAndRedact,
     findAndRedact,
     parseSearchTerms,
 };
+
+export default findAndRedactProcessor;

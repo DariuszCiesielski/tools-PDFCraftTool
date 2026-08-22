@@ -30,14 +30,6 @@ export interface RepairPDFOptions {
   removeCorruptedObjects: boolean;
 }
 
-/**
- * Default repair options
- */
-const DEFAULT_REPAIR_OPTIONS: RepairPDFOptions = {
-  ignoreEncryption: true,
-  rebuildXref: true,
-  removeCorruptedObjects: true,
-};
 
 // QPDF instance singleton
 let qpdfInstance: QpdfEmscriptenModule | null = null;
@@ -137,11 +129,7 @@ export class RepairPDFProcessor extends BasePDFProcessor {
     this.reset();
     this.onProgress = onProgress;
 
-    const { files, options } = input;
-    const repairOptions: RepairPDFOptions = {
-      ...DEFAULT_REPAIR_OPTIONS,
-      ...(options as Partial<RepairPDFOptions>),
-    };
+    const { files } = input;
 
     // Validate we have exactly 1 file
     if (files.length !== 1) {
@@ -209,7 +197,7 @@ export class RepairPDFProcessor extends BasePDFProcessor {
       try {
         outputFile = qpdf.FS.readFile(outputPath, { encoding: 'binary' });
         outputFileExists = !!(outputFile && outputFile.length > 0);
-      } catch (e) {
+      } catch {
         outputFileExists = false;
       }
 
@@ -262,12 +250,12 @@ export class RepairPDFProcessor extends BasePDFProcessor {
       if (qpdf?.FS) {
         try {
           qpdf.FS.unlink(inputPath);
-        } catch (e) {
+        } catch {
           // Ignore cleanup errors
         }
         try {
           qpdf.FS.unlink(outputPath);
-        } catch (e) {
+        } catch {
           // Ignore cleanup errors
         }
       }

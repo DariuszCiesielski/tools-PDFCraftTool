@@ -39,7 +39,7 @@ import { WorkflowLibrary } from './WorkflowLibrary';
 import { WorkflowControls } from './WorkflowControls';
 import { NodeSettingsPanel } from './NodeSettingsPanel';
 import { WorkflowPreview } from './WorkflowPreview';
-import { Undo2, Redo2, PanelLeftClose, PanelLeftOpen, PanelRightClose, PanelRightOpen } from 'lucide-react';
+import { Undo2, Redo2 } from 'lucide-react';
 
 // Node types for ReactFlow
 const nodeTypes = {
@@ -108,9 +108,6 @@ function WorkflowEditorContent() {
     /**
      * Register a Blob URL for cleanup
      */
-    const registerBlobUrl = useCallback((url: string) => {
-        createdBlobUrls.current.add(url);
-    }, []);
 
     /**
      * Cleanup all registered Blob URLs
@@ -283,7 +280,6 @@ function WorkflowEditorContent() {
 
             if (!reactFlowWrapper.current || !reactFlowInstance) return;
 
-            const reactFlowBounds = reactFlowWrapper.current.getBoundingClientRect();
             const nodeDataStr = event.dataTransfer.getData('application/reactflow');
 
             if (!nodeDataStr) return;
@@ -318,9 +314,6 @@ function WorkflowEditorContent() {
     /**
      * Handle file selection for execution and preview
      */
-    const handleFilesSelected = useCallback((files: File[]) => {
-        setSelectedFiles(files);
-    }, []);
 
     /**
      * Execute the workflow

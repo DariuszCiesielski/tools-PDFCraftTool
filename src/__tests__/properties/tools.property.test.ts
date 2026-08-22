@@ -10,7 +10,6 @@ import {
 } from '@/config/tools';
 import { 
   TOOL_CATEGORIES, 
-  type ToolCategory,
 } from '@/types/tool';
 import {
   searchTools,
