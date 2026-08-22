@@ -96,6 +96,8 @@ Tools logic w `src/lib/pdf/processors/<tool>.ts` jako pure functions, UI w `src/
 - [2026-05-07] KONTEKST: Refactor batch script regex robi DOUBLE-WRAP gdy oryginalny plik już ma `{!file && (...)}` wokół FileUploader. Idempotent check `if 'initialFile?:' in text` chroni przed re-refactor (props), ale NIE przed wrap. Skutek: 9 plików Wave-3 miało invalid JSX `{!file && ({!file && !hideUploader && (<FileUploader />)})}`. Reguła: PRZED odpalaniem refactor batch — (a) sprawdź `grep '!file' tool.tsx` w 1-2 sample files, (b) script powinien sprawdzać czy `!hideUploader` jest w pliku PRZED dodawaniem wrap.
 - [2026-05-07] KONTEKST: Multi-file batch tools (deskew, font-to-outline) NIE mają `useState<File | null>` — używają `useBatchProcessing` hook z `files` array. Plus iframe wizards (edit-pdf, stamps) i multi-input tools (alternate-merge, grid-combine, linearize, repair) → keep self-uploader, NIE forsuj prefilled pattern. Drawer wire-up bez propsów: `case 'tool-name': return <XxxTool />`. Audyt shape PRZED refactor: `grep -E "useState<File|useBatch|files\[\]" tools/*Tool.tsx`.
 - [2026-05-07] KONTEKST: UploadedFile shape (z `src/types/pdf.ts`) wymaga `{ id: string, file: File, status: 'pending'|... }` — NIE `{ name, size }`. Niektóre narzędzia (pdf-to-greyscale) używają tej struktury. Refactor: `setFile({ file: initialFile, id: crypto.randomUUID(), status: 'pending' })`. Plus onComplete użyje `file?.file` (nullable chain) zamiast lokalnego `file`.
+- [2026-08-22] KONTEKST: 8 testów layoutu padało na `localStorage.clear is not a function` — Node >=22 (tu 25.6) wystawia własny eksperymentalny globalny `localStorage` (Web Storage bez pliku = atrapa bez clear/getItem), który wygrywa z implementacją jsdom w vitest. Fix: `setup.ts` podmienia `globalThis.localStorage` i `window.localStorage` na in-memory `Storage`. Reguła: po podbiciu Node sprawdź, czy globalne API przeglądarkowe (localStorage, fetch, WebSocket) nie są dostarczane przez Node zamiast jsdom.
+- [2026-08-22] KONTEKST: property-based testy (fast-check) losują próbkę — przebieg „zielony" nie dowodzi braku błędu (test `>=2 relatedTools` przeszedł raz, padł w drugim przebiegu na `pdf-reader`). Reguła: po naprawie property-testów uruchamiaj suite min. 2× albo sprawdź własność deterministycznie skryptem po WSZYSTKICH danych (Python po `tools.ts`).
 
 ## Skróty klawiszowe Studio Mode
 
@@ -113,18 +115,13 @@ Tools logic w `src/lib/pdf/processors/<tool>.ts` jako pure functions, UI w `src/
 
 `https://access-manager-tools-pdfcraft.vercel.app/pl/studio`
 
-## Otwarte zadania (na sesję 2)
+## Otwarte zadania (stan 2026-08-22 18:57)
 
-Patrz: `.ai/handoffs/handoff-2026-05-07-0948-studio-prod-live-confirmation-flow-pending.md`
+**Sprzątanie jakości kodu 20-22.08 — DOMKNIĘTE:** ESLint flat (etap 1), 0× `any` (etap 2), lint w bramce builda (etap 3), **vitest 348/348, tsc 0 błędów (etap 4)**. Zostało 12 warningów lintu (kosmetyka).
 
-P0:
-1. Header avatar dropdown w prawym górnym rogu (1h)
-2. Confirmation flow UX banner (45 min)
+Kandydaci na następną sesję (decyzja Dariusza):
+1. P0 z handoffu 08.05: avatar dropdown w headerze Studio (1h), banner confirmation flow (45 min)
+2. 12 warningów ESLint → 0
+3. Smoke test prod po zmianach w `tools.ts` (relatedTools) — `next build` 1589 stron przed pushem
 
-P1:
-3. Migracja recent_documents localStorage → Supabase (1.5h)
-4. Migracja user_preferences → Supabase (1.5h)
-
-P2-P3:
-5. E2E test full flow
-6. Email template polonizacja
+Historia: `.ai/handoffs/` (najnowszy handoff = stan prawdy).
