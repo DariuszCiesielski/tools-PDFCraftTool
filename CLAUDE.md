@@ -113,7 +113,8 @@ Tools logic w `src/lib/pdf/processors/<tool>.ts` jako pure functions, UI w `src/
 
 ## Production URL
 
-`https://access-manager-tools-pdfcraft.vercel.app/pl/studio`
+- Domyślny alias Vercela (auto-promote po każdym deployu): `https://tools-pdfcrafttool.vercel.app/pl/studio`
+- Stary alias ręczny `https://access-manager-tools-pdfcraft.vercel.app` — **NIE promuje się automatycznie** (wskazywał build z 08.05 aż do 22.08). Po deployu: `vercel alias set <direct-url> access-manager-tools-pdfcraft.vercel.app` albo zrezygnować z tego adresu w komunikacji.
 
 ## Otwarte zadania (stan 2026-08-22 18:57)
 
